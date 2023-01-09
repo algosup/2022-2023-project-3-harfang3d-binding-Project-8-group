@@ -1,2 +1,6 @@
 /.idea
 *.pyc
+
+# Ignore configurations other than the launch file
+.vscode/
+!.vscode/launch.json
