@@ -129,6 +129,8 @@ To make sure that something is working, there is nothing better than multiple te
 - Defect Tracking: Defects will be tracked using a bug tracking tool.
 ```
 
+## [**Test Cases can be found here**](TestCase)
+
 ## **Schedule**
 
 ```
@@ -139,3 +141,22 @@ Defect tracking and resolution: 1 week
 Final testing: 1 week
 Total: 7 weeks
 ```
+
+## **Test Deliverables**
+
+```
+- Test plan
+- Test cases
+- Test data
+- Test execution results
+```
+
+## Acceptance Criteria
+
+For the project to be considered as a success, the following criteria must be met:
+````
+- All tests should pass
+- The code should be Usable without crashes
+- Examples from Harfang's 3D engine should work perfectly
+- The code should be able to handle spaghetti code
+````
