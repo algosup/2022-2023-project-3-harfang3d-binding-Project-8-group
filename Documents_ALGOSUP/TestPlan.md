@@ -12,7 +12,7 @@ The test plan has for goal the testing of the FABGen library bindings in Rust. I
 
 ### Team: The team will consist of the following members
 
-```
+```md
 - Project manager
 - Program manager
 - Tech lead
@@ -26,7 +26,7 @@ They will help in the reporting of bugs when found (QA has a specialisation in t
 
 Hardware
 
-```
+```md
 - 4 MacBook Air M1 running on macOS Monterey
 - 1 ThinkBook running on Windows 11
 - 1 WhiteBoard
@@ -34,7 +34,7 @@ Hardware
 
 Software
 
-```
+```md
 - Visual Studio Code
 - Github
 - Git
@@ -46,7 +46,7 @@ Software
 
 After a global analysis of the code, it was concluded that the project should have new created files and some updated to have it working. Following what was made for Python, Lua and Go, it should at least ressemble the following:
 
-```
+```md
 - examples/harfang.py (updated)
 - lang/rust.py (new)
 - lib/std.py (updated)
@@ -109,10 +109,12 @@ They are expected to pass all phases of the usage easily :
 
 The installation will be tested on VMs. It will be tested with the Github repository download. The installation of the required languages and libraries will be tested. OS that will be tested are :
 
+```md
 - Windows 10
 - Macos
 - Ubuntu
 - Debian
+```
 
 For the purpose of testing, Harfang will also be installed.
 
@@ -122,7 +124,7 @@ To make sure that something is working, there is nothing better than multiple te
 
 ## Test Approach
 
-```
+```md
 - Test Case Development: Test cases will be developed based on the requirements and design of the web application.
 - Test Execution: Test cases will be executed on the test environment.
 - Test Data Preparation: Test data will be prepared for functional and usability testing.
@@ -133,7 +135,7 @@ To make sure that something is working, there is nothing better than multiple te
 
 ## **Schedule**
 
-```
+```md
 Test planning: 2 weeks
 Test case development: 1 weeks
 Test execution: 2 weeks
@@ -144,7 +146,7 @@ Total: 7 weeks
 
 ## **Test Deliverables**
 
-```
+```md
 - Test plan
 - Test cases
 - Test data
@@ -154,9 +156,10 @@ Total: 7 weeks
 ## Acceptance Criteria
 
 For the project to be considered as a success, the following criteria must be met:
-````
+
+```md
 - All tests should pass
 - The code should be Usable without crashes
 - Examples from Harfang's 3D engine should work perfectly
 - The code should be able to handle spaghetti code
-````
+```
