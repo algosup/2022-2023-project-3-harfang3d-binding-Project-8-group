@@ -1,0 +1,10 @@
+[package]
+name = "testing"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+cc = "1.0"
+
+[dependencies]
+cty = "0.2.2"
