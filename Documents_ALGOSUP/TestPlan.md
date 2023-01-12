@@ -66,16 +66,16 @@ After a global analysis of the code, it was concluded that the project should ha
 
 The test plan will be separated in two parts:
 
-- The first part will be tests for long term usage like the use of the 3D engine with codes adapted from examples in other languages, new spaghetti code to see if it is able to handle it, checking all tests and verifying their integrity. To test some code outside of the game engine's environment."
+- The first part will be tests for long term usage like the use of Harfang's 3D engine library adapted to Rust, codes adapted from examples in other languages, new spaghetti code to see if it is able to handle it, Random Cpp libraries to benchmark how usable it is outside of Harfang's framework, checking all tests and verifying their integrity. To test some code outside of the game engine's environment."
 
 - The second part will be it's use from 0 as a user. It is less about the code and more about intuitiveness. How easy is it to install ? Do I know what to do and where ? Are there Additional steps ?
-This will also contain environment testing.
+It will also contains environment testing.
 
 ## Long term tests
 
 ### Use of examples
 
-The 3D engine Harfang will be installed and bound to the project by the end of the second week.
+The 3DHarfang's library python description will be remade for Rust and bound to the project by the end of the fourth week.
 Examples from the official documentation that passes in other languages will be tested to see if they work in Rust after translation.
 They must be of different types.
 
@@ -95,7 +95,7 @@ The client precised he would like the binding to be as functional as possible wi
 
 ### Define users
 
-The users are the developers that will use the bindings. They are supposed to be familiar with Rust and the 3D engine Harfang. They are supposed to be able to use the bindings without any help.
+The users are the developers that will create bindings and the ones that will use the premade ones. They are supposed to be familiar with Rust and Python. They are supposed to be able to use the bindings without any help.
 They are expected to pass all phases of the usage easily :
 
 - Installation
@@ -114,7 +114,7 @@ The installation will be tested on VMs. It will be tested with the Github reposi
 - Ubuntu
 - Debian
 
-For the purpose of testing, Harfang will also be installed.
+For the purpose of testing, Harfang's library will also be installed.
 
 ### Real life
 
@@ -123,7 +123,7 @@ To make sure that something is working, there is nothing better than multiple te
 ## Test Approach
 
 ```
-- Test Case Development: Test cases will be developed based on the requirements and design of the web application.
+- Test Case Development: Test cases will be developed based on the requirements and design documents.
 - Test Execution: Test cases will be executed on the test environment.
 - Test Data Preparation: Test data will be prepared for functional and usability testing.
 - Defect Tracking: Defects will be tracked using a bug tracking tool.
