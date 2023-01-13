@@ -19,10 +19,10 @@ RUN apt-get install -y lua5.2
 # install git
 RUN apt-get install -y git
 
-# https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-8-group.git
-RUN git clone https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-8-group.git
+RUN mkdir app
 
-RUN export PS1=`printf "\033[32mLouis_mon_dieu: \033[39m"`
+COPY ./requirements.txt /
+RUN pip install -r requirements.txt
 
 CMD ["/bin/bash"]
 
