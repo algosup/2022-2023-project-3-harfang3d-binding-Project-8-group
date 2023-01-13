@@ -2,17 +2,17 @@
 
 ## **Introduction**
 
-This test plan follows the project "Rust bindings" of team 8. It will test the full course of the project and will be updated as the project evolves.
+This test plan outlines the project "Rust bindings" for Team 8. Our ultimate goal is to bind Rust to C++. The plan will be updated as the project progresses, and it aims to test all aspects of the project including the code, Test-Driven Development (TDD), and its implementation in production.
 
 ## **Scope of the test plan**
 
-The goal of the test plan is to test the FABGen library bindings in Rust. This test plan covers all aspects including the code, the Test-Driven Development (TDD) methodology applied to it and its implementation in production. Additionally, the implementation of the code will be evaluated to ensure it conforms to the specified standards, specifically adhering to the coding guidelines set forth by Harfang.
+The test plan is designed to test the FABGen library bindings in Rust. It covers all aspects of the project, including the code, TDD, and implementation in production. Additionally, the implementation of the code will be evaluated to ensure it conforms to specified standards and adheres to the coding guidelines set forth by Harfang. The code must be readable for the client and any open-source contributors, and comments will be included in the supervised subjects.
 
 ## **Resources**
 
 ### Team: The team will consist of the following members
 
-```
+```md
 - Project manager
 - Program manager
 - Tech lead
@@ -20,21 +20,21 @@ The goal of the test plan is to test the FABGen library bindings in Rust. This t
 - QA
 ```
 
-They will help in the reporting of bugs when found (QA has a specialization in the field).
+The team members will contribute to reporting bugs when found (QA has specialization in the field).
 
 ### Tools: The tools used for the project will be
 
-Hardware
+#####  Hardware:
 
-```
+```md
 - 4 MacBook Air M1 running on macOS Monterey
 - 1 ThinkBook running on Windows 11
 - 1 WhiteBoard
 ```
 
-Software
+##### Software:
 
-```
+```md
 - Visual Studio Code
 - Github
 - Git
@@ -44,9 +44,10 @@ Software
 
 ## **Expected code architecture**
 
-After a global analysis of the code, it was concluded that the project should have new created files and some updated to have it working. Following what was made for Python, Lua and Go, it should at least resemble the following:
+After a global analysis of the code, it was concluded that the project should have new created files and some updated to have it working. 
+It will be using the following file structure contingent upon following the current architecture.
 
-```
+```md
 - examples/harfang.py (updated)
 - lang/rust.py (new)
 - lib/std.py (updated)
@@ -64,38 +65,44 @@ After a global analysis of the code, it was concluded that the project should ha
 
 ## **Test Strategy**
 
-The test plan will be separated in two parts:
+### Long term
+Those tests will not be removed at the end of the project, they will allow contributors to ensure that the added code did not break the foundations.
+Some examples:
+- the use of Harfang's 3D engine library adapted to Rust
+- codes adapted from examples in other languages
+- new spaghetti code to see if it is able to handle it
+- Random Cpp libraries to benchmark how usable it is outside of Harfang's framework
+- checking all TDD tests and verifying their integrity (this is a verification and has to be added since it is a critical point in the team's flow of work)
 
-- The first part will be tests for long term usage like the use of Harfang's 3D engine library adapted to Rust, codes adapted from examples in other languages, new spaghetti code to see if it is able to handle it, Random Cpp libraries to benchmark how usable it is outside of Harfang's framework, checking all tests and verifying their integrity. To test some code outside of the game engine's environment."
-
-- The second part will be it's use from 0 as a user. It is less about the code and more about intuitiveness. How easy is it to install ? Do I know what to do and where ? Are there Additional steps ?
-It will also contains environment testing.
+### Starting from 0
+Starting from 0 as a user. It is less about the code and more about intuitiveness. How easy is it to install ? Do I know what to do and where ? Are there Additional steps ?
+It also contains environment testing.
 
 ## Long term tests
 
 ### Use of examples
 
-The 3DHarfang's library python description will be remade for Rust and bound to the project by the end of the fourth week.
-Examples from the official documentation that passes in other languages will be tested to see if they work in Rust after translation.
-They must be of different types.
+The 3DHarfang's library python description has to be bound to the project by the end of the fourth week.
+Examples from the official documentation that passes in other languages are to be adapted and tested to see if they work in Rust.
+They must be of different types to cover as many aspects of the Rust language as possible.
 
 ### Spaghetti code
 
-To evaluate the robustness of the Rust bindings, we will intentionally introduce errors and create a poorly written version of the examples.
+Introducing errors intentionally and creating poorly written versions of the examples are conjointly needed to evaluate the robustness of the Rust bindings.
 
-### Tests
+### TDD Tests
 
-The tests are an important part of the project for the developers. They must be fully functional and up to date. They must be run and verified. We need to make sure they are valid and do not test outdated functions or true==true.
+The tests are an important part of the project for the developers. They must be fully functional and up to date. They must be run and verified. We need to ensure they are neither  true==true equalities / commented nor outdated functions.
 
 ### External code
 
-The client precised he would like the binding to be as functional as possible with external code. The Rust code will be tested with external code to see if it is able to handle it. It is not supposed to include advanced features but it may lead to finding new bugs that were being handled by some other parts of FABGen in a non common environment.
+The client specified he would like the binding to be as functional as possible with external code. The Rust code will be tested with external libraries to see if it is able to handle it. It is not supposed to include advanced features but it may lead to finding new bugs that were being handled by some other parts of FABGen in a non common environment.
 
-## User test
+## Primary User test
 
-### Define users
+### Define primary users
 
-The users are the developers that will create bindings and the ones that will use the premade ones. They are supposed to be familiar with Rust and Python. They are supposed to be able to use the bindings without any help.
+The users are developers that create bindings or random visitors that use the premade ones. They are supposed to be familiar with Rust and Python as well as to be able to use the bindings without any help.
 They are expected to pass all phases of the usage easily :
 
 - Installation
@@ -107,33 +114,31 @@ They are expected to pass all phases of the usage easily :
 
 ### Simulated
 
-The installation will be tested on VMs. It will be tested with the Github repository download. The installation of the required languages and libraries will be tested. The OS that will be tested are :
+The installation is tested on VMs. It will be tested with the Github repository download. The installation of the required languages and libraries will be tested. The OS that will be tested are :
 
 - Windows 10
 - Macos
 - Ubuntu
 - Debian
-
-For the purpose of testing, Harfang's library will also be installed.
+- a light linux distribution
 
 ### Real life
 
-To make sure that something is working, there is nothing better than multiple testers. As FABGen is an open source repository, outside developers will be asked to test it and give their feedback. They will be asked to test the installation and the usage of the bindings. They will be asked to test the examples.
+To make sure that something is working, there is nothing better than multiple testers. 
+As FABGen is an open source repository, outside developers will be asked to test it and give their feedback. They will be asked to test the installation and the usage of the bindings. They will be asked to test the examples.
 
 ## Test Approach
 
-```
-- Test Case Development: Test cases will be developed based on the requirements and design documents.
-- Test Execution: Test cases will be executed on the test environment.
-- Test Data Preparation: Test data will be prepared for functional and usability testing.
-- Defect Tracking: Defects will be tracked using a bug tracking tool.
-```
+- **Test Case Development:** Test cases will be developed based on the requirements and design documents made by the Program Manager.
+- **Test Execution:** Test cases will be executed on the test environment. Dockers with a common base will be used to test multiplatform execution.
+- **Test Data Preparation:** Test data will be prepared for functional and usability testing. All of them will be stored in Dated documents.
+- **Defect Tracking:** Defects will be tracked using a bug tracking tool as Github issues. 
 
 ## [**Test Cases can be found here**](TestCase)
 
 ## **Schedule**
 
-```
+```md
 Test planning: 2 weeks
 Test case development: 1 weeks
 Test execution: 2 weeks
@@ -144,7 +149,7 @@ Total: 7 weeks
 
 ## **Test Deliverables**
 
-```
+```md
 - Test plan
 - Test cases
 - Test data
@@ -153,7 +158,7 @@ Total: 7 weeks
 
 ## Acceptance Criteria
 
-For the project to be considered as a success, the following criteria must be met:
+For the project to be considered as a success, the following criteras must be met:
 ````
 - All tests should pass
 - The code should be Usable without crashes
