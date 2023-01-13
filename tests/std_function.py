@@ -129,27 +129,38 @@ test_rust = '''\
 
 #[cfg(test)]
 mod my_test {
-	#[test]
-	fn SimpleVoidFunction () {
-		println!("void function called")
-	};
-	fn ComputeFunction(v: int32, m: *int32, c: *int32) -> int32 {
-		return v*(*m) + *c
-	};
-	#[test]
-	fn Test {
-		SetSimpleVoidFunction(C.simpleVoidFunction);
-		InvokeSimpleVoidFunction();
+    extern "C" {
+        fn SetSimpleVoidFunction(f: extern "C" fn());
+        fn InvokeSimpleVoidFunction();
+        fn SetComputeFunction(f: extern "C" fn(int32_t, int32_t,int32_t) -> int32_t);
+        fn InvokeComputeFunction(v: int32_t, m: int32_t, c:int32_t) -> int32_t;
+    }
 
-		SetComputeFunction(C.computeFunction)
+    #[no_mangle]
+    extern "C" fn SimpleVoidFunction() {
+        println!("void function called");
+    }
 
-		r = InvokeComputeFunction(5, 3, 4);
+    #[no_mangle]
+    extern "C" fn ComputeFunction(v: int32_t, m: int32_t, c:int32_t) -> int32_t {
+        return v(m) + *c;
+    }
 
-		assert_eq!(
-			r, 9,
-			"should be equal."
-		);
+    #[test]
+    fn test() {
+        unsafe {
+            SetSimpleVoidFunction(SimpleVoidFunction);
+            InvokeSimpleVoidFunction();
+            SetComputeFunction(ComputeFunction);
+        }
 
-	}
+        let r = unsafe { InvokeComputeFunction(5, &3, &4) };
+
+        assert_eq!(
+            r, 9,
+            "should be equal."
+        );
+
+    }
 }
 '''

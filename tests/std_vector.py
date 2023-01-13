@@ -251,8 +251,8 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test {
 	#[test]
-	fn Test() {
-		v = NewVectorOfInt();
+	fn test() {
+		let v = newVectorOfInt();
 
 		assert_eq!(
 			v.Size(), 0,
@@ -263,29 +263,29 @@ mod my_test {
 			"should be the same."
 		);
 
-		v.PushBack(5);
-		v.PushBack(1);
-		v.PushBack(9);
+		v.pushBack(5);
+		v.pushBack(1);
+		v.pushBack(9);
 
 		assert_eq!(
-			v.Size(), 3,
+			v.size(), 3,
 			"should be the same."
 		);
 		assert_eq!(
-			v.Length(), 3,
+			v.length(), 3,
 			"should be the same."
 		);
 
 		assert_eq!(
-			*v.At(1), 1
+			*v.at(1), 1,
 			"should be the same."
 		);
 		assert_eq!(
-			*v.At(2), 9
+			*v.at(2), 9,
 			"should be the same."
 		);
 		assert_eq!(
-			*v.At(0), 5
+			*v.at(0), 5,
 			"should be the same."
 		);
 
@@ -305,7 +305,7 @@ mod my_test {
 
 		);
 		
-		v.Get(1, 19);
+		v.get(1, 19);
 
 		assert_eq!(
 			v.get(2), 9,
@@ -322,7 +322,7 @@ mod my_test {
 
 		);
 
-		v.Get(0, v.Get(0)*4);
+		v.get(0, v.get(0)*4);
 
 		assert_eq!(
 			v.get(0), 20,
@@ -330,12 +330,12 @@ mod my_test {
 
 		);
 		assert_eq!(
-			ConsumePointerToInt(v.Data()), 16,
+			consumePointerToInt(v.Data()), 16,
 			"should be the same."
 
 		);
 
-		w = NewVectorOfIntWithSequence([]int32{5, 2, 8});
+		let w = newVectorOfIntWithSequence([]int32{5, 2, 8});
 
 		assert_eq!(
 			w.get(0), 5,
@@ -350,16 +350,16 @@ mod my_test {
 			"should be the same."
 		);
 
-		vPtr = NewVectorOfIntPtr();
-		vPtr.PushBack(nil);
-		vPtr.PushBack(v.Data());
+		let vPtr = newVectorOfIntPtr();
+		vPtr.pushBack(nil);
+		vPtr.pushBack(v.data());
 
 		assert_eq!(
-			vPtr.Size(), 2,
+			vPtr.size(), 2,
 			"should be the same."
 		);
 		assert_eq!(
-			v.Length(), 2,
+			v.length(), 2,
 			"should be the same."
 		);
 	}

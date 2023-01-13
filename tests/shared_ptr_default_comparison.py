@@ -97,16 +97,16 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test {
 	#[test]
-	fn Test (){
-		a = GetObj0();
-		b = GetObj0();
+	fn test (){
+		let a = GetObj0();
+		let b = GetObj0();
 
 		assert_eq!(
 			a, b,
 			"should be equal."
 		);
 
-		c = GetObj1();
+		let c = GetObj1();
 
 		assert_ne!(
 			a, c,
@@ -116,7 +116,7 @@ mod my_test {
 			b, c,
 			"should not be equal."
 		);
-		d = GetObj2();
+		let d = GetObj2();
 
 		assert_eq!(
 			a, d,

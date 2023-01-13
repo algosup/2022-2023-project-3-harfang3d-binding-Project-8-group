@@ -112,26 +112,26 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test {
 		#[test]
-		fn Test() {
+		fn test() {
 			// take by value
-			s = ReturnSimpleStructByValue();
-			TakeSimpleStructByValue(s);
+			let s = returnSimpleStructByValue();
+			takeSimpleStructByValue(s);
 			assert!(
-				TestSimpleStruct(),
+				testSimpleStruct(),
 				"should be true."
 			);
 
-			sp = ReturnSimpleStructByPointer();
-			TakeSimpleStructByPointer(sp);
+			let sp = returnSimpleStructByPointer();
+			takeSimpleStructByPointer(sp);
 			assert!(
-				TestSimpleStructByValue(),
+				testSimpleStructByValue(),
 				"should be true."
 			);
 
-			sr = ReturnSimpleStructByRef();
-			TakeSimpleStructByRef(sr);
+			let sr = returnSimpleStructByRef();
+			takeSimpleStructByRef(sr);
 			assert!(
-				TestSimpleStructByValue(),
+				testSimpleStructByValue(),
 				"should be true."
 			);
 

@@ -92,19 +92,19 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test {
 	#[test]
-	fn Test() {
-		s = NewSimpleStruct();
+	fn test() {
+		let s = newSimpleStruct();
 
 		assert_eq!(
-			s.GetA(), 3,
+			s.getA(), 3,
 			"should be the same."
 		);
 		assert_eq!(
-			s.GetB(), 11,
+			s.getB(), 11,
 			"should be the same."
 		);
 		assert_eq!(
-			s.GetC(), 1,
+			s.getC(), 1,
 			"should be the same."
 		);
 
@@ -113,15 +113,15 @@ mod my_test {
 		s.SetC(2);
 
 		assert_eq!(
-			s.GetA(), 1,
+			s.getA(), 1,
 			"should be the same."
 		);
 		assert_eq!(
-			s.GetB(), 7,
+			s.getB(), 7,
 			"should be the same."
 		);
 		assert_eq!(
-			s.GetC(), 2,
+			s.getC(), 2,
 			"should be the same."
 		);
 	}

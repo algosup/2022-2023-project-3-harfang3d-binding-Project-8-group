@@ -109,8 +109,8 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test {
 	#[test]
-	fn Test () {
-		sp = GetSharedPtrToSimpleStruct();
+	fn test () {
+		let sp = GetSharedPtrToSimpleStruct();
 
 		assert_eq!(
 			sp.GetU(), 4.0,
@@ -121,7 +121,7 @@ mod my_test {
 			"should be the same."
 		);
 
-		sp2 = NewSsimpleStruct 9.0;
+		 let sp2 = NewSsimpleStruct(9.0);
 
 		assert_eq!(
 			sp2.GetU(), 9.0,
@@ -129,10 +129,10 @@ mod my_test {
 		);
 		assert_eq!(
 			sp2.GetV(), 90,
-			should be the same
+			"should be the same."
 		);
 
-		spn = GetEmptySharedPtr()
+		 let spn = GetEmptySharedPtr()
 
 		assert!(
 			spn.IsNil(),

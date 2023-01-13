@@ -75,11 +75,11 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test {
 	#[test]
-	fn Test() {
-		a = GetBaseClass();
-		b = CastBaseClassToDerivedClass(a);
+	fn test() {
+		let a = getBaseClass();
+		let b = castBaseClassToDerivedClass(a);
 		assert_eq!(
-			b.GetU, 7,
+			b.getU, 7,
 			"should be the same."
 		)
 	}

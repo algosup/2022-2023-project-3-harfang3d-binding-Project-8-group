@@ -173,92 +173,90 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test{
 	#[test]
-	fn Test() {
-		base = NewBaseClass();
+	fn test() {
+		let base = newBaseClass();
 		assert_eq!(
-			base.BaseMethod(), 4,
+			base.baseMethod(), 4,
 			"should be the same."
 		);
 		assert_eq!(
-			base.BasemethodeOverride(), 4,
+			base.basemethodeOverride(), 4,
 			"should be the same."
 		);
 
-		derived = NewDerivedClass();
+		let derived = newDerivedClass();
 		assert_eq!(
-			derived.BaseMethod(), 4,
+			derived.baseMethod(), 4,
 			"should be the same."
 		); // can still access base class
-		derived = NewDerivedClass();
 		assert_eq!(
-			derived.DerivedMethod(), 8,
+			derived.derivedMethod(), 8,
 			"should be the same."
 		);  // can access its own methods
-		derived = NewDerivedClass();
 		assert_eq!(
-			derived.BaseMethodOverride(), 8,
+			derived.baseMethodOverride(), 8,
 			"should be the same."
 		); // properly overshadows redeclared base methods
 
 		// argument casting through inheritance tree
 		assert_eq!(
-			ReadVirtualMethodThroughBaseClass(base), 6,
+			readVirtualMethodThroughBaseClass(base), 6,
 			"should be the same."
 		);
 		assert_eq!(
-			ReadVirtualMethodThroughBaseClass(CastDerivedClassToBaseClass(derived)), 9,
+			readVirtualMethodThroughBaseClass(CastDerivedClassToBaseClass(derived)), 9,
 			"should be the same."
 		);
 
 		// member access through inheritance tree
 		assert_eq!(
-				base.GetU(), 6,
+				base.getU(), 6,
 				"should be the same."
 		);
 		assert_eq!(
-				derived.GetU(), 6,
+				derived.getU(), 6,
 				"should be the same."
 		); // can access base class member
 		assert_eq!(
-				base.GetV(), 7,
+				base.getV(), 7,
 				"should be the same."
 		);
 		assert_eq!(
-				derived.GetV(), 7,
+				derived.getV(), 7,
 				"should be the same."
 		); // can access base class static member
 
 		assert_eq!(
-			base.GetOverride(), 4,
+			base.getOverride(), 4,
 			"should be the same."
 		);
 		assert_eq!(
-			base.GetStaticOverride(), 1,
+			base.getStaticOverride(), 1,
 			"should be the same."
 		);
 		assert_eq!(
-			derived.GetOverride(), 12,
+			derived.getOverride(), 12,
 			"should be the same."
 		); // member overshadowing
 		assert_eq!(
-			derived.GetStaticOverride(), 42,
+			derived.getStaticOverride(), 42,
 			"should be the same."
 		); // static member overshadowing
 
 		assert_eq!(
-			BaseClassGetV(), 7,
+			baseClassGetV(), 7,
 			"should be the same."
 		);
 		assert_eq!(
-			DerivedClassGetV(), 7,
+			derivedClassGetV(), 7,
 			"should be the same."
 		);
 		assert_eq!(
-			BaseClassGetStaticOverride(), 1,
+			baseClassGetStaticOverride(), 1,
 			"should be the same."
 		);
 		assert_eq!(
-			DerivedClassGetStaticOverride(), 42,
+			derivedClassGetStaticOverride(), 42,
 			"should be the same."
 		);
 	}
