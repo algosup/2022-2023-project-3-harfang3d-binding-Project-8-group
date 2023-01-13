@@ -104,3 +104,40 @@ func Test(t *testing.T) {
 	assert.True(t, spn.IsNil(), "should be nil.")
 }
 '''
+
+test_rust = '''\
+#[cfg(test)]
+mod my_test {
+	#[test]
+	fn Test () {
+		sp = GetSharedPtrToSimpleStruct();
+
+		assert_eq!(
+			sp.GetU(), float32(4.0),
+			"should be the same."
+		);
+		assert_eq!(
+			sp.GetV(), int32(7),
+			"should be the same."
+		);
+
+		sp2 = NewSsimpleStruct(9.0);
+
+		assert_eq!(
+			sp2.GetU(), float32(9.0),
+			"should be the same"
+		);
+		assert_eq!(
+			sp2.GetV(), int32(90),
+			should be the same
+		);
+
+		spn = GetEmptySharedPtr()
+
+		assert!(
+			spn.IsNil(),
+			"should be nill"
+		);
+	}
+}
+'''
