@@ -44,7 +44,7 @@ The team members will contribute to reporting bugs when found (QA has specializa
 
 ## **Expected code architecture**
 
-After a global analysis of the code, it was concluded that the project should have new created files and some updated to have it working. 
+After a global analysis of the code, it was determined that the project would require new files and updates to existing files to function properly. 
 It will be using the following file structure contingent upon following the current architecture.
 
 ```md
@@ -66,8 +66,7 @@ It will be using the following file structure contingent upon following the curr
 ## **Test Strategy**
 
 ### Long term
-Those tests will not be removed at the end of the project, they will allow contributors to ensure that the added code did not break the foundations.
-Some examples:
+These tests will not be removed at the end of the project. They will allow contributors to ensure that their added code does not break the foundations. Examples include:
 - the use of Harfang's 3D engine library adapted to Rust
 - codes adapted from examples in other languages
 - new spaghetti code to see if it is able to handle it
@@ -75,28 +74,27 @@ Some examples:
 - checking all TDD tests and verifying their integrity (this is a verification and has to be added since it is a critical point in the team's flow of work)
 
 ### Starting from 0
-Starting from 0 as a user. It is less about the code and more about intuitiveness. How easy is it to install ? Do I know what to do and where ? Are there Additional steps ?
-It also contains environment testing.
+Starting from 0 as a user. These tests will focus on intuitiveness, ease of installation, and understanding of how and where to use the bindings. They will also include environment testing.
 
 ## Long term tests
 
 ### Use of examples
 
-The 3DHarfang's library python description has to be bound to the project by the end of the fourth week.
-Examples from the official documentation that passes in other languages are to be adapted and tested to see if they work in Rust.
-They must be of different types to cover as many aspects of the Rust language as possible.
+The 3DHarfang's Cpp library described in python has to be bound to the project by the end of the fourth week.
+Examples from the official documentation that passes in other languages will be adapted and tested to see if they work in Rust.
+They will be of different types to cover as many aspects of the Rust language as possible.
 
 ### Spaghetti code
 
-Introducing errors intentionally and creating poorly written versions of the examples are conjointly needed to evaluate the robustness of the Rust bindings.
+Intentional error based code and creating poorly written versions of the examples are necessary to evaluate the robustness of the Rust bindings.
 
 ### TDD Tests
 
-The tests are an important part of the project for the developers. They must be fully functional and up to date. They must be run and verified. We need to ensure they are neither  true==true equalities / commented nor outdated functions.
+Tests are an important part of the project for developers. They must be fully functional and up-to-date. They will be run and verified to ensure they are neither true==true equalities nor outdated functions.
 
 ### External code
 
-The client specified he would like the binding to be as functional as possible with external code. The Rust code will be tested with external libraries to see if it is able to handle it. It is not supposed to include advanced features but it may lead to finding new bugs that were being handled by some other parts of FABGen in a non common environment.
+The client specified that they would like the binding to be as functional as possible with external code. The Rust code will be tested with external libraries to see if it is able to handle it. It is not expected to include advanced features, but it may lead to the discovery of new bugs that were not found or being handled by some other parts of FABGen in a non common environment.
 
 ## Primary User test
 
@@ -111,6 +109,13 @@ They are expected to pass all phases of the usage easily :
 - Usage
   - Compilation and calling of FABGen
   - Executing the code that has been generated.
+
+### Test Methods
+Primary user tests will include:
+
+- Surveys
+- Usability testing
+- Environment testing
 
 ### Simulated
 
