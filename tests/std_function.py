@@ -129,6 +129,7 @@ test_rust = '''\
 
 #[cfg(test)]
 mod my_test {
+	#[test]
 	fn SimpleVoidFunction () {
 		println!("void function called")
 	};
@@ -145,7 +146,7 @@ mod my_test {
 		r = InvokeComputeFunction(5, 3, 4);
 
 		assert_eq!(
-			r, float32(19),
+			r, 9,
 			"should be equal."
 		);
 

@@ -70,3 +70,18 @@ func Test(t *testing.T) {
 	assert.Equal(t, b.GetU(), int32(7), "should be the same.")
 }
 '''
+
+test_rust = '''\
+#[cfg(test)]
+mod my_test {
+	#[test]
+	fn Test() {
+		a = GetBaseClass();
+		b = CastBaseClassToDerivedClass(a);
+		assert_eq!(
+			b.GetU, 7,
+			"should be the same."
+		)
+	}
+}
+'''

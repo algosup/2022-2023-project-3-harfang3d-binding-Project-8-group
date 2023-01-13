@@ -246,3 +246,122 @@ func Test(t *testing.T) {
 	assert.Equal(t, vPtr.Len(), int32(2), "should be the same.")
 }
 '''
+
+test_rust = '''\
+#[cfg(test)]
+mod my_test {
+	#[test]
+	fn Test() {
+		v = NewVectorOfInt();
+
+		assert_eq!(
+			v.Size(), 0,
+			"should be the same."
+		);
+		assert_eq!(
+			v.Length(), 0,
+			"should be the same."
+		);
+
+		v.PushBack(5);
+		v.PushBack(1);
+		v.PushBack(9);
+
+		assert_eq!(
+			v.Size(), 3,
+			"should be the same."
+		);
+		assert_eq!(
+			v.Length(), 3,
+			"should be the same."
+		);
+
+		assert_eq!(
+			*v.At(1), 1
+			"should be the same."
+		);
+		assert_eq!(
+			*v.At(2), 9
+			"should be the same."
+		);
+		assert_eq!(
+			*v.At(0), 5
+			"should be the same."
+		);
+
+		assert_eq!(
+			v.get(1), 1,
+			"should be the same."
+
+		);
+		assert_eq!(
+			v.get(2), 9,
+			"should be the same."
+
+		);
+		assert_eq!(
+			v.get(0), 5,
+			"should be the same."
+
+		);
+		
+		v.Get(1, 19);
+
+		assert_eq!(
+			v.get(2), 9,
+			"should be the same."
+
+		);
+		assert_eq!(
+			v.get(0), 5,
+			"should be the same."
+		);
+		assert_eq!(
+			v.get(1), 16,
+			"should be the same."
+
+		);
+
+		v.Get(0, v.Get(0)*4);
+
+		assert_eq!(
+			v.get(0), 20,
+			"should be the same."
+
+		);
+		assert_eq!(
+			ConsumePointerToInt(v.Data()), 16,
+			"should be the same."
+
+		);
+
+		w = NewVectorOfIntWithSequence([]int32{5, 2, 8});
+
+		assert_eq!(
+			w.get(0), 5,
+			"should be the same."
+		);
+		assert_eq!(
+			w.get(1), 2,
+			"should be the same."
+		);
+		assert_eq!(
+			w.get(2), 8,
+			"should be the same."
+		);
+
+		vPtr = NewVectorOfIntPtr();
+		vPtr.PushBack(nil);
+		vPtr.PushBack(v.Data());
+
+		assert_eq!(
+			vPtr.Size(), 2,
+			"should be the same."
+		);
+		assert_eq!(
+			v.Length(), 2,
+			"should be the same."
+		);
+	}
+}
+'''

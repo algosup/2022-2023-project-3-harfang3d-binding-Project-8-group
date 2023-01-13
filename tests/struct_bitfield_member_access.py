@@ -87,3 +87,43 @@ func Test(t *testing.T) {
 	assert.Equal(t, s.GetC(), int32(2), "should be the same.")
 }
 '''
+
+test_rust = '''\
+#[cfg(test)]
+mod my_test {
+	#[test]
+	fn Test() {
+		s = NewSimpleStruct();
+
+		assert_eq!(
+			s.GetA(), 3,
+			"should be the same."
+		);
+		assert_eq!(
+			s.GetB(), 11,
+			"should be the same."
+		);
+		assert_eq!(
+			s.GetC(), 1,
+			"should be the same."
+		);
+
+		s.SetA(1);
+		s.SetB(7);
+		s.SetC(2);
+
+		assert_eq!(
+			s.GetA(), 1,
+			"should be the same."
+		);
+		assert_eq!(
+			s.GetB(), 7,
+			"should be the same."
+		);
+		assert_eq!(
+			s.GetC(), 2,
+			"should be the same."
+		);
+	}
+}
+'''

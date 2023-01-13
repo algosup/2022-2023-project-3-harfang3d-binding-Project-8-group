@@ -82,6 +82,7 @@ func Test(t *testing.T) {
 test_rust = '''\
 #[cfg(test)]
 mod my_test{
+	#[test]
 	fn Test() {
 		future = GetFutureValue();
 		assert!(
@@ -91,7 +92,7 @@ mod my_test{
 
 		future.Wait();
 		assert_eq!(
-			future.Get(), int32(8),
+			future.Get(), 8,
 			"should be the same."
 		);
 	}

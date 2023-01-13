@@ -113,22 +113,22 @@ mod my_test {
 		sp = GetSharedPtrToSimpleStruct();
 
 		assert_eq!(
-			sp.GetU(), float32(4.0),
+			sp.GetU(), 4.0,
 			"should be the same."
 		);
 		assert_eq!(
-			sp.GetV(), int32(7),
+			sp.GetV(), 7,
 			"should be the same."
 		);
 
-		sp2 = NewSsimpleStruct(9.0);
+		sp2 = NewSsimpleStruct 9.0;
 
 		assert_eq!(
-			sp2.GetU(), float32(9.0),
+			sp2.GetU(), 9.0,
 			"should be the same"
 		);
 		assert_eq!(
-			sp2.GetV(), int32(90),
+			sp2.GetV(), 90,
 			should be the same
 		);
 

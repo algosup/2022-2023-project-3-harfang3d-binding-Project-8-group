@@ -101,25 +101,25 @@ mod my_test {
 		a = GetObj0();
 		b = GetObj0();
 
-		assert!(
-			a = b,
+		assert_eq!(
+			a, b,
 			"should be equal."
 		);
 
 		c = GetObj1();
 
-		assert!(
-			a != c,
+		assert_ne!(
+			a, c,
 			"should not be equal."
 		);
-		assert!(
-			b != c,
-			"should not be equal"
+		assert_ne!(
+			b, c,
+			"should not be equal."
 		);
 		d = GetObj2();
 
-		assert!(
-			a = d,
+		assert_eq!(
+			a, d,
 			"should be equal."
 		);
 	}
