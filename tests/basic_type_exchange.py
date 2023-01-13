@@ -104,13 +104,15 @@ fn main() {
     assert_eq!(my_test::return_float(), 8.0);
     assert_eq!(my_test::return_const_char_ptr(), "const char * -> string");
 
-    let ptr = &mut 9;
-    assert_eq!(my_test::return_int_by_pointer(ptr), 9);
-    let ref_ = &mut 9;
-    assert_eq!(my_test::return_int_by_reference(ref_), 9);
+    let mut int_var = 9;
+    assert_eq!(my_test::return_int_by_pointer(&mut int_var), 9);
+    assert_eq!(my_test::return_int_by_reference(&mut int_var), 9);
 
-    assert_eq!(my_test::add_int_by_value(3, 4), 7);
-    assert_eq!(my_test::add_int_by_pointer(&mut 3, &mut 4), 7);
-    assert_eq!(my_test::add_int_by_reference(&mut 3, &mut 4), 7);
+    let mut a = 3;
+    let mut b = 4;
+    assert_eq!(my_test::add_int_by_value(a, b), 7);
+    assert_eq!(my_test::add_int_by_pointer(&mut a, &mut b), 7);
+    assert_eq!(my_test::add_int_by_reference(&mut a, &mut b), 7);
 }
+
 '''
