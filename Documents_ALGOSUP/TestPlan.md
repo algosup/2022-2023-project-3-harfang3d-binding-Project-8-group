@@ -26,7 +26,7 @@ The team members will contribute to reporting bugs when found (QA has specializa
 
 #####  Hardware:
 
-```md
+```sh
 - 4 MacBook Air M1 running on macOS Monterey
 - 1 ThinkBook running on Windows 11
 - 1 WhiteBoard
@@ -143,9 +143,9 @@ As FABGen is an open source repository, outside developers will be asked to test
 
 ## **Schedule**
 
-```md
+```sh
 Test planning: 2 weeks
-Test case development: 1 weeks
+Test case development: 1 week
 Test execution: 2 weeks
 Defect tracking and resolution: 1 week
 Final testing: 1 week
