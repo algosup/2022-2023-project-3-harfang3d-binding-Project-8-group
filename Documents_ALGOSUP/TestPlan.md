@@ -70,7 +70,7 @@ These tests will not be removed at the end of the project. They will allow contr
 - the use of Harfang's 3D engine library adapted to Rust
 - codes adapted from examples in other languages
 - new spaghetti code to see if it is able to handle it
-- Random Cpp libraries to benchmark how usable it is outside of Harfang's framework
+- Random C++ libraries to benchmark how usable it is outside of Harfang's framework
 - checking all TDD tests and verifying their integrity (this is a verification and has to be added since it is a critical point in the team's flow of work)
 
 ### Starting from 0
@@ -80,7 +80,7 @@ Starting from 0 as a user. These tests will focus on intuitiveness, ease of inst
 
 ### Use of examples
 
-The 3DHarfang's Cpp library described in python has to be bound to the project by the end of the fourth week.
+The 3DHarfang's C++ library described in python has to be bound to the project by the end of the fourth week.
 Examples from the official documentation that passes in other languages will be adapted and tested to see if they work in Rust.
 They will be of different types to cover as many aspects of the Rust language as possible.
 
