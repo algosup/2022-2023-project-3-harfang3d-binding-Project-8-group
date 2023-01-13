@@ -137,3 +137,37 @@ func Test(t *testing.T) {
 	assert.Equal(t, s.GetD(), int32(9), "should be the same.")
 }
 """
+
+test_rust = """\
+extern crate my_test;
+
+fn main() {
+    let mut s = my_test::return_simple_struct_by_pointer();
+
+    assert_eq!(s.a, 7);
+    assert_eq!(s.b, 17.5);
+    assert_eq!(s.c, true);
+    assert_eq!(s.d, 9);
+    assert_eq!(s.text_field, "some content");
+
+    s.a = -2;
+    s.b = -4.5;
+    s.c = false;
+
+    assert_eq!(s.a, -2);
+    assert_eq!(s.b, -4.5);
+    assert_eq!(s.c, false);
+
+    s.a += 4;
+    assert_eq!(s.a, 2);
+
+    // write to const member
+    let write_to_const_failed = 
+        match std::mem::replace(&mut s.d, 12) {
+             Ok(v) => false,
+             Err(_) => true
+        };
+    assert_eq!(write_to_const_failed, true);
+    assert_eq!(s.d, 9);
+}
+"""

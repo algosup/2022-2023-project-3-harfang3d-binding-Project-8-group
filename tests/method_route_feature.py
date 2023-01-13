@@ -53,4 +53,12 @@ func Test(t *testing.T) {
 	assert.Equal(t, o.Get(4), int32(15), "should be the same.")
 }
 """
+test_rust = """\
+extern crate my_test;
+
+fn main() {
+    let o = my_test::Object::new();
+    assert_eq!(o.get(4), 15);
+}
+"""
 

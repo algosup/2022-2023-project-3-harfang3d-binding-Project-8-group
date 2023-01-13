@@ -45,3 +45,18 @@ end
 test_go = '''\
 package mytest
 '''
+
+test_rust = '''\
+extern crate my_test;
+
+fn main() {
+    let mut exception_raised = false;
+
+    match my_test::get_int() {
+        Ok(_) => {},
+        Err(_) => exception_raised = true,
+    }
+
+    assert_eq!(exception_raised, true);
+}
+'''

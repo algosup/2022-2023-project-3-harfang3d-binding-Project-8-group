@@ -122,3 +122,24 @@ func Test(t *testing.T) {
 	assert.Equal(t, v, int32(14), "should be the same.")
 }
 '''
+test_rust = '''\
+extern crate my_test;
+
+fn main() {
+    assert_eq!(my_test::get_int(), 8);
+
+    assert_eq!(my_test::get_global_int(), 0);
+    my_test::set_global_int();
+    assert_eq!(my_test::get_global_int(), 8);
+
+    // overload
+    assert_eq!(my_test::get(), 0);
+    assert_eq!(my_test::get_int(2), 1);
+    assert_eq!(my_test::get_int_int(4, 3), 12);
+    assert_eq!(my_test::get_int_int_int(4, 3, 2), 14);
+
+    // optional argument
+    assert_eq!(my_test::get_global_int_multiplied(), 15);
+    assert_eq!(my_test::get_global_int_multiplied(2), 6);
+}
+'''

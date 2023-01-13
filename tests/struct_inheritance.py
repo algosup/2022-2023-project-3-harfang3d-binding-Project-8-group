@@ -36,7 +36,7 @@ int read_virtual_method_through_base_class(base_class &o) {
 }
 ''', True, False)
 
-	base_conv =	gen.begin_class('base_class')
+	base_conv = gen.begin_class('base_class')
 	gen.bind_constructor(base_conv, [])
 	gen.bind_method(base_conv, 'base_method', 'int', [])
 	gen.bind_method(base_conv, 'base_method_override', 'int', [])
@@ -54,7 +54,8 @@ int read_virtual_method_through_base_class(base_class &o) {
 	gen.bind_static_members(derived_conv, ['int static_override'])
 	gen.end_class(derived_conv)
 
-	gen.bind_function('read_virtual_method_through_base_class', 'int', ['base_class &o'])
+	gen.bind_function('read_virtual_method_through_base_class',
+	                  'int', ['base_class &o'])
 
 	gen.finalize()
 
@@ -71,7 +72,8 @@ assert base.base_method_override() == 4
 derived = my_test.derived_class()
 assert derived.base_method() == 4  # can still access base class
 assert derived.derived_method() == 8  # can access its own methods
-assert derived.base_method_override() == 8  # properly overshadows redeclared base methods
+# properly overshadows redeclared base methods
+assert derived.base_method_override() == 8
 
 # argument casting through inheritance tree
 assert my_test.read_virtual_method_through_base_class(base) == 6
@@ -173,90 +175,92 @@ test_rust = '''\
 #[cfg(test)]
 mod my_test{
 	#[test]
-	fn test() {
-		let base = newBaseClass();
+	fn Test() {
+		base = NewBaseClass();
 		assert_eq!(
-			base.baseMethod(), 4,
+			base.BaseMethod(), 4,
 			"should be the same."
 		);
 		assert_eq!(
-			base.basemethodeOverride(), 4,
+			base.BasemethodeOverride(), 4,
 			"should be the same."
 		);
 
-		let derived = newDerivedClass();
+		derived = NewDerivedClass();
 		assert_eq!(
-			derived.baseMethod(), 4,
+			derived.BaseMethod(), 4,
 			"should be the same."
 		); // can still access base class
+		derived = NewDerivedClass();
 		assert_eq!(
-			derived.derivedMethod(), 8,
+			derived.DerivedMethod(), 8,
 			"should be the same."
 		);  // can access its own methods
+		derived = NewDerivedClass();
 		assert_eq!(
-			derived.baseMethodOverride(), 8,
+			derived.BaseMethodOverride(), 8,
 			"should be the same."
 		); // properly overshadows redeclared base methods
 
 		// argument casting through inheritance tree
 		assert_eq!(
-			readVirtualMethodThroughBaseClass(base), 6,
+			ReadVirtualMethodThroughBaseClass(base), 6,
 			"should be the same."
 		);
 		assert_eq!(
-			readVirtualMethodThroughBaseClass(CastDerivedClassToBaseClass(derived)), 9,
+			ReadVirtualMethodThroughBaseClass(CastDerivedClassToBaseClass(derived)), 9,
 			"should be the same."
 		);
 
 		// member access through inheritance tree
 		assert_eq!(
-				base.getU(), 6,
+				base.GetU(), 6,
 				"should be the same."
 		);
 		assert_eq!(
-				derived.getU(), 6,
+				derived.GetU(), 6,
 				"should be the same."
 		); // can access base class member
 		assert_eq!(
-				base.getV(), 7,
+				base.GetV(), 7,
 				"should be the same."
 		);
 		assert_eq!(
-				derived.getV(), 7,
+				derived.GetV(), 7,
 				"should be the same."
 		); // can access base class static member
 
 		assert_eq!(
-			base.getOverride(), 4,
+			base.GetOverride(), 4,
 			"should be the same."
 		);
 		assert_eq!(
-			base.getStaticOverride(), 1,
+			base.GetStaticOverride(), 1,
 			"should be the same."
 		);
 		assert_eq!(
-			derived.getOverride(), 12,
+			derived.GetOverride(), 12,
 			"should be the same."
 		); // member overshadowing
 		assert_eq!(
-			derived.getStaticOverride(), 42,
+			derived.GetStaticOverride(), 42,
 			"should be the same."
 		); // static member overshadowing
 
 		assert_eq!(
-			baseClassGetV(), 7,
+			BaseClassGetV(), 7,
 			"should be the same."
 		);
 		assert_eq!(
-			derivedClassGetV(), 7,
+			DerivedClassGetV(), 7,
 			"should be the same."
 		);
 		assert_eq!(
-			baseClassGetStaticOverride(), 1,
+			BaseClassGetStaticOverride(), 1,
 			"should be the same."
 		);
 		assert_eq!(
-			derivedClassGetStaticOverride(), 42,
+			DerivedClassGetStaticOverride(), 42,
 			"should be the same."
 		);
 	}

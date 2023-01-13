@@ -65,3 +65,15 @@ func Test(t *testing.T) {
 	assert.Equal(t, u.GetV(), int32(4), "should be the same.")
 }
 """
+
+test_rust = """\
+extern crate my_test;
+
+fn main() {
+    let s = my_test::SimpleStruct::new();
+    let t = my_test::SimpleStruct::new_with_value(4);
+
+    assert_eq!(s.v_, -8);
+    assert_eq!(t.v_, 4);
+}
+"""

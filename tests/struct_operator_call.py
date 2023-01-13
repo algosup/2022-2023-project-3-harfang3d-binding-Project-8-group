@@ -170,3 +170,37 @@ func Test(t *testing.T) {
 	assert.True(t, a.Ne(b), "should be the same.")
 }
 """
+test_rust = '''\
+extern crate my_test;
+
+fn main() {
+    let a = my_test::SimpleStruct::new_with_value(4);
+    let b = my_test::SimpleStruct::new_with_value(8);
+
+    let mut s = a + b;
+    assert_eq!(s.v, 12);
+    s += b;
+    assert_eq!(s.v, 20);
+    s += SimpleStruct::new_with_value(4);
+    assert_eq!(s.v, 24);
+
+    s = s / SimpleStruct::new_with_value(4);
+    assert_eq!(s.v, 6);
+    s /= SimpleStruct::new_with_value(3);
+    assert_eq!(s.v, 2);
+    s += a;
+    assert_eq!(s.v, 6);
+
+    s = s * a;
+    assert_eq!(s.v, 24);
+    s *= SimpleStruct::new_with_value(2);
+    assert_eq!(s.v, 48);
+
+    s = s - b;
+    assert_eq!(s.v, 40);
+    s -= SimpleStruct::new_with_value(32);
+    assert_eq!(s.v, 8);
+
+    let c = a * SimpleStruct::new_with_value(2);
+}
+'''
