@@ -20,7 +20,7 @@ RUN apt-get install -y lua5.2
 RUN apt-get install -y git
 
 # https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-8-group.git
-RUN git clone https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-8-group.git
+COPY . .
 
 CMD ["/bin/bash"]
 
