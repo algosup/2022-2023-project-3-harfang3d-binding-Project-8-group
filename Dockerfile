@@ -22,5 +22,7 @@ RUN apt-get install -y git
 # https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-8-group.git
 RUN git clone https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-8-group.git
 
+RUN export PS1=`printf "\033[32mLouis_mon_dieu: \033[39m"`
+
 CMD ["/bin/bash"]
 
