@@ -20,9 +20,11 @@ RUN apt-get install -y lua5.2
 RUN apt-get install -y git
 
 RUN mkdir app
+WORKDIR /app
 
-COPY ./requirements.txt /
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
+RUN rm requirements.txt
 
 CMD ["/bin/bash"]
 
