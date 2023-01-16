@@ -21,6 +21,8 @@ RUN echo "set linenumbers" >> /etc/nanorc
 # add Rust
 RUN apt install rustc -y
 
+RUN apt install cmake
+
 RUN mkdir app
 WORKDIR /app
 
