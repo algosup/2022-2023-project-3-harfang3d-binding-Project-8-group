@@ -14,8 +14,8 @@ mod hello_bindings;
 fn main() {
     let i = 1;
     let c: i8 = 65;
-    let cs = hello_bindings::CoolStruct{x: 2, y: 3};
+    let mut cs = hello_bindings::CoolStruct{x: 2, y: 3};
     unsafe {
-        hello_bindings::cool_function(i, c, *cs);
+        hello_bindings::cool_function(i, c, &mut cs);
     }
 }
