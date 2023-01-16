@@ -3,11 +3,7 @@
 	// for the documentation about the tasks.json format
 	"version": "2.0.0",
 	"command": "C:/Pythons/35/python.exe",
-<<<<<<< Updated upstream
 	"echoCommand": true,
-=======
-"echoCommand": true,
->>>>>>> Stashed changes
 	"tasks": [
 		{
 			"label": "tests",
