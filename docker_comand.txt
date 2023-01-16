@@ -1,2 +1,2 @@
 docker build -t fabgen .
-docker run -v /Users/maxbernard/Documents/GitHub/2022-2023-project-3-harfang3d-binding-Project-8-group:/app -it fabgen
+docker run -v /Users/{userName}/Documents/GitHub/2022-2023-project-3-harfang3d-binding-Project-8-group:/app -it fabgen
