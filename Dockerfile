@@ -1,23 +1,19 @@
 # linux image with golang, python and lua
 FROM ubuntu:latest
 
+RUN apt-get update
+
 # install golang
-RUN apt-get update && apt-get install -y golang
+RUN apt-get install -y golang golang-golang-x-tools clang-format
 
 # install python
-RUN apt-get install -y python3
-
-# install pip
-RUN apt-get install -y python3-pip
-
-# pip install pypeg2
-RUN pip3 install pypeg2
+RUN apt-get install -y python3 python3-pip
 
 # install lua
 RUN apt-get install -y lua5.2
 
-# install git
-RUN apt-get install -y git
+# install utilities
+RUN apt-get install -y git nano
 
 RUN mkdir app
 WORKDIR /app
@@ -27,4 +23,3 @@ RUN pip install -r requirements.txt
 RUN rm requirements.txt
 
 CMD ["/bin/bash"]
-
