@@ -15,6 +15,9 @@ RUN apt-get install -y lua5.2
 # install utilities
 RUN apt-get install -y git nano
 
+# add to nanorc line numbers
+RUN echo "set linenumbers" >> /etc/nanorc
+
 RUN mkdir app
 WORKDIR /app
 
