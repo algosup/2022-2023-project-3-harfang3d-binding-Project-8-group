@@ -27,6 +27,7 @@ def clean_name(name):
 	return new_name
 
 
+
 def clean_name_with_title(name):
 	new_name = ""
 	if "_" in name:
@@ -53,6 +54,7 @@ def clean_name_with_title(name):
 				first_letter_checked = True
 				new_name += c.capitalize()
 	return new_name.strip().replace("_", "").replace(":", "")
+
 
 
 class GoTypeConverterCommon(gen.TypeConverter):
@@ -187,11 +189,13 @@ class GoExternTypeConverter(GoTypeConverterCommon):
 
 
 class GoGenerator(gen.FABGen):
+	'''Generator for Go bindings.'''
 	default_ptr_converter = GoPtrTypeConverter
 	default_class_converter = GoClassTypeDefaultConverter
 	default_extern_converter = GoExternTypeConverter
 
 	def __init__(self):
+		'Constructor.'
 		super().__init__()
 		self.check_self_type_in_ops = True
 		self.go = ""
@@ -204,6 +208,7 @@ class GoGenerator(gen.FABGen):
 		pass
 
 	def start(self, module_name):
+		"called at the beginning of the generation process"
 		super().start(module_name)
 
 		self._source += self.get_binding_api_declaration()
@@ -253,6 +258,7 @@ class GoGenerator(gen.FABGen):
 
 	#
 	def get_binding_api_declaration(self):
+		'''Return the declaration of the binding API.'''
 		type_info_name = gen.apply_api_prefix("type_info")
 
 		out = '''\
@@ -1766,8 +1772,9 @@ uint32_t %s(void* p) {
 
 		self.go_c = go_c
 
-		# .go
-		go_bind = f"package {clean_name_with_title(self._name)}\n" \
+		# .go file 
+		#  package name should always be lowercase
+		go_bind = f"package {clean_name_with_title(self._name).lower()}\n" \
 				'// #include "wrapper.h"\n' \
 				'// #cgo CFLAGS: -I . -Wall -Wno-unused-variable -Wno-unused-function -O3\n' \
 				'// #cgo CXXFLAGS: -std=c++14 -O3\n'

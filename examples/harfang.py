@@ -5460,16 +5460,21 @@ def bind_extras(gen):
 
 
 def bind(gen):
+	"Entry point for the binding code generator (is in user's file)"
+	print('__________Step 1__________')
 	gen.start('harfang')
 
+	print('__________Step 2__________')
 	lib.bind_defaults(gen)
 
+	print('__________Step 3__________')
 	gen.add_include('foundation/cext.h')
 
 	gen.add_include('engine/engine.h')
 	gen.add_include('engine/factories.h')
 	gen.add_include('engine/plugin_system.h')
 
+	print('__________Step 4__________')
 	if gen.get_language() == 'CPython':
 		gen.insert_binding_code('''
 // Add the Python interpreter module search paths to the engine default plugins search path
@@ -5548,6 +5553,8 @@ static void InitializePluginsDefaultSearchPath(lua_State *L) {
 	lib.stl.bind_future_T(gen, 'uint32_t', 'FutureUInt')
 	lib.stl.bind_future_T(gen, 'size_t', 'FutureSize')
 
+
+	print('__________Step 5__________')
 	bind_std_vector(gen, gen.get_conv('char'))
 	bind_std_vector(gen, gen.get_conv('int'))
 	bind_std_vector(gen, gen.get_conv('int8_t'))
