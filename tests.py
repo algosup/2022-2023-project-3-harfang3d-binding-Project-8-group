@@ -439,6 +439,7 @@ class GoTestBed:
 		try:
 			subprocess.check_output('go mod init mytest', shell=True, stderr=subprocess.STDOUT)
 			subprocess.check_output("go fmt mytest", shell=True, stderr=subprocess.STDOUT)
+			subprocess.check_output("go get golang.org/x/tools/cmd/goimports@latest", shell=True, stderr=subprocess.STDOUT)
 			subprocess.check_output("goimports -w bind.go", shell=True, stderr=subprocess.STDOUT)
 			subprocess.check_output('go test -run ""', shell=True, stderr=subprocess.STDOUT)
 		except subprocess.CalledProcessError as e:
@@ -473,7 +474,7 @@ else:
 	test_names = [file[:-3] for file in os.listdir('./tests') if file.endswith('.py')]
 
 
-if args.linux or args.python_base_path:
+if args.python_base_path:
 	gen = lang.cpython.CPythonGenerator()
 	gen.verbose = False
 	run_tests(gen, test_names, CPythonTestBed())
