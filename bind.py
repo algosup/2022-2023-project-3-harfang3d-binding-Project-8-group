@@ -23,6 +23,7 @@ This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under certain conditions.''')
 
+# arguments the user can pass to the script
 parser = argparse.ArgumentParser(description='FABGen')
 parser.add_argument('script', nargs=1)
 parser.add_argument('--lua', help='Bind to Lua 5.2+', action='store_true')
@@ -44,14 +45,17 @@ os.makedirs(args.out, exist_ok=True)
 
 
 def output_binding(generator):
+	'Output binding code to files, here is the full process'
 	t_start = time.perf_counter()
 
 	if args.embedded:
 		print("Generating embedded binding code")
 		generator.embedded = args.embedded
 
+	# bindings, this is where the magic happens
 	script.bind(generator)
 
+	# write output files
 	for path, src in generator.get_output().items():
 		path = os.path.join(args.out, args.out_prefix + path)
 		with open(path, mode='w', encoding='utf-8') as f:
@@ -63,34 +67,41 @@ def output_binding(generator):
 
 # load binding script
 split = os.path.split(args.script[0])
+# path to the script
 path = split[0]
+# script name without extension
 mod = os.path.splitext(split[1])[0]
 
+# add path to sys.path
 sys.path.append(path)
+
+# import script
 script = importlib.import_module(mod)
 
 
-# set prefix
+# set prefix if specified
 if args.prefix:
 	gen.api_prefix = args.prefix
 
-
-# setup documentation hook
+#setup documentation hook
 def setup_generator(generator):
+	'Setup a generator with common arguments'
 	generator.defines = args.defines.split(',')
 
 	if args.doc_md_folder:
 		def md_doc_hook(name):
+			'Retrieve symbol documentation using its bound name from a folder containing an MD file for each documented symbol'
 			symbol_md_path = os.path.join(args.doc_md_folder, str(name) + '.md')
 
 			try:
+				# read file and escape special characters
 				with open(symbol_md_path, 'r') as file:
 					lines = file.readlines()
 					lines = ''.join(lines).replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", " ")
 					return lines
 			except IOError:
 				return ""
-
+		# call the the md_doc_hook function
 		generator.get_symbol_doc_hook = md_doc_hook
 
 	return generator
@@ -106,11 +117,14 @@ if args.lua:
 if args.go:
 	go_gen = lang.go.GoGenerator()
 	output_binding(setup_generator(go_gen))
+	cd = os.getcwd()
 	os.chdir(args.out)
 	os.system(f"go mod init {go_gen._name}")
 	os.system("go fmt bind.go")
+	os.system("go mod tidy")
 	os.system("goimports -w bind.go")
-
+	# return to the root directory
+	os.chdir(cd)
 	try:
 		os.system("clang-format -i wrapper.cpp wrapper.h")
 	except:
