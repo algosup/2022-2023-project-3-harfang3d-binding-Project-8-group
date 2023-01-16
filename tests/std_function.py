@@ -132,8 +132,8 @@ mod my_test {
     extern "C" {
         fn SetSimpleVoidFunction(f: extern "C" fn());
         fn InvokeSimpleVoidFunction();
-        fn SetComputeFunction(f: extern "C" fn(int32_t, int32_t,int32_t) -> int32_t);
-        fn InvokeComputeFunction(v: int32_t, m: int32_t, c:int32_t) -> int32_t;
+        fn SetComputeFunction(f: extern "C" fn(i32, i32,i32) -> i32);
+        fn InvokeComputeFunction(v: i32, m: i32, c:i32) -> i32;
     }
 
     #[no_mangle]
@@ -142,8 +142,8 @@ mod my_test {
     }
 
     #[no_mangle]
-    extern "C" fn ComputeFunction(v: int32_t, m: int32_t, c:int32_t) -> int32_t {
-        return v(m) + *c;
+    extern "C" fn ComputeFunction(v: i32, m: i32, c:i32) -> i32 {
+        v * m + c
     }
 
     #[test]
@@ -154,13 +154,14 @@ mod my_test {
             SetComputeFunction(ComputeFunction);
         }
 
-        let r = unsafe { InvokeComputeFunction(5, &3, &4) };
+        let r = unsafe { InvokeComputeFunction(5, 3, 4) };
 
         assert_eq!(
-            r, 9,
+            r, 17,
             "should be equal."
         );
 
     }
 }
+
 '''
