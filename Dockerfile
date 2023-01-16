@@ -19,6 +19,9 @@ RUN apt-get install -y lua5.2
 # install git
 RUN apt-get install -y git
 
+# install cmake
+RUN apt-get install -y cmake
+
 RUN mkdir app
 
 COPY ./requirements.txt /
