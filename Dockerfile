@@ -19,7 +19,7 @@ RUN apt-get install -y git nano
 RUN echo "set linenumbers" >> /etc/nanorc
 
 # add Rust
-RUN sudo apt install rustc -y
+RUN apt install rustc -y
 
 RUN mkdir app
 WORKDIR /app
