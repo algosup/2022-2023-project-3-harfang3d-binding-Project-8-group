@@ -47,6 +47,7 @@ func Test(t *testing.T) {
 	assert.Equal(t, GetFloat(), float32(8), "should be the same.")
 }
 """
+
 test_rust = """\
 extern crate my_test;
 

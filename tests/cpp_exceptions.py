@@ -48,15 +48,11 @@ package mytest
 
 test_rust = '''\
 extern crate my_test;
+use std::panicking;
 
-fn main() {
-    let mut exception_raised = false;
-
-    match my_test::get_int() {
-        Ok(_) => {},
-        Err(_) => exception_raised = true,
-    }
-
-    assert_eq!(exception_raised, true);
+#[test]
+fn test_get_int() {
+    let exception_raised = std::panicking::catch_unwind(|| my_test::get_int()).is_err();
+    assert!(exception_raised);
 }
 '''

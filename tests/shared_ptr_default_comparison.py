@@ -97,32 +97,24 @@ test_rust = '''\
 
 #[cfg(test)]
 mod my_test {
-	#[test]
-	fn test (){
-		let a = GetObj0();
-		let b = GetObj0();
+    use my_test::*;
+    use std::ptr;
 
-		assert_eq!(
-			a, b,
-			"should be equal."
-		);
+    #[test]
+    fn test() {
+        let a = get_obj0();
+        let b = get_obj0();
 
-		let c = GetObj1();
+        assert!(ptr::eq(&*a, &*b), "should be equal.");
 
-		assert_ne!(
-			a, c,
-			"should not be equal."
-		);
-		assert_ne!(
-			b, c,
-			"should not be equal."
-		);
-		let d = GetObj2();
+        let c = get_obj1();
 
-		assert_eq!(
-			a, d,
-			"should be equal."
-		);
-	}
+        assert!(!ptr::eq(&*a, &*c), "should not be equal.");
+        assert!(!ptr::eq(&*b, &*c), "should not be equal.");
+        let d = get_obj2();
+
+        assert!(ptr::eq(&*a, &*d), "should be equal.");
+    }
 }
+
 '''
