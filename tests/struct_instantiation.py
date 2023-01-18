@@ -47,7 +47,7 @@ assert(s.v_ == -8)
 assert(t.v_ == 4)
 '''
 
-test_go = """\
+test_go = '''\
 package mytest
 
 import (
@@ -64,16 +64,16 @@ func Test(t *testing.T) {
 	assert.Equal(t, s.GetV(), int32(-8), "should be the same.")
 	assert.Equal(t, u.GetV(), int32(4), "should be the same.")
 }
-"""
+'''
 
-test_rust = """\
+test_rust = '''\
 extern crate my_test;
 
 fn main() {
     let s = my_test::SimpleStruct::new();
-    let t = my_test::SimpleStruct::new_with_value(4);
+    let t = my_test::SimpleStruct::new_with_v(4);
 
     assert_eq!(s.v_, -8);
     assert_eq!(t.v_, 4);
 }
-"""
+'''

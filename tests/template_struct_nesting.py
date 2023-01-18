@@ -53,7 +53,7 @@ n = my_test.GetNestedStructInt(s)
 assert(n.v == 9)
 '''
 
-test_go = """\
+test_go = '''\
 package mytest
 
 import (
@@ -68,8 +68,9 @@ func Test(t *testing.T) {
 	n := GetNestedStructInt(s)
 	assert.Equal(t, n.GetV(), int32(9), "should be the same.")
 }
-"""
-test_rust = """\
+'''
+
+test_rust = '''\
 extern crate my_test;
 
 fn main() {
@@ -77,4 +78,4 @@ fn main() {
     let n = my_test::get_nested_struct_int(&s);
     assert_eq!(n.v, 9);
 }
-"""
+'''

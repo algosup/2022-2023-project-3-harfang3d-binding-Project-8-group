@@ -98,6 +98,7 @@ func Test(t *testing.T) {
 	assert.Equal(t, e.GetN().GetV(), int32(24), "should be the same.")
 }
 '''
+
 test_rust = '''\
 extern crate my_test;
 

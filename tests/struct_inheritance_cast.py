@@ -72,16 +72,15 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
+extern crate my_test;
+
 #[cfg(test)]
 mod my_test {
 	#[test]
 	fn test() {
-		let a = getBaseClass();
-		let b = castBaseClassToDerivedClass(a);
-		assert_eq!(
-			b.getU, 7,
-			"should be the same."
-		)
+		let a = my_test::get_base_class();
+		let b = my_test::cast_base_class_to_derived_class(a);
+		assert_eq!(b.u, 7);
 	}
 }
 '''

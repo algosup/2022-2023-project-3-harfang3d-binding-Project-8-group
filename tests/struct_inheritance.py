@@ -36,7 +36,7 @@ int read_virtual_method_through_base_class(base_class &o) {
 }
 ''', True, False)
 
-	base_conv = gen.begin_class('base_class')
+	base_conv =	gen.begin_class('base_class')
 	gen.bind_constructor(base_conv, [])
 	gen.bind_method(base_conv, 'base_method', 'int', [])
 	gen.bind_method(base_conv, 'base_method_override', 'int', [])
@@ -54,8 +54,7 @@ int read_virtual_method_through_base_class(base_class &o) {
 	gen.bind_static_members(derived_conv, ['int static_override'])
 	gen.end_class(derived_conv)
 
-	gen.bind_function('read_virtual_method_through_base_class',
-	                  'int', ['base_class &o'])
+	gen.bind_function('read_virtual_method_through_base_class', 'int', ['base_class &o'])
 
 	gen.finalize()
 
@@ -72,8 +71,7 @@ assert base.base_method_override() == 4
 derived = my_test.derived_class()
 assert derived.base_method() == 4  # can still access base class
 assert derived.derived_method() == 8  # can access its own methods
-# properly overshadows redeclared base methods
-assert derived.base_method_override() == 8
+assert derived.base_method_override() == 8  # properly overshadows redeclared base methods
 
 # argument casting through inheritance tree
 assert my_test.read_virtual_method_through_base_class(base) == 6
@@ -172,97 +170,40 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
+extern crate my_test;
+
 #[cfg(test)]
 mod my_test{
 	#[test]
 	fn Test() {
-		base = NewBaseClass();
-		assert_eq!(
-			base.BaseMethod(), 4,
-			"should be the same."
-		);
-		assert_eq!(
-			base.BasemethodeOverride(), 4,
-			"should be the same."
-		);
+		let base = my_test::BaseClass::new();
+		assert_eq!(base.base_method(), 4);
+		assert_eq!(base.base_method_override(), 4);
 
-		derived = NewDerivedClass();
-		assert_eq!(
-			derived.BaseMethod(), 4,
-			"should be the same."
-		); // can still access base class
-		derived = NewDerivedClass();
-		assert_eq!(
-			derived.DerivedMethod(), 8,
-			"should be the same."
-		);  // can access its own methods
-		derived = NewDerivedClass();
-		assert_eq!(
-			derived.BaseMethodOverride(), 8,
-			"should be the same."
-		); // properly overshadows redeclared base methods
+		let derived = DerivedClass::new();
+		assert_eq!(derived.base_method(), 4); // can still access base class
+		assert_eq!(derived.derived_method(), 8);  // can access its own methods
+		assert_eq!(derived.base_method_override(), 8); // properly overshadows redeclared base methods
 
 		// argument casting through inheritance tree
-		assert_eq!(
-			ReadVirtualMethodThroughBaseClass(base), 6,
-			"should be the same."
-		);
-		assert_eq!(
-			ReadVirtualMethodThroughBaseClass(CastDerivedClassToBaseClass(derived)), 9,
-			"should be the same."
-		);
+		assert_eq!(my_test::read_virtual_method_through_base_class(&base), 6);
+		assert_eq!(my_test::read_virtual_method_through_base_class(my_test::cast_derived_class_to_base_class(&derived)), 9);
 
 		// member access through inheritance tree
-		assert_eq!(
-				base.GetU(), 6,
-				"should be the same."
-		);
-		assert_eq!(
-				derived.GetU(), 6,
-				"should be the same."
-		); // can access base class member
-		assert_eq!(
-				base.GetV(), 7,
-				"should be the same."
-		);
-		assert_eq!(
-				derived.GetV(), 7,
-				"should be the same."
-		); // can access base class static member
+		assert_eq!(base.u, 6);
+		assert_eq!(derived.u, 6); // can access base class member
+		assert_eq!(base.v, 7);
+		assert_eq!(derived.v, 7); // can access base class static member
 
-		assert_eq!(
-			base.GetOverride(), 4,
-			"should be the same."
-		);
-		assert_eq!(
-			base.GetStaticOverride(), 1,
-			"should be the same."
-		);
-		assert_eq!(
-			derived.GetOverride(), 12,
-			"should be the same."
-		); // member overshadowing
-		assert_eq!(
-			derived.GetStaticOverride(), 42,
-			"should be the same."
-		); // static member overshadowing
+		assert_eq!(base.override, 4);
+		assert_eq!(base.static_override, 1);
+		assert_eq!(derived.override, 12); // member overshadowing
+		assert_eq!(derived.static_override, 42); // static member overshadowing
 
-		assert_eq!(
-			BaseClassGetV(), 7,
-			"should be the same."
-		);
-		assert_eq!(
-			DerivedClassGetV(), 7,
-			"should be the same."
-		);
-		assert_eq!(
-			BaseClassGetStaticOverride(), 1,
-			"should be the same."
-		);
-		assert_eq!(
-			DerivedClassGetStaticOverride(), 42,
-			"should be the same."
-		);
+		assert_eq!(my_test::get_base_class().v, 7);
+		assert_eq!(my_test::get_derived_class().v, 7);
+		assert_eq!(my_test::get_base_class().static_override, 1);
+		assert_eq!(my_test::get_derived_class.static_override, 42);
 	}
 }
 '''

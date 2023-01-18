@@ -109,6 +109,7 @@ func Test(t *testing.T) {
 	assert.Equal(t, C.GetBaseValue(), int32(12), "should be the same.")
 }
 '''
+
 test_rust = '''\
 extern crate my_test;
 
