@@ -134,9 +134,9 @@ fn main() {
 
     // overload
     assert_eq!(my_test::get(), 0);
-    assert_eq!(my_test::get(2), 1);
-    assert_eq!(my_test::get(4, 3), 12);
-    assert_eq!(my_test::get(4, 3, 2), 14);
+    assert_eq!(my_test::get_with_v(2), 1);
+    assert_eq!(my_test::get_with_v_k(4, 3), 12);
+    assert_eq!(my_test::get_with_v_k_b(4, 3, 2), 14);
 
     // optional argument
     assert_eq!(my_test::get_global_int_multiplied(), 15);
