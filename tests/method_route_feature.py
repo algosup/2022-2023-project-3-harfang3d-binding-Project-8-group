@@ -57,7 +57,7 @@ test_rust = """\
 extern crate my_test;
 
 fn main() {
-    let o = my_test::Object::new();
+    let o = my_test::object::new();
     assert_eq!(o.get(4), 15);
 }
 """

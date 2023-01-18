@@ -110,7 +110,7 @@ test_rust = '''\
 mod my_test {
 	#[test]
 	fn test () {
-		let sp = GetSharedPtrToSimpleStruct();
+		let sp = get_shared_ptr_to_simple_struct();
 
 		assert_eq!(
 			sp.GetU(), 4.0,
@@ -121,7 +121,7 @@ mod my_test {
 			"should be the same."
 		);
 
-		 let sp2 = NewSsimpleStruct(9.0);
+		let sp2 = new_s_simple_struct(9.0);
 
 		assert_eq!(
 			sp2.GetU(), 9.0,
@@ -132,12 +132,9 @@ mod my_test {
 			"should be the same."
 		);
 
-		 let spn = GetEmptySharedPtr()
+		let spn = get_empty_shared_ptr()
 
-		assert!(
-			spn.IsNil(),
-			"should be nill"
-		);
+		assert_eq!(spn.is_null(), true, "should be nil."
 	}
 }
 '''

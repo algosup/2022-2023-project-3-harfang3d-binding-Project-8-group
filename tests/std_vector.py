@@ -252,20 +252,20 @@ test_rust = '''\
 mod my_test {
 	#[test]
 	fn test() {
-		let v = newVectorOfInt();
+		let v = vector_of_int();
 
 		assert_eq!(
-			v.Size(), 0,
+			v.size(), 0,
 			"should be the same."
 		);
 		assert_eq!(
-			v.Length(), 0,
+			v.length(), 0,
 			"should be the same."
 		);
 
-		v.pushBack(5);
-		v.pushBack(1);
-		v.pushBack(9);
+		v.push_back(5);
+		v.push_back(1);
+		v.push_back(9);
 
 		assert_eq!(
 			v.size(), 3,
@@ -305,7 +305,7 @@ mod my_test {
 
 		);
 		
-		v.get(1, 19);
+		v.set(1, 16);
 
 		assert_eq!(
 			v.get(2), 9,
@@ -319,23 +319,21 @@ mod my_test {
 		assert_eq!(
 			v.get(1), 16,
 			"should be the same."
-
 		);
 
-		v.get(0, v.get(0)*4);
+		v.set(0, v.get(0)*4);
 
 		assert_eq!(
 			v.get(0), 20,
 			"should be the same."
-
 		);
+
 		assert_eq!(
-			consumePointerToInt(v.Data()), 16,
+			consume_pointer_to_int(v.Data()), 16,
 			"should be the same."
-
 		);
 
-		let w = newVectorOfIntWithSequence([]int32{5, 2, 8});
+		let w = vector_of_int_ptr([]int32{5, 2, 8});
 
 		assert_eq!(
 			w.get(0), 5,
@@ -350,9 +348,9 @@ mod my_test {
 			"should be the same."
 		);
 
-		let vPtr = newVectorOfIntPtr();
-		vPtr.pushBack(nil);
-		vPtr.pushBack(v.data());
+		let vPtr = vector_of_int_ptr();
+		vPtr.push_back(nil);
+		vPtr.push_back(v.data());
 
 		assert_eq!(
 			vPtr.size(), 2,

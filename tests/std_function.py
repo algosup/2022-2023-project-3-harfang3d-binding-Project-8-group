@@ -126,42 +126,31 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
+use my_test;
 
-#[cfg(test)]
-mod my_test {
-    extern "C" {
-        fn SetSimpleVoidFunction(f: extern "C" fn());
-        fn InvokeSimpleVoidFunction();
-        fn SetComputeFunction(f: extern "C" fn(i32, i32,i32) -> i32);
-        fn InvokeComputeFunction(v: i32, m: i32, c:i32) -> i32;
-    }
-
-    #[no_mangle]
-    extern "C" fn SimpleVoidFunction() {
-        println!("void function called");
-    }
-
-    #[no_mangle]
-    extern "C" fn ComputeFunction(v: i32, m: i32, c:i32) -> i32 {
-        v * m + c
-    }
-
-    #[test]
-    fn test() {
-        unsafe {
-            SetSimpleVoidFunction(SimpleVoidFunction);
-            InvokeSimpleVoidFunction();
-            SetComputeFunction(ComputeFunction);
-        }
-
-        let r = unsafe { InvokeComputeFunction(5, 3, 4) };
-
-        assert_eq!(
-            r, 17,
-            "should be equal."
-        );
-
-    }
+fn simple_void_function() {
+	println!("void function called!");
 }
 
+
+#[test]
+fn test_std_function() {
+	unsafe {
+		my_test::set_simple_void_function(simple_void_function);
+		my_test::invoke_simple_void_function();
+	}
+}
+
+fn compute_function(v: i32, m: &i32, c: &i32) -> i32 {
+	return v * *m + *c;
+}
+
+#[test]
+fn test_std_function2() {
+	unsafe {
+		my_test::set_compute_function(compute_function);
+		let r = my_test::invoke_compute_function(5, 3, 4);
+		assert_eq!(r, 19);
+	}
+}
 '''

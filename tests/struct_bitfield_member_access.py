@@ -93,35 +93,35 @@ test_rust = '''\
 mod my_test {
 	#[test]
 	fn test() {
-		let s = newSimpleStruct();
+		let s = simple_struct();
 
 		assert_eq!(
-			s.getA(), 3,
+			s.get_a(), 3,
 			"should be the same."
 		);
 		assert_eq!(
-			s.getB(), 11,
+			s.get_b(), 11,
 			"should be the same."
 		);
 		assert_eq!(
-			s.getC(), 1,
+			s.get_c(), 1,
 			"should be the same."
 		);
 
-		s.SetA(1);
-		s.SetB(7);
-		s.SetC(2);
+		s.set_a(1);
+		s.set_b(7);
+		s.set_c(2);
 
 		assert_eq!(
-			s.getA(), 1,
+			s.get_a(), 1,
 			"should be the same."
 		);
 		assert_eq!(
-			s.getB(), 7,
+			s.get_b(), 7,
 			"should be the same."
 		);
 		assert_eq!(
-			s.getC(), 2,
+			s.get_c(), 2,
 			"should be the same."
 		);
 	}

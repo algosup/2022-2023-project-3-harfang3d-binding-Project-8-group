@@ -44,7 +44,7 @@ extern crate my_test;
 use std::fmt;
 
 fn main() {
-    let o = my_test::SomeStruct::new();
+    let o = my_test::some_struct::new();
 
     assert_eq!(format!("{:?}", o), "repr!");
 }

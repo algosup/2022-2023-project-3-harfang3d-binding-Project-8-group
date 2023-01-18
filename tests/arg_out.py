@@ -124,22 +124,22 @@ test_rust = '''\
 extern crate my_test;
 
 fn main() {
-    let mut a = my_test::A::new();
-    a = my_test::modify_in_out_struct(a);
-    assert_eq!(a.v, 3);
+    let mut d = my_test::a::new();
+    d = my_test::modify_in_out_struct(d);
+    assert_eq!(d.v, 3);
 
-    let (a, b) = my_test::out_values_function_call(2, 3);
-    assert_eq!(a, 16);
+    let (d, b) = my_test::out_values_function_call(2, 3);
+    assert_eq!(d, 16);
     assert_eq!(b, 42);
 
-    let (r, a, b) = my_test::out_values_function_call_rval(2);
+    let (r, d, b) = my_test::out_values_function_call_rval(2);
     assert_eq!(r, 2);
-    assert_eq!(a, 16);
+    assert_eq!(d, 16);
     assert_eq!(b, 28);
 
-    let (r, a, b) = my_test::out_values_function_call_rval(2, 2);
+    let (r, d, b) = my_test::out_values_function_call_rval(2, 2);
     assert_eq!(r, 4);
-    assert_eq!(a, 16);
+    assert_eq!(d, 16);
     assert_eq!(b, 28);
 
     let (r, v) = my_test::in_out_value(5);

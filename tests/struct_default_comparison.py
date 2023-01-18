@@ -84,15 +84,15 @@ test_rust = '''\
 mod my_test{
 	#[test]
 	fn test() {
-		let a = GetObj0();
-		let b = GetObj0();
+		let a = get_obj0();
+		let b = get_obj0();
 
 		assert_eq!(
 			a, b,
 			"should be the same."
 		);
 
-		let c = GetObj1();
+		let c = get_obj1();
 
 		assert_ne!(
 			a, c,

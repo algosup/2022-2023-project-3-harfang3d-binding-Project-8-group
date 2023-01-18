@@ -84,7 +84,7 @@ test_rust = '''\
 mod my_test{
 	#[test]
 	fn test() {
-		let future = getFutureValue();
+		let future = get_future_value();
 		assert!(
 			future.is_valid(),
 			"should be the same."
