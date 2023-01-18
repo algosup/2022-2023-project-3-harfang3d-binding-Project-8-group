@@ -124,11 +124,11 @@ mod my_test {
 		let sp2 = new_s_simple_struct(9.0);
 
 		assert_eq!(
-			sp2.GetU(), 9.0,
+			sp2.get_u(), 9.0,
 			"should be the same"
 		);
 		assert_eq!(
-			sp2.GetV(), 90,
+			sp2.get_v(), 90,
 			"should be the same."
 		);
 
