@@ -519,6 +519,7 @@ class RustTestBed:
 
 		# copy test file
 		test_path = os.path.join(work_path, 'test.rs')
+		test_path = os.path.join(work_path, 'Cargo.toml')
 		with open(test_path, 'w') as file:
 			file.write(module.test_rust)
 
@@ -580,7 +581,7 @@ else:
 	test_names = [file[:-3] for file in os.listdir('./tests') if file.endswith('.py')]
 
 
-if args.linux or args.python_base_path:
+if args.python_base_path:
 	gen = lang.cpython.CPythonGenerator()
 	gen.verbose = False
 	run_tests(gen, test_names, CPythonTestBed())
