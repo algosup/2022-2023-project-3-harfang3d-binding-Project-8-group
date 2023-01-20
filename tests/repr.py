@@ -39,3 +39,13 @@ test_go = '''\
 package mytest
 
 '''
+test_rust = '''\
+extern crate my_test;
+use std::fmt;
+
+fn main() {
+    let o = my_test::some_struct::new();
+
+    assert_eq!(format!("{:?}", o), "repr!");
+}
+'''

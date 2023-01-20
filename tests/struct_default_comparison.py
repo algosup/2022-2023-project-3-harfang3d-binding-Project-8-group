@@ -78,3 +78,30 @@ func Test(t *testing.T) {
 	assert.NotEqual(t, b, c, "should not be the same.")
 }
 '''
+
+test_rust = '''\
+#[cfg(test)]
+mod my_test{
+	#[test]
+	fn test() {
+		let a = get_obj0();
+		let b = get_obj0();
+
+		assert_eq!(
+			a, b,
+			"should be the same."
+		);
+
+		let c = get_obj1();
+
+		assert_ne!(
+			a, c,
+			"should not be the same."
+		);
+		assert_ne!(
+			b, c,
+			"should not be the same."
+		);
+	}
+}
+'''

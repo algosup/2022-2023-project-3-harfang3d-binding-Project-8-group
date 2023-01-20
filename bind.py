@@ -11,6 +11,7 @@ import argparse
 import gen
 import lang.lua
 import lang.go
+import lang.rust
 import lang.cpython
 import lang.xml
 
@@ -29,6 +30,7 @@ parser.add_argument('script', nargs=1)
 parser.add_argument('--lua', help='Bind to Lua 5.2+', action='store_true')
 parser.add_argument('--cpython', help='Bind to CPython', action='store_true')
 parser.add_argument('--go', help='Bind to Go', action='store_true')
+parser.add_argument('--rust', help='Bind to Rust', action='store_true')
 parser.add_argument('--xml', help='Bind to CPython', action='store_true')
 parser.add_argument('--out', help='Path to output generated files', required=True)
 parser.add_argument('--out_prefix', help='Prefix to append to output generated files name', default='')

@@ -1,5 +1,6 @@
 /.idea
 *.pyc
+.DS_Store
 
 # Ignore configurations other than the launch file
 .vscode/

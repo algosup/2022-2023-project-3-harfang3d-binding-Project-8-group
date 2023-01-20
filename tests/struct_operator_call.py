@@ -129,7 +129,7 @@ assert(c == b)
 assert(a ~= b)
 '''
 
-test_go = """\
+test_go = '''\
 package mytest
 
 import (
@@ -169,4 +169,42 @@ func Test(t *testing.T) {
 	assert.True(t, c.Eq(b), "should be the same.")
 	assert.True(t, a.Ne(b), "should be the same.")
 }
-"""
+'''
+
+test_rust = '''\
+extern crate my_test;
+
+fn main() {
+	// TODO: Check for scoping rules (RAII)
+    let a = my_test::SimpleStruct::new(4);
+    let b = my_test::SimpleStruct::new(8);
+
+    let mut s = a.add_simple_struct(b);
+    assert_eq!(s.v, 12);
+    s.add_int(b);
+    assert_eq!(s.v, 20);
+    s.inplace_add_int(4);
+    assert_eq!(s.v, 24);
+
+    s = s.divide_int(4);
+    assert_eq!(s.v, 6);
+    s.inplace_divide_int(3);
+    assert_eq!(s.v, 2);
+    s.inplace_add_simple_struct(a);
+    assert_eq!(s.v, 6);
+
+    s = s.multiply_simple_struct(a);
+    assert_eq!(s.v, 24);
+    s.inplace_miltiply_int(2);
+    assert_eq!(s.v, 48);
+
+    s = s.subtract_simple_struct(b);
+    assert_eq!(s.v, 40);
+    s.subtract_int(32);
+    assert_eq!(s.v, 8);
+
+    let c = a.multiply_int(2);
+	assert_eq!(c, b);
+	assert_ne!(a, b);
+}
+'''

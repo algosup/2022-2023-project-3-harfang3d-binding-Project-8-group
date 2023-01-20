@@ -98,7 +98,7 @@ assert(s.a == 2)
 --expect_eq(s.d, 9)
 '''
 
-test_go = """\
+test_go = '''\
 package mytest
 
 import (
@@ -136,4 +136,37 @@ func Test(t *testing.T) {
 
 	assert.Equal(t, s.GetD(), int32(9), "should be the same.")
 }
-"""
+'''
+
+test_rust = '''\
+extern crate my_test;
+
+fn main() {
+    let mut s = my_test::return_simple_struct_by_pointer();
+
+    assert_eq!(s.a, 7);
+    assert_eq!(s.b, 17.5);
+    assert!(s.c);
+    assert_eq!(s.d, 9);
+    assert_eq!(s.text_field, "some content");
+
+    s.a = -2;
+    s.b = -4.5;
+    s.c = false;
+
+    assert_eq!(s.a, -2);
+    assert_eq!(s.b, -4.5);
+    assert!(!s.c);
+
+    s.a += 4;
+    assert_eq!(s.a, 2);
+
+    // write to const member
+	// FIXME: Cannot would not compile
+	/*
+    let old_value = std::mem::replace(&mut s.d, 12);
+    assert_eq!(write_to_const_failed, true);
+    assert_eq!(s.d, 9);
+	*/
+}
+'''

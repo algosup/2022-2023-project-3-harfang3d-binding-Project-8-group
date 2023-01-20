@@ -4,12 +4,12 @@ import lib
 
 
 def bind_test(gen):
-	gen.start('my_test')
+    gen.start('my_test')
 
-	lib.bind_defaults(gen)
+    lib.bind_defaults(gen)
 
-	# inject test code in the wrapper
-	gen.insert_code('''\
+    # inject test code in the wrapper
+    gen.insert_code('''\
 #include <future>
 #include <thread>
 #include <chrono>
@@ -31,13 +31,13 @@ std::future<int> GetFutureValue() {
 }
 ''', True, False)
 
-	lib.stl.bind_future_T(gen, 'int', 'FutureInt')
-	gen.bind_function('GetFutureValue', 'std::future<int>', [])
+    lib.stl.bind_future_T(gen, 'int', 'FutureInt')
+    gen.bind_function('GetFutureValue', 'std::future<int>', [])
 
-	gen.add_custom_free_code('work_thread.join();\n')
-	gen.finalize()
+    gen.add_custom_free_code('work_thread.join();\n')
+    gen.finalize()
 
-	return gen.get_output()
+    return gen.get_output()
 
 
 test_python = '''\
@@ -78,3 +78,24 @@ func Test(t *testing.T) {
 	assert.Equal(t, future.Get(), int32(8), "should be the same.")
 }
 """
+
+test_rust = '''\
+#[cfg(test)]
+mod my_test{
+	#[test]
+	fn test() {
+		let future = get_future_value();
+		assert!(
+			future.is_valid(),
+			"should be the same."
+		);
+
+		future.wait();
+		assert_eq!(
+			future.get(), 8,
+			"should be the same."
+		);
+	}
+}
+'''
+

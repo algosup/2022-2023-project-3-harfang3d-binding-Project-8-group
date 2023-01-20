@@ -45,3 +45,14 @@ end
 test_go = '''\
 package mytest
 '''
+
+test_rust = '''\
+extern crate my_test;
+use std::panicking;
+
+#[test]
+fn test_get_int() {
+    let exception_raised = std::panicking::catch_unwind(|| my_test::get_int()).is_err();
+    assert!(exception_raised);
+}
+'''
