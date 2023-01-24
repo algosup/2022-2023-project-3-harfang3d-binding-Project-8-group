@@ -11,8 +11,8 @@ def bind_std(gen):
 	class RustConstCharPtrConverter(lang.rust.RustTypeConverterCommon):
 		def __init__(self, type: str, *args, **kwargs) -> None:
 			super().__init__(type, *args, **kwargs)
-			self.rust_to_c_type = "*C.char"
-			# self.rust_type = "string" # TODO
+			self.rust_to_c_type = "*const c_char"
+			self.rust_type = "String"
 			
 		def get_type_glue(self, gen: FABGen, module_name: str) -> str:
 			return ""
@@ -21,10 +21,17 @@ def bind_std(gen):
 			return ""
 
 		def to_c_call(self, in_var: str, out_var_p: str, is_pointer: bool=False) -> str:
-			return "" # TODO
+			if is_pointer:
+				out += f"{out_var_p.replace('&', '_')}1 := CString(&mut {in_var})\n"
+				out += f"{out_var_p.replace('&', '_')} := &{out_var_p.replace('&', '_')}1\n"
+			else:
+				out = f"{out_var_p.replace('&', '_')}, idFin{out_var_p.replace('&', '_')} := wrapString({in_var})\n"
+				out += f"defer idFin{out_var_p.replace('&', '_')}()\n"
+			return out
+
 
 		def from_c_call(self, out_var: str, expr: str, ownership: Any) -> str:
-			return # TODO
+			return "C.RustString(%s)" % (out_var)
 
 	gen.bind_type(RustConstCharPtrConverter("const char *"))
 
@@ -41,50 +48,55 @@ def bind_std(gen):
 			return ""
 
 		def to_c_call(self, in_var: str, out_var_p: str, is_pointer: bool=False) -> str:
-			return # TODO
+			if is_pointer:
+				return f"{out_var_p.replace('&', '_')} := (*{self.rust_to_c_type})({in_var})\n"
+			else:
+				return f"{out_var_p.replace('&', '_')} := {self.rust_to_c_type}({in_var})\n"
 
-		def from_c_call(self, out_var: str, expr: str, ownership: Any) -> str:
-			return "" # TODO
 
-	# TODO
-	# gen.bind_type(RustBasicTypeConverter("char", "C.char", ""))
+		def from_c_call(self, out_var: str, expr: stxr, ownership: Any) -> str:
+			return f"{self.rust_type}({out_var})"
 
-	# gen.bind_type(RustBasicTypeConverter("unsigned char", "C.uchar", ""))
-	# gen.bind_type(RustBasicTypeConverter("uint8_t", "C.uchar", ""))
 
-	# gen.bind_type(RustBasicTypeConverter("short", "C.short", ""))
-	# gen.bind_type(RustBasicTypeConverter("int16_t", "C.short", ""))
-	# gen.bind_type(RustBasicTypeConverter("char16_t", "C.short", ""))
+	gen.bind_type(RustBasicTypeConverter("char", "c_char", "i8"))
 
-	# gen.bind_type(RustBasicTypeConverter("uint16_t", "C.ushort", ""))
-	# gen.bind_type(RustBasicTypeConverter("unsigned short", "C.ushort ", ""))
+	gen.bind_type(RustBasicTypeConverter("unsigned char", "c_uchar", "u8"))
+	gen.bind_type(RustBasicTypeConverter("uint8_t", "c_uchar", "u8"))
+
+	gen.bind_type(RustBasicTypeConverter("short", "c_short", "i16"))
+	gen.bind_type(RustBasicTypeConverter("int16_t", "c_short", "i16"))
+	gen.bind_type(RustBasicTypeConverter("char16_t", "c_short", "i16"))
+
+	gen.bind_type(RustBasicTypeConverter("uint16_t", "c_ushort", "u16"))
+	gen.bind_type(RustBasicTypeConverter("unsigned short", "c_ushort", "u16"))
 	
-	# gen.bind_type(RustBasicTypeConverter("int32", "C.int32_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("int", "C.int32_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("int32_t", "C.int32_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("char32_t", "C.int32_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("size_t", "C.size_t", ""))
+	gen.bind_type(RustBasicTypeConverter("int32", "c_int", "i32"))
+	gen.bind_type(RustBasicTypeConverter("int", "c_int", "i32"))
+	gen.bind_type(RustBasicTypeConverter("int32_t", "c_int", "i32"))
+	gen.bind_type(RustBasicTypeConverter("char32_t", "c_int", "i32"))
+	gen.bind_type(RustBasicTypeConverter("size_t", "c_int", "i32"))
 
-	# gen.bind_type(RustBasicTypeConverter("uint32_t", "C.uint32_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("unsigned int32_t", "C.uint32_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("unsigned int", "C.uint32_t", ""))
+	gen.bind_type(RustBasicTypeConverter("uint32_t", "c_uint", "u32"))
+	gen.bind_type(RustBasicTypeConverter("unsigned int32_t", "c_uint", "u32"))
+	gen.bind_type(RustBasicTypeConverter("unsigned int", "c_uint", "u32"))
+	# _________________________________________________________
 
-	# gen.bind_type(RustBasicTypeConverter("int64_t", "C.int64_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("long", "C.int64_t", ""))
+	gen.bind_type(RustBasicTypeConverter("int64_t", "c_longlong", "i64"))
+	gen.bind_type(RustBasicTypeConverter("long", "c_longlong", "i64"))
 
-	# gen.bind_type(RustBasicTypeConverter("float32", "C.float", ""))
-	# gen.bind_type(RustBasicTypeConverter("float", "C.float", ""))
+	gen.bind_type(RustBasicTypeConverter("float32", "c_float", "f32"))
+	gen.bind_type(RustBasicTypeConverter("float", "c_float", "f32"))
 	
-	# gen.bind_type(RustBasicTypeConverter("intptr_t", "C.intptr_t", ""))
+	gen.bind_type(RustBasicTypeConverter("intptr_t", "c_longlong", "i64"))
 
-	# gen.bind_type(RustBasicTypeConverter("unsigned long", "C.uint64_t", ""))
-	# gen.bind_type(RustBasicTypeConverter("uint64_t", "C.uint64_t ", ""))
-	# gen.bind_type(RustBasicTypeConverter("double", "C.double", ""))	
+	gen.bind_type(RustBasicTypeConverter("unsigned long", "c_ulonglong", "u64"))
+	gen.bind_type(RustBasicTypeConverter("uint64_t", "c_ulonglong", "u64"))
+	gen.bind_type(RustBasicTypeConverter("double", "c_double", "f64"))
 	
 	class RustBoolConverter(lang.rust.RustTypeConverterCommon):
 		def __init__(self, type, *args, **kwargs) -> None:
 			super().__init__(type, *args, **kwargs)
-			self.go_to_c_type = "C.bool"
+			self.rust_to_c_type = "c_bool"
 			
 		def get_type_glue(self, gen: FABGen, module_name: str) -> str:
 			return ""
@@ -93,9 +105,12 @@ def bind_std(gen):
 			return ""
 
 		def to_c_call(self, in_var: str, out_var_p: str, is_pointer: bool=False) -> str:
-			return "" # TODO
+			if is_pointer:
+				return f"{out_var_p.replace('&', '_')} := (&{self.rust_to_c_type})({in_var})\n"
+			else:
+				return f"{out_var_p.replace('&', '_')} := {self.rust_to_c_type}({in_var})\n"
 
 		def from_c_call(self, out_var: str, expr: str, ownership: Any) -> str:
-			return "" # TODO
+			return "bool(%s)" % out_var
 
-	gen.bind_type(RustBoolConverter('bool')).nobind = True
+	gen.bind_type(RustBoolConverter("bool")).nobind = True

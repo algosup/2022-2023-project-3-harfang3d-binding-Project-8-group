@@ -59,6 +59,7 @@ def bind_std(gen):
 	gen.bind_type(GoBasicTypeConverter("int8_t", "C.short", "int8"))
 	gen.bind_type(GoBasicTypeConverter("uint8_t", "C.uchar", "uint8"))
 	gen.bind_type(GoBasicTypeConverter("short", "C.short", "int16"))
+	gen.bind_type(GoBasicTypeConverter("int8_t", "C.short", "int8"))
 	gen.bind_type(GoBasicTypeConverter("int16_t", "C.short", "int16"))
 	gen.bind_type(GoBasicTypeConverter("char16_t", "C.short", "int16"))
 
