@@ -4,11 +4,11 @@ FROM ubuntu:latest
 RUN apt-get update
 
 # install utilities
-RUN apt-get install -y git nano sudo curl
+RUN apt-get install -y git nano sudo curl cmake
 RUN echo "set linenumbers" >> /etc/nanorc
 
 # install Golang
-RUN apt-get install -y golang golang-golang-x-tools clang-format
+RUN apt-get install -y golang golang-golang-x-tools clang clang-format
 
 # install Python
 RUN apt-get install -y python3 python3-pip
@@ -18,10 +18,10 @@ RUN apt-get install -y lua5.2
 
 # install Rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+# update crates.io index
+RUN mkdir /tmp/crates_update && cd /tmp/crates_update && /root/.cargo/bin/cargo init && /root/.cargo/bin/cargo add bindgen && rm -rf /tmp/crates_update
 
-RUN apt install -y cmake
-
-RUN mkdir app
+RUN mkdir /app
 WORKDIR /app
 
 COPY ./requirements.txt .
