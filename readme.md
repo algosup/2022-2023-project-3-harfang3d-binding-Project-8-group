@@ -4,12 +4,12 @@
 [![Coverage Status](https://coveralls.io/repos/github/ejulien/FABGen/badge.svg?branch=master)](https://coveralls.io/github/ejulien/FABGen)
 
 Fabgen is a set of Python scripts to generate C++ binding code to different languages.  
-It was written as a SWIG replacement for the Harfang Multimedia Framework (http://www.harfang3d.com).
+It was written as a SWIG replacement for the Harfang Multimedia Framework (<http://www.harfang3d.com>).
 
 ## Authors
 
-Fabgen is written and maintained by Emmanuel Julien for the Harfang Multimedia Framework (http://www.harfang3d.com).  
-Fabgen GO is written and maintained by Thomas Simonnet for the Harfang Multimedia Framework (http://www.harfang3d.com).
+Fabgen is written and maintained by Emmanuel Julien for the Harfang Multimedia Framework (<http://www.harfang3d.com>).  
+Fabgen GO is written and maintained by Thomas Simonnet for the Harfang Multimedia Framework (<http://www.harfang3d.com>).
 
 ## License
 
@@ -68,7 +68,8 @@ Generate binding for Lua 5.3
 
 Generate binding for GO  
 Installation:  
-- Install Go from https://golang.org/dl/  
+
+- Install Go from <https://golang.org/dl/>  
 - goimports with: `go get golang.org/x/tools/cmd/goimports`
 
 `bind.py api_binding_script.py --go --out d:\`
