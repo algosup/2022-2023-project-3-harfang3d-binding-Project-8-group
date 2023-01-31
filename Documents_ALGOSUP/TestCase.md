@@ -171,3 +171,37 @@ To ensure that the library can handle the maximum/minimum limit of characters/li
 6. Execute the Rust code file
 7. Verify that the output is as expected
 8. Test the library with different values close to the maximum/minimum limit of characters/lines to ensure that it can handle edge cases.
+
+##  Test
+
+### Objective
+
+To ensure that the library can handle the maximum/minimum limit of characters/lines that can be converted.
+
+### Pre-conditions
+
+- Python code file is accessible
+- Python and C++ are installed
+
+### Input
+
+- Python code file with maximum/minimum limit of characters/lines
+
+### Expected Output
+
+- Rust code file is created
+
+### Post-conditions
+
+- Rust code file can be compiled and executed
+
+### Steps
+
+1. Open the library in Python
+2. Import the Python code file
+3. Convert the C++ code to Rust
+4. Save the Rust code file
+5. Compile the Rust code file
+6. Execute the Rust code file
+7. Verify that the output is as expected
+8. Test the library with different values close to the maximum/minimum limit of characters/lines to ensure that it can handle edge cases.
