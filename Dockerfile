@@ -28,4 +28,6 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
 
+ENV PATH="/root/.cargo/bin:${PATH}"
+
 CMD ["/bin/bash"]
