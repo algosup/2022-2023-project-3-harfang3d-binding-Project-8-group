@@ -54,13 +54,14 @@ def bind_std(gen):
 				return f"{out_var_p.replace('&', '_')} := {self.rust_to_c_type}({in_var})\n"
 
 
-		def from_c_call(self, out_var: str, expr: stxr, ownership: Any) -> str:
+		def from_c_call(self, out_var: str, expr: str, ownership: Any) -> str:
 			return f"{self.rust_type}({out_var})"
 
 
 	gen.bind_type(RustBasicTypeConverter("char", "c_char", "i8"))
 
 	gen.bind_type(RustBasicTypeConverter("unsigned char", "c_uchar", "u8"))
+	gen.bind_type(RustBasicTypeConverter("int8_t", "c_char", "i8"))
 	gen.bind_type(RustBasicTypeConverter("uint8_t", "c_uchar", "u8"))
 
 	gen.bind_type(RustBasicTypeConverter("short", "c_short", "i16"))
