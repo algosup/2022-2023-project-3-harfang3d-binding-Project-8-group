@@ -517,17 +517,60 @@ class RustTestBed:
 			print("Can't find test_rust")
 			return False
 
+		# initializing cargo package
+		os.chdir(work_path)
+		subprocess.check_output(["cargo", "init", "--lib", "--name", "my_test"])
+		toml_path = os.path.join(work_path, 'Cargo.toml')
+		with open(toml_path, 'a') as file:
+			file.write("""
+[lib]
+name = "my_test"
+crate-type = ["staticlib"]
+
+[build-dependencies]
+bindgen = "0.63"
+cc = "1.0"
+""")
+
+		# create builder file
+		builder_path = os.path.join(work_path, 'build.rs')
+		with open(builder_path, 'w') as file:
+			file.write("""
+fn main() {
+    if std::path::Path::new("wrapper.cpp").exists() {
+        cc::Build::new()
+            .file("wrapper.cpp")
+            .include("src")
+            .compile("test");
+    }
+
+    let bindings = bindgen::Builder::default()
+        .generate_inline_functions(true)
+        .enable_cxx_namespaces()
+        .raw_line("pub use self::root::*;")
+        .clang_args(&[
+            "-x",
+            "c++",
+            "-I/usr/include/c++/11",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+        ])
+        .header("wrapper.h")
+        .generate()
+        .unwrap();
+
+    let mut target = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    target.push("bindings.rs");
+    
+    bindings.write_to_file(&target).unwrap();
+}
+""")
+
 		# copy test file
-		test_path = os.path.join(work_path, 'test.rs')
-		test_path = os.path.join(work_path, 'Cargo.toml')
+		test_path = os.path.join(work_path, 'src/lib.rs')
 		with open(test_path, 'w') as file:
 			file.write(module.test_rust)
-
-		# if need special other file in package
-		if hasattr(module, "test_special_crust"):
-			test_path = os.path.join(work_path, 'test_crust.rs')
-			with open(test_path, 'w') as file:
-				file.write(module.test_special_crust)
 
 		build_path = os.path.join(work_path, 'build')
 		os.mkdir(build_path)
