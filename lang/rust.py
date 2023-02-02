@@ -174,9 +174,34 @@ class RustGenerator(gen.FABGen):
 
 	#
 	def get_binding_api_declaration(self) -> str:
+		"""Return the declaration of the binding API."""
 		type_info_name = gen.apply_api_prefix("type_info")
-		
-		return "" # TODO
+
+		out = f'''\
+struct {type_info_name} {{
+	uint32_t type_tag;
+	const char *c_type;
+	const char *bound_name;
+
+	bool (*check)(void* p);
+	void (*to_c)(void *p, void *out);
+	int (*from_c)(void *obj, OwnershipPolicy policy);
+}};\n
+'''
+
+		out += "// return a type info from its type tag\n"
+		prefixed_bound_type = gen.apply_api_prefix("get_bound_type_info")
+		out += f"{type_info_name} *{prefixed_bound_type}(uint32_t type_tag);\n"
+
+		out += "// return a type info from its type name\n"
+		prefixed_c_type = gen.apply_api_prefix("get_c_type_info")
+		out += f"{type_info_name} *{prefixed_c_type}(const char *type);\n"
+
+		out += "// returns the typetag of a userdata object, nullptr if not a Fabgen object\n"
+		prefixed_wrapped_type = gen.apply_api_prefix("get_wrapped_object_type_tag")
+		out += f"uint32_t {prefixed_wrapped_type}(void* p);\n\n"
+
+		return out
 
 	def output_binding_api(self) -> None:
 		type_info_name = gen.apply_api_prefix("type_info")
