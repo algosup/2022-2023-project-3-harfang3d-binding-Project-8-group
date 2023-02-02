@@ -2,6 +2,7 @@
 #	Copyright (C) 2023 Léo Chartier
 
 from typing import Any
+from pypeg2 import parse
 
 import gen
 import lib
@@ -184,7 +185,7 @@ class RustGenerator(gen.FABGen):
 
 	#
 	def get_output(self) -> dict[str, str]:
-		return {"wrapper.cpp": self.rust_c, "wrapper.h": self.rust_h, "bind.go": self.rust_bind, "translate_file.json": self.rust_translate_file}
+		return {"wrapper.cpp": self.rust_cpp, "wrapper.h": self.rust_h}
 
 	def _get_type(self, name: str) -> gen.TypeConverter | None:
 		for type in self._bound_types:
@@ -391,8 +392,228 @@ class RustGenerator(gen.FABGen):
 		# 					check_if_val_have_constructor(arg)
 
 	def finalize(self) -> None:
-		self.rust_c = ""
-		self.rust_h = ""
-		self.rust_bind = ""
-		self.rust_translate_file = ""
-		pass # TODO
+		super().finalize()
+
+		self.output_binding_api()
+
+		# helper to add from itself and from parent class
+		def extract_conv_and_bases(convs_to_extract, extract_func, bases_convs_to_extract):
+			rust = ""
+			saved_names = []
+			for conv_to_extract in convs_to_extract:
+				if "name" in conv_to_extract:
+					saved_names.append(conv_to_extract["name"])
+				elif "op" in conv_to_extract:
+					saved_names.append(conv_to_extract["op"])
+				rust += extract_func(conv_to_extract)
+
+			# add static member get set for base class
+			for base_convs_to_extract in bases_convs_to_extract:
+				for conv_to_extract in base_convs_to_extract:
+					# add only if it's not already in the current class
+					n = ""
+					if "name" in conv_to_extract:
+						n = conv_to_extract["name"]
+					elif "op" in conv_to_extract:
+						n = conv_to_extract["op"]
+					if n not in saved_names:
+						saved_names.append(n)
+						rust += extract_func(conv_to_extract)
+			return rust
+
+		# .h
+		rust_h = '#pragma once\n' \
+				'#ifdef __cplusplus\n'\
+				'extern "C" {\n'\
+				'#endif\n'
+
+		rust_h += '#include <stdint.h>\n' \
+			'#include <stdbool.h>\n' \
+			'#include <stddef.h>\n' \
+			'#include <memory.h>\n' \
+			'#include <string.h>\n' \
+			'#include <stdlib.h>\n' \
+			'#include "fabgen.h"\n\n'
+			
+		# enum
+		for bound_name, enum in self._enums.items():
+			enum_conv = self._get_conv_from_bound_name(bound_name)
+			if enum_conv is not None and hasattr(enum_conv, "base_type") and enum_conv.base_type is not None:
+				arg_bound_name = str(enum_conv.base_type)
+			else:
+				arg_bound_name = "int"
+				
+			rust_h += f"extern {arg_bound_name} Get{bound_name}(const int id);\n"
+
+		# write all typedef first
+		for conv in self._bound_types:
+			if conv.nobind:
+				continue
+
+			cleanBoundName = clean_name_with_title(conv.bound_name)
+			if self.__get_is_type_class_or_pointer_with_class(conv) :
+				rust_h += f"typedef void* {clean_name_with_title(self._name)}{cleanBoundName};\n"
+
+			if "GoStdFunctionConverter" in str(conv):
+				func_name = conv.base_type.replace("std::function<", "").replace("&", "*")[:-1] # [:-1] to remove the > of std::function
+				first_parenthesis = func_name.find("(")
+				# get all args boundname in c
+				args = func_name[first_parenthesis+1:-1].split(",")
+				args_boundname = []
+				for arg in args:
+					if len(arg):
+						ctype = parse(arg, gen._CType)
+						conv = self.select_ctype_conv(ctype)
+						args_boundname.append(self.__get_arg_bound_name_to_c({"conv": conv, "carg": type('carg', (object,), {'ctype':ctype})()}))
+
+				rust_h += f"typedef {func_name[:first_parenthesis]} (*{clean_name_with_title(self._name)}{cleanBoundName})({','.join(args_boundname)});\n"
+
+		# write the rest of the classes
+		for conv in self._bound_types:
+			if conv.nobind:
+				continue
+
+			cleanBoundName = clean_name_with_title(conv.bound_name)
+
+			if "sequence" in conv._features:
+				rust_h += self.__extract_sequence(conv, is_in_header=True)
+
+			# static members
+			rust_h += extract_conv_and_bases(conv.static_members, \
+									lambda member: self.__extract_get_set_member(conv.bound_name, conv, member, static=True, is_in_header=True), \
+									[base_class.static_members for base_class in conv._bases])
+
+			# members
+			rust_h += extract_conv_and_bases(conv.members, \
+									lambda member: self.__extract_get_set_member(conv.bound_name, conv, member, is_in_header=True), \
+									[base_class.members for base_class in conv._bases])
+
+			# constructors
+			if conv.constructor:
+				rust_h += self.__extract_method(cleanBoundName, conv, conv.constructor, bound_name=f"constructor_{conv.bound_name}", is_in_header=True, is_global=True, is_constructor=True)
+
+			# destructor for all type class
+			if self.__get_is_type_class_or_pointer_with_class(conv) :
+				rust_h += f"extern void {clean_name_with_title(self._name)}{cleanBoundName}Free({clean_name_with_title(self._name)}{cleanBoundName});\n"
+
+			# arithmetic operators
+			rust_h += extract_conv_and_bases(conv.arithmetic_ops, \
+									lambda arithmetic: self.__extract_method(conv.bound_name, conv, arithmetic, is_in_header=True, name=arithmetic['op'], bound_name=gen.get_clean_symbol_name(arithmetic['op'])), \
+									[base_class.arithmetic_ops for base_class in conv._bases])
+
+			# comparison_ops
+			rust_h += extract_conv_and_bases(conv.comparison_ops, \
+									lambda comparison: self.__extract_method(conv.bound_name, conv, comparison, is_in_header=True, name=comparison['op'], bound_name=gen.get_clean_symbol_name(comparison['op'])), \
+									[base_class.comparison_ops for base_class in conv._bases])
+
+			# static methods
+			rust_h += extract_conv_and_bases(conv.static_methods, \
+									lambda method: self.__extract_method(conv.bound_name, conv, method, static=True, is_in_header=True), \
+									[base_class.static_methods for base_class in conv._bases])
+			# methods
+			rust_h += extract_conv_and_bases(conv.methods, \
+									lambda method: self.__extract_method(conv.bound_name, conv, method, is_in_header=True), \
+									[base_class.methods for base_class in conv._bases])
+				
+			
+		# functions
+		for func in self._bound_functions:
+			rust_h += self.__extract_method("", None, func, name=func["name"], is_global=True, is_in_header=True)
+
+		# global variables
+		for var in self._bound_variables:
+			rust_h += self.__extract_get_set_member("", None, var, is_global=True, is_in_header=True)
+
+		rust_h += '#ifdef __cplusplus\n' \
+				'}\n' \
+				'#endif\n'
+		self.rust_h = rust_h
+
+
+		# cpp
+		rust_cpp = '// rust wrapper c\n' \
+				'#include \"wrapper.h\"\n' \
+				'#include <memory>\n'
+				
+		if len(self._FABGen__system_includes) > 0:
+			rust_cpp += "".join(['#include "%s"\n\n' % path for path in self._FABGen__system_includes])
+		if len(self._FABGen__user_includes) > 0:
+			rust_cpp += "".join(['#include "%s"\n\n' % path for path in self._FABGen__user_includes])
+
+		rust_cpp += self._source
+
+		# enum
+		for bound_name, enum in self._enums.items():
+			enum_conv = self._get_conv_from_bound_name(bound_name)
+			if enum_conv is not None and hasattr(enum_conv, "base_type") and enum_conv.base_type is not None:
+				arg_bound_name = str(enum_conv.base_type)
+			else:
+				arg_bound_name = "int"
+
+			enum_vars = []
+			for name, value in enum.items():
+				enum_vars.append(f"({arg_bound_name}){value}")
+			rust_cpp += f"static const {arg_bound_name} {clean_name_with_title(self._name)}{bound_name} [] = {{ {', '.join(enum_vars)} }};\n"
+			rust_cpp += f"{arg_bound_name} Get{bound_name}(const int id) {{ return {clean_name_with_title(self._name)}{bound_name}[id];}}\n"
+
+		#  classes
+		for conv in self._bound_types:
+			if conv.nobind:
+				continue
+
+			cleanBoundName = clean_name_with_title(conv.bound_name)
+			if conv.is_type_class():
+				rust_cpp += f"// bind {clean_name_with_title(self._name)}{cleanBoundName} methods\n"
+
+			if "sequence" in conv._features:
+				rust_cpp += self.__extract_sequence(conv)
+			
+			# static members
+			rust_cpp += extract_conv_and_bases(conv.static_members, \
+									lambda member: self.__extract_get_set_member(conv.bound_name, conv, member, static=True), \
+									[base_class.static_members for base_class in conv._bases])
+
+			# members
+			rust_cpp += extract_conv_and_bases(conv.members, \
+									lambda member: self.__extract_get_set_member(conv.bound_name, conv, member), \
+									[base_class.members for base_class in conv._bases])
+
+			# constructors
+			if conv.constructor:
+				rust_cpp += self.__extract_method(conv.bound_name, conv, conv.constructor, bound_name=f"constructor_{conv.bound_name}", is_global=True, is_constructor=True)
+				
+			# destructor for all type class
+			if self.__get_is_type_class_or_pointer_with_class(conv) :
+				# delete
+				rust_cpp += f"void {clean_name_with_title(self._name)}{cleanBoundName}Free({clean_name_with_title(self._name)}{cleanBoundName} h){{" \
+						f"delete ({conv.ctype}*)h;" \
+						f"}}\n" 
+
+			# arithmetic operators
+			rust_cpp += extract_conv_and_bases(conv.arithmetic_ops, \
+									lambda arithmetic: self.__extract_method(conv.bound_name, conv, arithmetic, name=arithmetic['op'], bound_name=gen.get_clean_symbol_name(arithmetic['op']), overload_op=arithmetic["op"]), \
+									[base_class.arithmetic_ops for base_class in conv._bases])
+
+			# comparison_ops
+			rust_cpp += extract_conv_and_bases(conv.comparison_ops, \
+									lambda comparison: self.__extract_method(conv.bound_name, conv, comparison, name=comparison["op"], bound_name=gen.get_clean_symbol_name(comparison["op"]), overload_op=comparison["op"]), \
+									[base_class.comparison_ops for base_class in conv._bases])
+
+			# static methods
+			rust_cpp += extract_conv_and_bases(conv.static_methods, \
+									lambda method: self.__extract_method(conv.bound_name, conv, method, static=True), \
+									[base_class.static_methods for base_class in conv._bases])
+			# methods
+			rust_cpp += extract_conv_and_bases(conv.methods, \
+									lambda method: self.__extract_method(conv.bound_name, conv, method), \
+									[base_class.methods for base_class in conv._bases])
+
+		# functions
+		for func in self._bound_functions:
+			rust_cpp += self.__extract_method("", None, func, name=func["name"], is_global=True)
+
+		# global variables
+		for var in self._bound_variables:
+			rust_cpp += self.__extract_get_set_member("", None, var, is_global=True, static=True)
+
+		self.rust_cpp = rust_cpp
