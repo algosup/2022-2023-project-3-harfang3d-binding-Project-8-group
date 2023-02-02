@@ -71,11 +71,17 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-extern crate my_test;
+mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 
-fn main() {
-    let s = my_test::EnclosingTemplateInt::new();
-    let n = my_test::get_nested_struct_int(&s);
-    assert_eq!(n.v, 9);
+#[cfg(test)]
+mod atest {
+	#[test]
+	fn main() {
+		let s = my_test::EnclosingTemplateInt::new();
+		let n = my_test::get_nested_struct_int(&s);
+		assert_eq!(n.v, 9);
+	}
 }
 '''

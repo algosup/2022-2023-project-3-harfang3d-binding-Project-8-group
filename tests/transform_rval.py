@@ -111,15 +111,21 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-extern crate my_test;
+mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 
-fn main() {
-    let b = my_test::get_b();
-    assert_eq!(b.b, 3);
-    assert_eq!(b.get_base_value(), 12);
+#[cfg(test)]
+mod atest {
+	#[test]
+	fn main() {
+		let b = my_test::get_b();
+		assert_eq!(b.b, 3);
+		assert_eq!(b.get_base_value(), 12);
 
-    let c = my_test::get_c();
-    assert_eq!(c.c, 7);
-    assert_eq!(c.get_base_value(), 12);
+		let c = my_test::get_c();
+		assert_eq!(c.c, 7);
+		assert_eq!(c.get_base_value(), 12);
+	}
 }
 '''

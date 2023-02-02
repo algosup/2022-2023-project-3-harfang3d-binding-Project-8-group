@@ -93,19 +93,25 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-extern crate my_test;
+mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 
-fn main() {
-    assert_eq!(my_test::get_v(), 2i32);
-	my_test::set_v(5i32);
-    assert_eq!(my_test::get_v(), 5i32);
+#[cfg(test)]
+mod atest {
+	#[test]
+	fn main() {
+		assert_eq!(my_test::get_v(), 2i32);
+		my_test::set_v(5i32);
+		assert_eq!(my_test::get_v(), 5i32);
 
-    assert_eq!(my_test::get_s().v, 4i32);
-    my_test::get_s().v = 9i32;
-    assert_eq!(my_test::get_s().v, 9i32);
-    
-	assert_eq!(my_test::get_w(), 14i32);
+		assert_eq!(my_test::get_s().v, 4i32);
+		my_test::get_s().v = 9i32;
+		assert_eq!(my_test::get_s().v, 9i32);
+		
+		assert_eq!(my_test::get_w(), 14i32);
 
-    assert_eq!(my_test::get_u(), 7f32);
+		assert_eq!(my_test::get_u(), 7f32);
+	}
 }
 '''

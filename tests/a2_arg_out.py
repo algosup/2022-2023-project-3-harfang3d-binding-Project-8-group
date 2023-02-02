@@ -121,29 +121,37 @@ func Test(t *testing.T) {
 }
 '''
 test_rust = '''\
-extern crate my_test;
+mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 
-fn main() {
-    let mut d = my_test::a::new();
-    d = my_test::modify_in_out_struct(d);
-    assert_eq!(d.v, 3);
+#[cfg(test)]
+mod atest {
+		use my_test::*;
 
-    let (d, b) = my_test::out_values_function_call(2, 3);
-    assert_eq!(d, 16);
-    assert_eq!(b, 42);
+		#[test]
+		fn test() {
+		let mut d = my_test::a::new();
+		d = my_test::modify_in_out_struct(d);
+		assert_eq!(d.v, 3);
 
-    let (r, d, b) = my_test::out_values_function_call_rval(2);
-    assert_eq!(r, 2);
-    assert_eq!(d, 16);
-    assert_eq!(b, 28);
+		let (d, b) = my_test::out_values_function_call(2, 3);
+		assert_eq!(d, 16);
+		assert_eq!(b, 42);
 
-    let (r, d, b) = my_test::out_values_function_call_rval(2, 2);
-    assert_eq!(r, 4);
-    assert_eq!(d, 16);
-    assert_eq!(b, 28);
+		let (r, d, b) = my_test::out_values_function_call_rval(2);
+		assert_eq!(r, 2);
+		assert_eq!(d, 16);
+		assert_eq!(b, 28);
 
-    let (r, v) = my_test::in_out_value(5);
-    assert_eq!(r, true);
-    assert_eq!(v, 20);
+		let (r, d, b) = my_test::out_values_function_call_rval(2, 2);
+		assert_eq!(r, 4);
+		assert_eq!(d, 16);
+		assert_eq!(b, 28);
+
+		let (r, v) = my_test::in_out_value(5);
+		assert_eq!(r, true);
+		assert_eq!(v, 20);
+	}
 }
 '''

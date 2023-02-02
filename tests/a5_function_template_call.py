@@ -49,10 +49,18 @@ func Test(t *testing.T) {
 """
 
 test_rust = """\
-extern crate my_test;
+mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 
-fn main() {
-    assert_eq!(my_test::get_int(), 8);
-    assert_eq!(my_test::get_float(), 8.0);
+#[cfg(test)]
+mod atest {
+    use my_test::*;
+
+    #[test]
+	fn main() {
+		assert_eq!(my_test::get_int(), 8);
+		assert_eq!(my_test::get_float(), 8.0);
+	}
 }
 """

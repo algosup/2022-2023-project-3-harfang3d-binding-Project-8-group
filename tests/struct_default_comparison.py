@@ -80,8 +80,12 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
+mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
+
 #[cfg(test)]
-mod my_test{
+mod atest {
 	#[test]
 	fn test() {
 		let a = get_obj0();

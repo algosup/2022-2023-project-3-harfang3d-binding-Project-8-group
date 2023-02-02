@@ -170,10 +170,12 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-extern crate my_test;
+mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 
 #[cfg(test)]
-mod my_test{
+mod atest {
 	#[test]
 	fn Test() {
 		let base = my_test::BaseClass::new();

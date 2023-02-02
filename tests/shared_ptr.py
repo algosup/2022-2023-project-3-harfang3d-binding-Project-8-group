@@ -106,8 +106,12 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-#[cfg(test)]
 mod my_test {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
+
+#[cfg(test)]
+mod atest {
 	#[test]
 	fn test () {
 		let sp = get_shared_ptr_to_simple_struct();
