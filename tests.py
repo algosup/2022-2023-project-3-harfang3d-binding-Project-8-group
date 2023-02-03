@@ -528,30 +528,31 @@ name = "my_test"
 crate-type = ["staticlib"]
 
 [build-dependencies]
-bindgen = "0.63"
-cc = "1.0"
+bindgen = "*"
+cc = "*"
 """)
 
 		# create builder file
+		use_bindgen_tests = False
 		builder_path = os.path.join(work_path, 'build.rs')
 		with open(builder_path, 'w') as file:
-			file.write("""
-fn main() {
-    if std::path::Path::new("wrapper.cpp").exists() {
+			file.write(f"""
+fn main() {{
+    if std::path::Path::new("wrapper.cpp").exists() {{
         cc::Build::new()
             .file("wrapper.cpp")
             .include("src")
             .compile("test");
-    }
+    }}
 
     let bindings = bindgen::Builder::default()
+		.layout_tests({str(use_bindgen_tests).lower()})
         .generate_inline_functions(true)
         .enable_cxx_namespaces()
         .raw_line("pub use self::root::*;")
         .clang_args(&[
             "-x",
             "c++",
-            "-I/usr/include/c++/11",
             "-Wall",
             "-Wextra",
             "-Werror"
@@ -561,10 +562,10 @@ fn main() {
         .unwrap();
 
     let mut target = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
-    target.push("bindings.rs");
+    target.push("src/bindings.rs");
     
     bindings.write_to_file(&target).unwrap();
-}
+}}
 """)
 
 		# copy test file
