@@ -40,18 +40,12 @@ package mytest
 
 '''
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
-use std::fmt;
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn main() {
-		let o = my_test::some_struct::new();
+#[test]
+fn main() {
+	let o = some_struct::new();
 
-		assert_eq!(format!("{:?}", o), "repr!");
-	}
+	assert_eq!(format!("{:?}", o), "repr!");
 }
 '''

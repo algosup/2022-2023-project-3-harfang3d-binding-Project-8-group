@@ -97,30 +97,22 @@ func Test(t *testing.T) {
 }
 '''
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	assert_eq!(return_int(), 8);
+	assert_eq!(return_float(), 8.0);
+	assert_eq!(return_const_char_ptr(), "const char * -> string");
+
+	let mut int_var = 9;
+	assert_eq!(return_int_by_pointer(&mut int_var), 9);
+	assert_eq!(return_int_by_reference(&mut int_var), 9);
+
+	let mut a = 3;
+	let mut b = 4;
+	assert_eq!(add_int_by_value(a, b), 7);
+	assert_eq!(add_int_by_pointer(&mut a, &mut b), 7);
+	assert_eq!(add_int_by_reference(&mut a, &mut b), 7);
 }
-
-#[cfg(test)]
-mod atest {
-	use my_test::*;
-
-	#[test]
-	fn test() {
-		assert_eq!(my_test::return_int(), 8);
-		assert_eq!(my_test::return_float(), 8.0);
-		assert_eq!(my_test::return_const_char_ptr(), "const char * -> string");
-
-		let mut int_var = 9;
-		assert_eq!(my_test::return_int_by_pointer(&mut int_var), 9);
-		assert_eq!(my_test::return_int_by_reference(&mut int_var), 9);
-
-		let mut a = 3;
-		let mut b = 4;
-		assert_eq!(my_test::add_int_by_value(a, b), 7);
-		assert_eq!(my_test::add_int_by_pointer(&mut a, &mut b), 7);
-		assert_eq!(my_test::add_int_by_reference(&mut a, &mut b), 7);
-	}
-}
-
 '''

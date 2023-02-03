@@ -170,42 +170,37 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn Test() {
-		let base = my_test::BaseClass::new();
-		assert_eq!(base.base_method(), 4);
-		assert_eq!(base.base_method_override(), 4);
+#[test]
+fn Test() {
+	let base = BaseClass::new();
+	assert_eq!(base.base_method(), 4);
+	assert_eq!(base.base_method_override(), 4);
 
-		let derived = DerivedClass::new();
-		assert_eq!(derived.base_method(), 4); // can still access base class
-		assert_eq!(derived.derived_method(), 8);  // can access its own methods
-		assert_eq!(derived.base_method_override(), 8); // properly overshadows redeclared base methods
+	let derived = DerivedClass::new();
+	assert_eq!(derived.base_method(), 4); // can still access base class
+	assert_eq!(derived.derived_method(), 8);  // can access its own methods
+	assert_eq!(derived.base_method_override(), 8); // properly overshadows redeclared base methods
 
-		// argument casting through inheritance tree
-		assert_eq!(my_test::read_virtual_method_through_base_class(&base), 6);
-		assert_eq!(my_test::read_virtual_method_through_base_class(my_test::cast_derived_class_to_base_class(&derived)), 9);
+	// argument casting through inheritance tree
+	assert_eq!(read_virtual_method_through_base_class(&base), 6);
+	assert_eq!(read_virtual_method_through_base_class(cast_derived_class_to_base_class(&derived)), 9);
 
-		// member access through inheritance tree
-		assert_eq!(base.u, 6);
-		assert_eq!(derived.u, 6); // can access base class member
-		assert_eq!(base.v, 7);
-		assert_eq!(derived.v, 7); // can access base class static member
+	// member access through inheritance tree
+	assert_eq!(base.u, 6);
+	assert_eq!(derived.u, 6); // can access base class member
+	assert_eq!(base.v, 7);
+	assert_eq!(derived.v, 7); // can access base class static member
 
-		assert_eq!(base.override, 4);
-		assert_eq!(base.static_override, 1);
-		assert_eq!(derived.override, 12); // member overshadowing
-		assert_eq!(derived.static_override, 42); // static member overshadowing
+	assert_eq!(base.override, 4);
+	assert_eq!(base.static_override, 1);
+	assert_eq!(derived.override, 12); // member overshadowing
+	assert_eq!(derived.static_override, 42); // static member overshadowing
 
-		assert_eq!(my_test::get_base_class().v, 7);
-		assert_eq!(my_test::get_derived_class().v, 7);
-		assert_eq!(my_test::get_base_class().static_override, 1);
-		assert_eq!(my_test::get_derived_class.static_override, 42);
-	}
+	assert_eq!(get_base_class().v, 7);
+	assert_eq!(get_derived_class().v, 7);
+	assert_eq!(get_base_class().static_override, 1);
+	assert_eq!(get_derived_class.static_override, 42);
 }
 '''

@@ -44,18 +44,12 @@ func Test(t *testing.T) {
 }
 '''
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
+use std::ptr::null_mut;
 
-#[cfg(test)]
-mod atest {
-    use my_test::*;
-	use std::ptr::null_mut;
-    #[test]
-	fn main() {
-		let v = my_test::return_nullptr();
-		assert!(v.is_null());
-	}
+#[test]
+fn main() {
+	let v = return_nullptr();
+	assert!(v.is_null());
 }
 '''

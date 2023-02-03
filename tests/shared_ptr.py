@@ -106,39 +106,34 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn test () {
-		let sp = get_shared_ptr_to_simple_struct();
+#[test]
+fn test () {
+	let sp = get_shared_ptr_to_simple_struct();
 
-		assert_eq!(
-			sp.GetU(), 4.0,
-			"should be the same."
-		);
-		assert_eq!(
-			sp.GetV(), 7,
-			"should be the same."
-		);
+	assert_eq!(
+		sp.GetU(), 4.0,
+		"should be the same."
+	);
+	assert_eq!(
+		sp.GetV(), 7,
+		"should be the same."
+	);
 
-		let sp2 = new_s_simple_struct(9.0);
+	let sp2 = new_s_simple_struct(9.0);
 
-		assert_eq!(
-			sp2.get_u(), 9.0,
-			"should be the same"
-		);
-		assert_eq!(
-			sp2.get_v(), 90,
-			"should be the same."
-		);
+	assert_eq!(
+		sp2.get_u(), 9.0,
+		"should be the same"
+	);
+	assert_eq!(
+		sp2.get_v(), 90,
+		"should be the same."
+	);
 
-		let spn = get_empty_shared_ptr()
+	let spn = get_empty_shared_ptr()
 
-		assert_eq!(spn.is_null(), true, "should be nil."
-	}
+	assert_eq!(spn.is_null(), true, "should be nil."
 }
 '''

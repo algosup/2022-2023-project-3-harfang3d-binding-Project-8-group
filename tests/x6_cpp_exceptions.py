@@ -47,17 +47,12 @@ package mytest
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
+use std::panicking;
 
-#[cfg(test)]
-mod atest {
-	use std::panicking;
-	#[test]
-	fn test_get_int() {
-		let exception_raised = std::panicking::catch_unwind(|| my_test::get_int()).is_err();
-		assert!(exception_raised);
-	}
+#[test]
+fn test_get_int() {
+	let exception_raised = std::panicking::catch_unwind(|| get_int()).is_err();
+	assert!(exception_raised);
 }
 '''

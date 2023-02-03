@@ -100,27 +100,22 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn main() {
-		let mut n = my_test::NestedStruct::new();
-		assert_eq!(n.v, 8);
-		n.v -= 4;
-		assert_eq!(n.v, 4);
+#[test]
+fn main() {
+	let mut n = NestedStruct::new();
+	assert_eq!(n.v, 8);
+	n.v -= 4;
+	assert_eq!(n.v, 4);
 
-		let mut e = my_test::EnclosingStruct::new();
-		assert_eq!(e.n.v, 8);
-		e.n.v = 12;
-		assert_eq!(e.n.v, 12);
-		e.n.v *= 4;
-		assert_eq!(e.n.v, 48);
-		e.n.v /= 2;
-		assert_eq!(e.n.v, 24);
-	}
+	let mut e = EnclosingStruct::new();
+	assert_eq!(e.n.v, 8);
+	e.n.v = 12;
+	assert_eq!(e.n.v, 12);
+	e.n.v *= 4;
+	assert_eq!(e.n.v, 48);
+	e.n.v /= 2;
+	assert_eq!(e.n.v, 24);
 }
 '''

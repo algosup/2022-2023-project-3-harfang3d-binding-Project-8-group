@@ -54,19 +54,12 @@ func Test(t *testing.T) {
 }
 """
 test_rust = """\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-    use my_test::*;
-
-    #[test]
-	fn main() {
-		let o = my_test::object::new();
-		assert_eq!(o.get(4), 15);`
-	}
+#[test]
+fn main() {
+	let o = object::new();
+	assert_eq!(o.get(4), 15);`
 }
 """
 

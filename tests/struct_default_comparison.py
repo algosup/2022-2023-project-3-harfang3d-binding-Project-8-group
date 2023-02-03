@@ -80,32 +80,28 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	let a = get_obj0();
+	let b = get_obj0();
+
+	assert_eq!(
+		a, b,
+		"should be the same."
+	);
+
+	let c = get_obj1();
+
+	assert_ne!(
+		a, c,
+		"should not be the same."
+	);
+	assert_ne!(
+		b, c,
+		"should not be the same."
+	);
 }
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn test() {
-		let a = get_obj0();
-		let b = get_obj0();
-
-		assert_eq!(
-			a, b,
-			"should be the same."
-		);
-
-		let c = get_obj1();
-
-		assert_ne!(
-			a, c,
-			"should not be the same."
-		);
-		assert_ne!(
-			b, c,
-			"should not be the same."
-		);
-	}
-}
 '''

@@ -80,26 +80,21 @@ func Test(t *testing.T) {
 """
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest{
-	#[test]
-	fn test() {
-		let future = get_future_value();
-		assert!(
-			future.is_valid(),
-			"should be the same."
-		);
+#[test]
+fn test() {
+	let future = get_future_value();
+	assert!(
+		future.is_valid(),
+		"should be the same."
+	);
 
-		future.wait();
-		assert_eq!(
-			future.get(), 8,
-			"should be the same."
-		);
-	}
+	future.wait();
+	assert_eq!(
+		future.get(), 8,
+		"should be the same."
+	);
 }
 '''
 

@@ -141,27 +141,22 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn main() {
-		let mut s = my_test::SimpleStruct::new();
+#[test]
+fn main() {
+	let mut s = my_test::SimpleStruct::new();
 
-		assert_eq!(s.get_a(), 1);
-		assert!(s.set_a_with_v0_v1(8, 2));
+	assert_eq!(s.get_a(), 1);
+	assert!(s.set_a_with_v0_v1(8, 2));
 
-		assert_eq!(s.get_a(), 10);
+	assert_eq!(s.get_a(), 10);
 
-		assert_eq!(s.set_a_with_v(9), 9);
-		assert_eq!(s.get_a(), 9);
+	assert_eq!(s.set_a_with_v(9), 9);
+	assert_eq!(s.get_a(), 9);
 
-		assert_eq!(my_test::SimpleStruct::get_static_int(), 4);
+	assert_eq!(my_test::SimpleStruct::get_static_int(), 4);
 
-		// TODO: Add tests for `get_modify_arg_out` ?
-	}
+	// TODO: Add tests for `get_modify_arg_out` ?
 }
 '''

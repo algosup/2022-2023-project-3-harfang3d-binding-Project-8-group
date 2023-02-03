@@ -72,17 +72,13 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	let a = get_base_class();
+	let b = cast_base_class_to_derived_class(a);
+	assert_eq!(b.u, 7);
 }
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn test() {
-		let a = my_test::get_base_class();
-		let b = my_test::cast_base_class_to_derived_class(a);
-		assert_eq!(b.u, 7);
-	}
-}
 '''

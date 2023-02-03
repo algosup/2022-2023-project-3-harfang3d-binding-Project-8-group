@@ -69,19 +69,14 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn main() {
-		let v = my_test::SimpleStruct::new();
-		assert_eq!(v.v, 3);
+#[test]
+fn main() {
+	let v = SimpleStruct::new();
+	assert_eq!(v.v, 3);
 
-		assert_eq!(my_test::SimpleStruct::i, 5);
-		assert_eq!(my_test::SimpleStruct::s, "some string");
-	}
+	assert_eq!(SimpleStruct::i, 5);
+	assert_eq!(SimpleStruct::s, "some string");
 }
 '''

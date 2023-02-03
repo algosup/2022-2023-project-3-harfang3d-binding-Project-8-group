@@ -123,31 +123,24 @@ func Test(t *testing.T) {
 }
 '''
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-    use my_test::*;
+#[test]
+fn test() {
+	assert_eq!(get_int(), 8);
 
-    #[test]
-    fn test() {
-		assert_eq!(my_test::get_int(), 8);
+	assert_eq!(get_global_int(), 0);
+	set_global_int();
+	assert_eq!(get_global_int(), 8);
 
-		assert_eq!(my_test::get_global_int(), 0);
-		my_test::set_global_int();
-		assert_eq!(my_test::get_global_int(), 8);
+	// overload
+	assert_eq!(get(), 0);
+	assert_eq!(get_with_v(2), 1);
+	assert_eq!(get_with_v_k(4, 3), 12);
+	assert_eq!(get_with_v_k_b(4, 3, 2), 14);
 
-		// overload
-		assert_eq!(my_test::get(), 0);
-		assert_eq!(my_test::get_with_v(2), 1);
-		assert_eq!(my_test::get_with_v_k(4, 3), 12);
-		assert_eq!(my_test::get_with_v_k_b(4, 3, 2), 14);
-
-		// optional argument
-		assert_eq!(my_test::get_global_int_multiplied(), 15);
-		assert_eq!(my_test::get_global_int_multiplied(2), 6);
-	}
+	// optional argument
+	assert_eq!(get_global_int_multiplied(), 15);
+	assert_eq!(get_global_int_multiplied(2), 6);
 }
 '''

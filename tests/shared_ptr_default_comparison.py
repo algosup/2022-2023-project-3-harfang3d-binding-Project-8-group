@@ -94,30 +94,23 @@ func Test(t *testing.T) {
 }
 '''
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
+use std::ptr;
 
-#[cfg(test)]
-mod atest {
-    use my_test::*;
-    use std::ptr;
+#[test]
+fn test() {
+    let a = get_obj0();
+    let b = get_obj0();
 
-    #[test]
-    fn test() {
-        let a = get_obj0();
-        let b = get_obj0();
+    assert!(ptr::eq(&*a, &*b), "should be equal.");
 
-        assert!(ptr::eq(&*a, &*b), "should be equal.");
+    let c = get_obj1();
 
-        let c = get_obj1();
+    assert!(!ptr::eq(&*a, &*c), "should not be equal.");
+    assert!(!ptr::eq(&*b, &*c), "should not be equal.");
+    let d = get_obj2();
 
-        assert!(!ptr::eq(&*a, &*c), "should not be equal.");
-        assert!(!ptr::eq(&*b, &*c), "should not be equal.");
-        let d = get_obj2();
-
-        assert!(ptr::eq(&*a, &*d), "should be equal.");
-    }
+    assert!(ptr::eq(&*a, &*d), "should be equal.");
 }
 
 '''

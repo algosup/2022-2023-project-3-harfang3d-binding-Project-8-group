@@ -248,122 +248,117 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-mod my_test {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-}
+include!("bindings.rs");
 
-#[cfg(test)]
-mod atest {
-	#[test]
-	fn test() {
-		let v = vector_of_int();
+#[test]
+fn test() {
+	let v = vector_of_int();
 
-		assert_eq!(
-			v.size(), 0,
-			"should be the same."
-		);
-		assert_eq!(
-			v.length(), 0,
-			"should be the same."
-		);
+	assert_eq!(
+		v.size(), 0,
+		"should be the same."
+	);
+	assert_eq!(
+		v.length(), 0,
+		"should be the same."
+	);
 
-		v.push_back(5);
-		v.push_back(1);
-		v.push_back(9);
+	v.push_back(5);
+	v.push_back(1);
+	v.push_back(9);
 
-		assert_eq!(
-			v.size(), 3,
-			"should be the same."
-		);
-		assert_eq!(
-			v.length(), 3,
-			"should be the same."
-		);
+	assert_eq!(
+		v.size(), 3,
+		"should be the same."
+	);
+	assert_eq!(
+		v.length(), 3,
+		"should be the same."
+	);
 
-		assert_eq!(
-			*v.at(1), 1,
-			"should be the same."
-		);
-		assert_eq!(
-			*v.at(2), 9,
-			"should be the same."
-		);
-		assert_eq!(
-			*v.at(0), 5,
-			"should be the same."
-		);
+	assert_eq!(
+		*v.at(1), 1,
+		"should be the same."
+	);
+	assert_eq!(
+		*v.at(2), 9,
+		"should be the same."
+	);
+	assert_eq!(
+		*v.at(0), 5,
+		"should be the same."
+	);
 
-		assert_eq!(
-			v.get(1), 1,
-			"should be the same."
+	assert_eq!(
+		v.get(1), 1,
+		"should be the same."
 
-		);
-		assert_eq!(
-			v.get(2), 9,
-			"should be the same."
+	);
+	assert_eq!(
+		v.get(2), 9,
+		"should be the same."
 
-		);
-		assert_eq!(
-			v.get(0), 5,
-			"should be the same."
+	);
+	assert_eq!(
+		v.get(0), 5,
+		"should be the same."
 
-		);
-		
-		v.set(1, 16);
+	);
+	
+	v.set(1, 16);
 
-		assert_eq!(
-			v.get(2), 9,
-			"should be the same."
+	assert_eq!(
+		v.get(2), 9,
+		"should be the same."
 
-		);
-		assert_eq!(
-			v.get(0), 5,
-			"should be the same."
-		);
-		assert_eq!(
-			v.get(1), 16,
-			"should be the same."
-		);
+	);
+	assert_eq!(
+		v.get(0), 5,
+		"should be the same."
+	);
+	assert_eq!(
+		v.get(1), 16,
+		"should be the same."
+	);
 
-		v.set(0, v.get(0)*4);
+	v.set(0, v.get(0)*4);
 
-		assert_eq!(
-			v.get(0), 20,
-			"should be the same."
-		);
+	assert_eq!(
+		v.get(0), 20,
+		"should be the same."
+	);
 
-		assert_eq!(
-			consume_pointer_to_int(v.Data()), 16,
-			"should be the same."
-		);
+	assert_eq!(
+		consume_pointer_to_int(v.Data()), 16,
+		"should be the same."
+	);
 
-		let w = vector_of_int_ptr([]int32{5, 2, 8});
+	let w = vector_of_int_ptr([]int32{5, 2, 8});
 
-		assert_eq!(
-			w.get(0), 5,
-			"should be the same."
-		);
-		assert_eq!(
-			w.get(1), 2,
-			"should be the same."
-		);
-		assert_eq!(
-			w.get(2), 8,
-			"should be the same."
-		);
+	assert_eq!(
+		w.get(0), 5,
+		"should be the same."
+	);
+	assert_eq!(
+		w.get(1), 2,
+		"should be the same."
+	);
+	assert_eq!(
+		w.get(2), 8,
+		"should be the same."
+	);
 
-		let vPtr = vector_of_int_ptr();
-		vPtr.push_back(nil);
-		vPtr.push_back(v.data());
+	let vPtr = vector_of_int_ptr();
+	vPtr.push_back(nil);
+	vPtr.push_back(v.data());
 
-		assert_eq!(
-			vPtr.size(), 2,
-			"should be the same."
-		);
-		assert_eq!(
-			v.length(), 2,
-			"should be the same."
-		);
-	}
+	assert_eq!(
+		vPtr.size(), 2,
+		"should be the same."
+	);
+	assert_eq!(
+		v.length(), 2,
+		"should be the same."
+	);
 }
 '''
