@@ -447,8 +447,7 @@ struct {type_info_name} {{
 			return rust
 
 		# .h
-		rust_h = '#pragma once\n' \
-				'#ifdef __cplusplus\n'\
+		rust_h = '#ifdef __cplusplus\n'\
 				'extern "C" {\n'\
 				'#endif\n'
 
