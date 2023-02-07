@@ -1,6 +1,6 @@
 # Programation Languages
 
-- [our Lord Stack Overflow](https://stackoverflow.com/),
+This document is a report on the researches done concerning the programation languages. It will present lists of links divided by languages.
 
 ## Rust Language
 
