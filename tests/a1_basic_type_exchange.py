@@ -101,18 +101,22 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	assert_eq!(my_test_return_int(), 8);
-	assert_eq!(my_test_return_float(), 8.0);
-	assert_eq!(my_test_return_const_char_ptr(), "const char * -> string");
+    unsafe {
+        assert_eq!(my_test_return_int(), 8);
+        assert_eq!(my_test_return_float(), 8.0);
+        
+        let c_char_ptr = my_test_return_const_char_ptr();
+        let c_string = std::ffi::CStr::from_ptr(c_char_ptr).to_str().unwrap();
+        assert_eq!(c_string, "const char * -> string");
 
-	let mut int_var = 9;
-	assert_eq!(my_test_return_int_by_pointer(&mut int_var), 9);
-	assert_eq!(my_test_return_int_by_reference(&mut int_var), 9);
+        assert_eq!(*my_test_return_int_by_pointer(), 9);
+        assert_eq!(*my_test_return_int_by_reference(), 9);
 
-	let mut a = 3;
-	let mut b = 4;
-	assert_eq!(my_test_add_int_by_value(a, b), 7);
-	assert_eq!(my_test_add_int_by_pointer(&mut a, &mut b), 7);
-	assert_eq!(my_test_add_int_by_reference(&mut a, &mut b), 7);
+        let mut a = 3;
+        let mut b = 4;
+        assert_eq!(my_test_add_int_by_value(a, b), 7);
+        assert_eq!(my_test_add_int_by_pointer(&mut a, &mut b), 7);
+        assert_eq!(my_test_add_int_by_reference(&mut a, &mut b), 7);
+    }
 }
 '''
