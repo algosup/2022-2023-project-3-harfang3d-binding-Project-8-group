@@ -519,7 +519,7 @@ class RustTestBed:
 
 		# initializing cargo package
 		os.chdir(work_path)
-		subprocess.check_output(["cargo", "init", "--lib", "--name", "my_test"])
+		subprocess.check_output(["cargo", "init", "--lib", "--name", "my_test", "--vcs", "none"])
 		toml_path = os.path.join(work_path, 'Cargo.toml')
 		with open(toml_path, 'a') as file:
 			file.write("""
