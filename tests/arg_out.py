@@ -125,26 +125,28 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-let mut d = a::new();
-d = modify_in_out_struct(d);
-assert_eq!(d.v, 3);
+	unsafe {
+		let mut d = my_test_a::new();
+		d = my_test_modify_in_out_struct(d);
+		assert_eq!(d.v, 3);
 
-let (d, b) = out_values_function_call(2, 3);
-assert_eq!(d, 16);
-assert_eq!(b, 42);
+		let (d, b) = my_test_out_values_function_call(2, 3);
+		assert_eq!(d, 16);
+		assert_eq!(b, 42);
 
-let (r, d, b) = out_values_function_call_rval(2);
-assert_eq!(r, 2);
-assert_eq!(d, 16);
-assert_eq!(b, 28);
+		let (r, d, b) = my_test_out_values_function_call_rval(2);
+		assert_eq!(r, 2);
+		assert_eq!(d, 16);
+		assert_eq!(b, 28);
 
-let (r, d, b) = out_values_function_call_rval(2, 2);
-assert_eq!(r, 4);
-assert_eq!(d, 16);
-assert_eq!(b, 28);
+		let (r, d, b) = my_test_out_values_function_call_rval(2, 2);
+		assert_eq!(r, 4);
+		assert_eq!(d, 16);
+		assert_eq!(b, 28);
 
-let (r, v) = in_out_value(5);
-assert_eq!(r, true);
-assert_eq!(v, 20);
-
+		let (r, v) = my_test_in_out_value(5);
+		assert_eq!(r, true);
+		assert_eq!(v, 20);
+	}
+}
 '''

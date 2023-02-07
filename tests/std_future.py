@@ -84,17 +84,13 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	let future = get_future_value();
-	assert!(
-		future.is_valid(),
-		"should be the same."
-	);
+	unsafe {
+		let future = my_test_get_future_value();
+		assert!(future.is_valid());
 
-	future.wait();
-	assert_eq!(
-		future.get(), 8,
-		"should be the same."
-	);
+		future.wait();
+		assert_eq!(future.get());
+	}
 }
 '''
 

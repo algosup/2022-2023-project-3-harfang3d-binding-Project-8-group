@@ -84,24 +84,17 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	let a = get_obj0();
-	let b = get_obj0();
+	unsafe {
+		let a = my_test_get_obj0();
+		let b = my_test_get_obj0();
 
-	assert_eq!(
-		a, b,
-		"should be the same."
-	);
+		assert_eq!(a, b);
 
-	let c = get_obj1();
+		let c = get_obj1();
 
-	assert_ne!(
-		a, c,
-		"should not be the same."
-	);
-	assert_ne!(
-		b, c,
-		"should not be the same."
-	);
+		assert_ne!(a, c);
+		assert_ne!(b, c);
+	}
 }
 
 '''

@@ -70,12 +70,14 @@ test_rust = '''\
 include!("bindings.rs");
 
 #[test]
-fn main() {
-	let s = SimpleStruct::new();
-	let t = SimpleStruct::new_with_v(4);
+fn test() {
+	unsafe {
+		let s = my_test_SimpleStruct::new();
+		let t = my_test_SimpleStruct::new_with_v(4);
 
-	assert_eq!(s.v_, -8);
-	assert_eq!(t.v_, 4);
+		assert_eq!(s.v_, -8);
+		assert_eq!(t.v_, 4);
+	}
 }
 
 '''

@@ -99,18 +99,19 @@ use std::ptr;
 
 #[test]
 fn test() {
-    let a = get_obj0();
-    let b = get_obj0();
+    unsafe {
+        let a = my_test_get_obj0();
+        let b = my_test_get_obj0();
 
-    assert!(ptr::eq(&*a, &*b), "should be equal.");
+        assert!(ptr::eq(&*a, &*b));
 
-    let c = get_obj1();
+        let c = my_test_get_obj1();
 
-    assert!(!ptr::eq(&*a, &*c), "should not be equal.");
-    assert!(!ptr::eq(&*b, &*c), "should not be equal.");
-    let d = get_obj2();
+        assert!(!ptr::eq(&*a, &*c));
+        assert!(!ptr::eq(&*b, &*c));
+        let d = my_test_get_obj2();
 
-    assert!(ptr::eq(&*a, &*d), "should be equal.");
+        assert!(ptr::eq(&*a, &*d));
+    }
 }
-
 '''

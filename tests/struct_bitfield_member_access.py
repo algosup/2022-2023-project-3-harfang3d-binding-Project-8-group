@@ -93,37 +93,21 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	let s = simple_struct();
+	unsafe {
+		let s = my_test_simple_struct();
 
-	assert_eq!(
-		s.get_a(), 3,
-		"should be the same."
-	);
-	assert_eq!(
-		s.get_b(), 11,
-		"should be the same."
-	);
-	assert_eq!(
-		s.get_c(), 1,
-		"should be the same."
-	);
+		assert_eq!(s.get_a(), 3);
+		assert_eq!(s.get_b(), 11);
+		assert_eq!(s.get_c(), 1);
 
-	s.set_a(1);
-	s.set_b(7);
-	s.set_c(2);
+		s.set_a(1);
+		s.set_b(7);
+		s.set_c(2);
 
-	assert_eq!(
-		s.get_a(), 1,
-		"should be the same."
-	);
-	assert_eq!(
-		s.get_b(), 7,
-		"should be the same."
-	);
-	assert_eq!(
-		s.get_c(), 2,
-		"should be the same."
-	);
+		assert_eq!(s.get_a(), 1);
+		assert_eq!(s.get_b(), 7);
+		assert_eq!(s.get_c(), 2);
+	}
 }
 
 '''

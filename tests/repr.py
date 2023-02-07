@@ -43,9 +43,11 @@ test_rust = '''\
 include!("bindings.rs");
 
 #[test]
-fn main() {
-	let o = some_struct::new();
+fn test() {
+	unsafe {
+		let o = my_test_some_struct::new();
 
-	assert_eq!(format!("{:?}", o), "repr!");
+		assert_eq!(format!("{:?}", o), "repr!");
+	}
 }
 '''

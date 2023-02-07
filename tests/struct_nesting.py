@@ -103,19 +103,21 @@ test_rust = '''\
 include!("bindings.rs");
 
 #[test]
-fn main() {
-	let mut n = NestedStruct::new();
-	assert_eq!(n.v, 8);
-	n.v -= 4;
-	assert_eq!(n.v, 4);
+fn test() {
+	usafe {
+		let mut n = NestedStruct::new();
+		assert_eq!(n.v, 8);
+		n.v -= 4;
+		assert_eq!(n.v, 4);
 
-	let mut e = EnclosingStruct::new();
-	assert_eq!(e.n.v, 8);
-	e.n.v = 12;
-	assert_eq!(e.n.v, 12);
-	e.n.v *= 4;
-	assert_eq!(e.n.v, 48);
-	e.n.v /= 2;
-	assert_eq!(e.n.v, 24);
+		let mut e = EnclosingStruct::new();
+		assert_eq!(e.n.v, 8);
+		e.n.v = 12;
+		assert_eq!(e.n.v, 12);
+		e.n.v *= 4;
+		assert_eq!(e.n.v, 48);
+		e.n.v /= 2;
+		assert_eq!(e.n.v, 24);
+	}
 }
 '''

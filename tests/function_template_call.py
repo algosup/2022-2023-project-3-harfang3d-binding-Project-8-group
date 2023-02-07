@@ -52,8 +52,10 @@ test_rust = """\
 include!("bindings.rs");
 
 #[test]
-fn main() {
-	assert_eq!(get_int(), 8);
-	assert_eq!(get_float(), 8.0);
+fn test() {
+	unsafe {
+		assert_eq!(my_test_get_int(), 8);
+		assert_eq!(my_test_get_float(), 8.0);
+	}
 }
 """

@@ -29,5 +29,7 @@ package mytest
 '''
 
 test_rust = '''\
+include!("bindings.rs");
+
 extern crate my_test;
 '''

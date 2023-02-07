@@ -57,9 +57,10 @@ test_rust = """\
 include!("bindings.rs");
 
 #[test]
-fn main() {
-	let o = object::new();
-	assert_eq!(o.get(4), 15);`
+fn test() {
+	unsafe {
+		let o = my_test_object::new();
+		assert_eq!(o.get(4), 15);`
+	}
 }
 """
-

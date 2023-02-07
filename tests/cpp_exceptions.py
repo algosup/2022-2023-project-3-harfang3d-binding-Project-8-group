@@ -52,7 +52,9 @@ use std::panicking;
 
 #[test]
 fn test_get_int() {
-	let exception_raised = std::panicking::catch_unwind(|| get_int()).is_err();
-	assert!(exception_raised);
+	usafe {
+		let exception_raised = std::panicking::catch_unwind(|| my_test_get_int()).is_err();
+		assert!(exception_raised);
+	}
 }
 '''

@@ -110,30 +110,20 @@ include!("bindings.rs");
 
 #[test]
 fn test () {
-	let sp = get_shared_ptr_to_simple_struct();
+	unsafe {
+		let sp = my_test_get_shared_ptr_to_simple_struct();
 
-	assert_eq!(
-		sp.GetU(), 4.0,
-		"should be the same."
-	);
-	assert_eq!(
-		sp.GetV(), 7,
-		"should be the same."
-	);
+		assert_eq!(sp.get_u(), 4.0);
+		assert_eq!(sp.get_v(), 7);
 
-	let sp2 = new_s_simple_struct(9.0);
+		let sp2 = my_test_new_s_simple_struct(9.0);
 
-	assert_eq!(
-		sp2.get_u(), 9.0,
-		"should be the same"
-	);
-	assert_eq!(
-		sp2.get_v(), 90,
-		"should be the same."
-	);
+		assert_eq!(sp2.get_u(), 9.0);
+		assert_eq!(sp2.get_v(), 90);
 
-	let spn = get_empty_shared_ptr()
+		let spn = my_test_get_empty_shared_ptr();
 
-	assert_eq!(spn.is_null(), true, "should be nil."
+		assert!(spn.is_null());
+	}
 }
 '''

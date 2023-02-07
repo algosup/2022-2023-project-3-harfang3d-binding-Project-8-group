@@ -48,8 +48,10 @@ include!("bindings.rs");
 use std::ptr::null_mut;
 
 #[test]
-fn main() {
-	let v = return_nullptr();
-	assert!(v.is_null());
+fn test() {
+	unsafe {
+		let v = my_test_return_nullptr();
+		assert!(v.is_null());
+	}
 }
 '''

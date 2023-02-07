@@ -96,18 +96,20 @@ test_rust = '''\
 include!("bindings.rs");
 
 #[test]
-fn main() {
-	assert_eq!(get_v(), 2i32);
-	set_v(5i32);
-	assert_eq!(get_v(), 5i32);
+fn test() {
+	unsafe {
+		assert_eq!(my_test_get_v(), 2i32);
+		my_test_set_v(5i32);
+		assert_eq!(my_test_get_v(), 5i32);
 
-	assert_eq!(get_s().v, 4i32);
-	get_s().v = 9i32;
-	assert_eq!(get_s().v, 9i32);
-	
-	assert_eq!(get_w(), 14i32);
+		assert_eq!(my_test_get_s().v, 4i32);
+		my_test_get_s().v = 9i32;
+		assert_eq!(my_test_get_s().v, 9i32);
+		
+		assert_eq!(my_test_get_w(), 14i32);
 
-	assert_eq!(get_u(), 7f32);
+		assert_eq!(my_test_get_u(), 7f32);
+	}
 }
 
 '''

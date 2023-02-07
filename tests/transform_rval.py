@@ -114,13 +114,15 @@ test_rust = '''\
 include!("bindings.rs");
 
 #[test]
-fn main() {
-	let b = get_b();
-	assert_eq!(b.b, 3);
-	assert_eq!(b.get_base_value(), 12);
+fn test() {
+	unsafe {
+		let b = my_test_get_b();
+		assert_eq!(b.b, 3);
+		assert_eq!(b.get_base_value(), 12);
 
-	let c = get_c();
-	assert_eq!(c.c, 7);
-	assert_eq!(c.get_base_value(), 12);
+		let c = my_test_get_c();
+		assert_eq!(c.c, 7);
+		assert_eq!(c.get_base_value(), 12);
+	}
 }
 '''

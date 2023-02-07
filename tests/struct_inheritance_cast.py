@@ -76,9 +76,11 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	let a = get_base_class();
-	let b = cast_base_class_to_derived_class(a);
-	assert_eq!(b.u, 7);
+	unsafe {
+		let a = my_test_get_base_class();
+		let b = my_test_cast_base_class_to_derived_class(a);
+		assert_eq!(b.u, 7);
+	}
 }
 
 '''

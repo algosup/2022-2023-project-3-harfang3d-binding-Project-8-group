@@ -127,20 +127,22 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	assert_eq!(get_int(), 8);
+	unsafe {
+		assert_eq!(my_test_get_int(), 8);
 
-	assert_eq!(get_global_int(), 0);
-	set_global_int();
-	assert_eq!(get_global_int(), 8);
+		assert_eq!(my_test_get_global_int(), 0);
+		my_test_set_global_int();
+		assert_eq!(my_test_get_global_int(), 8);
 
-	// overload
-	assert_eq!(get(), 0);
-	assert_eq!(get_with_v(2), 1);
-	assert_eq!(get_with_v_k(4, 3), 12);
-	assert_eq!(get_with_v_k_b(4, 3, 2), 14);
+		// overload
+		assert_eq!(my_test_get(), 0);
+		assert_eq!(my_test_get_with_v(2), 1);
+		assert_eq!(my_test_get_with_v_k(4, 3), 12);
+		assert_eq!(my_test_get_with_v_k_b(4, 3, 2), 14);
 
-	// optional argument
-	assert_eq!(get_global_int_multiplied(), 15);
-	assert_eq!(get_global_int_multiplied(2), 6);
+		// optional argument
+		assert_eq!(my_test_get_global_int_multiplied(), 15);
+		assert_eq!(my_test_get_global_int_multiplied_with_k(2), 6);
+	}
 }
 '''
