@@ -17,15 +17,15 @@ def clean_name(name: str) -> str:
 
 
 def clean_name_with_title(name: str) -> str:
-	return ""  # TODO: Check usefulness
+	return name # TODO
 
 
 class RustTypeConverterCommon(gen.TypeConverter):
 	# def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False) -> None:
 	# 	super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
 	# 	self.base_type = type
-	# 	self.go_to_c_type = None
-	# 	self.go_type = None
+	# 	self.rust_to_c_type = None
+	# 	self.rust_type = None
 
 	def get_type_api(self, module_name: str) -> str:
 		out = f"// type API for {self.ctype}\n"
@@ -130,7 +130,7 @@ class RustGenerator(gen.FABGen):
 		self._source += self.get_binding_api_declaration()
 
 	def set_compilation_directives(self, directives: Any) -> None: # TODO
-		self.cgo_directives = directives
+		self.crust_directives = directives
 
 	# kill a bunch of functions we don't care about
 	def set_error(self, type: str, reason: str) -> str:
@@ -297,10 +297,10 @@ struct {type_info_name} {{
 	def __arg_from_c_to_cpp(self, val: dict[str, Any], retval_name: str, add_star: bool=True) -> tuple[str, str]:
 		src = ""
 		# check if there is special slice to convert
-		if isinstance(val["conv"], lib.go.stl.GoSliceToStdVectorConverter):
+		if False: #isinstance(val["conv"], lib.rust.stl.RustSliceToStdVectorConverter): # TODO
 			# special if string or const char*
-			if "GoStringConverter" in str(val["conv"].T_conv): # or \
-				# "GoConstCharPtrConverter" in str(val["conv"].T_conv):
+			if "RustStringConverter" in str(val["conv"].T_conv): # or \
+				# "RustConstCharPtrConverter" in str(val["conv"].T_conv):
 				src += f"std::vector<{val['conv'].T_conv.ctype}> {retval_name};\n"\
 					f"for(int i_counter_c=0; i_counter_c < {retval_name}ToCSize; ++i_counter_c)\n"\
 					f"	{retval_name}.push_back(std::string({retval_name}ToCBuf[i_counter_c]));\n"
@@ -314,13 +314,13 @@ struct {type_info_name} {{
 
 		retval = ""
 		# very special case, std::string &
-		if "GoStringConverter" in str(val["conv"]) and \
+		if "RustStringConverter" in str(val["conv"]) and \
 			"carg" in val and hasattr(val["carg"].ctype, "ref") and any(s in val["carg"].ctype.ref for s in ["&"]) and \
 			not val["carg"].ctype.const:
 			src += f"std::string {retval_name}_cpp(*{retval_name});\n"
 			retval += f"{retval_name}_cpp"
 		# std::function
-		elif "GoStdFunctionConverter" in str(val["conv"]):
+		elif "RustStdFunctionConverter" in str(val["conv"]):
 			func_name = val["conv"].base_type.replace("std::function<", "")[:-1]
 			first_parenthesis = func_name.find("(")
 			retval += f"({func_name[:first_parenthesis]}(*){func_name[first_parenthesis:]}){retval_name}"
@@ -332,7 +332,7 @@ struct {type_info_name} {{
 				if isinstance(val['conv'], RustPtrTypeConverter):
 					stars = stars[1:]
 				
-				# if it's not a pointer, add a star anyway because we use pointer to use in go
+				# if it's not a pointer, add a star anyway because we use pointer to use in rust
 				if (not val["conv"].ctype.is_pointer() and ("carg" not in val or ("carg" in val and not val["carg"].ctype.is_pointer()))):
 					stars += "*"
 					if add_star:
@@ -361,7 +361,78 @@ struct {type_info_name} {{
 		return "" # TODO
 
 	def __get_arg_bound_name_to_c(self, val: dict[str, Any]) -> str:
-		return "" # TODO
+		arg_bound_name = ""
+
+		# check to add const
+		if 'storage_ctype' in val and val["storage_ctype"].const or \
+			'carg' in val and val["carg"].ctype.const:
+			arg_bound_name += "const "
+		
+		# if class or pointer with class
+		if self.__get_is_type_class_or_pointer_with_class(val["conv"]) or \
+			"RustStdFunctionConverter" in str(val["conv"]):
+			arg_bound_name += f"{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)} "
+		else:
+			# check the convert from the base (in case of ptr)
+			if  ('carg' in val and (val['carg'].ctype.is_pointer() or (hasattr(val['carg'].ctype, 'ref') and any(s in val['carg'].ctype.ref for s in ["&", "*"])))) or \
+				('storage_ctype' in val and (val['storage_ctype'].is_pointer() or (hasattr(val['storage_ctype'], 'ref') and any(s in val['storage_ctype'].ref for s in ["&", "*"])))) or \
+				isinstance(val['conv'], RustPtrTypeConverter):
+				# check if it's an enum
+				if val['conv'].bound_name in self._enums.keys():
+					enum_conv = self._get_conv_from_bound_name(val['conv'].bound_name)
+					if enum_conv is not None and hasattr(enum_conv, "base_type") and enum_conv.base_type is not None:
+						arg_bound_name = str(enum_conv.base_type)
+					else:
+						arg_bound_name = "int"
+				else:
+					# sometimes typedef is weird and don't give valid value, so check it
+					base_conv = self._get_conv(str(val['conv'].bound_name))
+					if base_conv is None:
+						# check with typedef
+						if hasattr(val['conv'], "base_type") and val['conv'].base_type is not None:
+							arg_bound_name = str(val['conv'].base_type)
+						else:
+							if 'storage_ctype' in val:
+								arg_bound_name += f"{val['storage_ctype']} "
+							else:
+								arg_bound_name += f"{val['conv'].ctype} "
+					
+						# if it's a ptr type, remove a star
+						if isinstance(val['conv'], RustPtrTypeConverter):
+							arg_bound_name = arg_bound_name.replace("*", "").replace("&", "")
+					else:
+						arg_bound_name += f"{val['conv'].bound_name} "
+
+				# add a star (only if it's not a const char * SPECIAL CASE)
+				if "RustConstCharPtrConverter" not in str(val["conv"]) and ("carg" not in val or not val["carg"].ctype.const):
+					arg_bound_name += "*"
+
+				if "carg" in val and hasattr(val["carg"].ctype, "ref") and not val["carg"].ctype.const:
+					arg_bound_name += "*" * (len(val["carg"].ctype.ref) - 1)
+				if "storage_ctype" in val and hasattr(val["storage_ctype"], "ref"):
+					arg_bound_name += "*" * (len(val["storage_ctype"].ref) - 1)
+			else:
+				# check if it's an enum
+				if val['conv'].bound_name in self._enums.keys():
+					enum_conv = self._get_conv_from_bound_name(val['conv'].bound_name)
+					if enum_conv is not None and hasattr(enum_conv, "base_type") and enum_conv.base_type is not None:
+						arg_bound_name = str(enum_conv.base_type)
+					else:
+						arg_bound_name = "int"
+				else:
+					# sometimes typedef is weird and don't give valid value, so check it
+					base_conv = self._get_conv(str(val['conv'].bound_name))
+					if base_conv is None:
+						if hasattr(val['conv'], "base_type") and val['conv'].base_type is not None:
+							arg_bound_name = str(val['conv'].base_type)
+						else:
+							if 'storage_ctype' in val:
+								arg_bound_name += f"{val['storage_ctype']} "
+							else:
+								arg_bound_name += f"{val['conv'].ctype} "
+					else:
+						arg_bound_name += f"{val['conv'].bound_name} "
+		return arg_bound_name
 
 	def __extract_sequence_rust(self, conv: gen.TypeConverter) -> str:
 		return "" # TODO
@@ -380,7 +451,162 @@ struct {type_info_name} {{
 		return "" # TODO
 
 	def __extract_method(self, classname: str, convClass: gen.TypeConverter, method: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False, is_constructor: bool=False, overload_op: str | None=None) -> str:
-		return "" # TODO
+		rust = ""
+
+		if bound_name is None:
+			bound_name = method["bound_name"]
+		if name is None:
+			name = bound_name
+		wrap_name = bound_name
+
+		cpp_function_name = name
+		if "name" in method:
+			cpp_function_name = method["name"]
+
+		uid = classname + bound_name if classname else bound_name
+
+		protos = self._build_protos(method["protos"])
+		for id_proto, proto in enumerate(protos):
+			retval = "void"
+
+			if str(proto["rval"]["storage_ctype"]) != "void":
+				retval = self.__get_arg_bound_name_to_c(proto["rval"])
+
+				# special std::string (convert to const char*)
+				retval = retval.replace("std::string", "const char*")
+				retval = retval.replace("const const", "const")
+
+			if is_in_header:
+				rust += "extern "
+			rust += f"{retval} {clean_name_with_title(self._name)}_{clean_name_with_title(wrap_name)}"
+
+			# not global, add the Name of the class to be sure to avoid double name function name
+			if not is_global or (not is_constructor and is_global and convClass is not None):
+				rust += f"{clean_name_with_title(convClass.bound_name)}"
+
+			# add bounding_name to the overload function
+			if "bound_name" in proto["features"]:
+				rust += proto["features"]["bound_name"]
+			# if automatic suffix generated
+			elif "suggested_suffix" in proto:
+				rust += proto["suggested_suffix"]
+
+			rust += "("
+
+			has_previous_arg = False
+			# not global, member class, include the "this" pointer first
+			if not is_global or (not is_constructor and is_global and convClass is not None):
+				has_previous_arg = True
+				rust += f"{clean_name_with_title(self._name)}{clean_name_with_title(convClass.bound_name)} this_"
+
+			if len(proto["args"]):
+				for argin in proto["args"]:
+					if has_previous_arg:
+						rust += " ,"
+
+					# get arg name
+					arg_bound_name = self.__get_arg_bound_name_to_c(argin)
+
+					# special std::string (convert to const char*)
+					arg_bound_name = arg_bound_name.replace("std::string", "const char*")
+					arg_bound_name = arg_bound_name.replace("const const", "const")
+
+					rust += f"{arg_bound_name} {argin['carg'].name}"
+					has_previous_arg = True
+
+			rust += ")"
+
+			if is_in_header:
+				rust += ";\n"
+			else:
+				rust += "{\n"
+
+				args = []
+				# if another route is set
+				if "route" in proto["features"] and convClass is not None and not is_constructor:
+					args.append(f"({convClass.ctype}*)this_")
+
+				# convert arg to cpp
+				if len(proto["args"]):
+					# if the function is global but have a convclass,
+					# special case, which include the class has arg in first arg
+					if  not is_constructor and is_global and convClass is not None:
+						src, retval_c = self.__arg_from_c_to_cpp({"conv":convClass}, "this_")
+						rust += src
+						args.append(retval_c)
+
+					# other normal args
+					for argin in proto["args"]:
+						src, retval_c = self.__arg_from_c_to_cpp(argin, str(argin["carg"].name))
+						rust += src
+						args.append(retval_c)
+
+				if is_constructor:
+					# constructor, make our own return
+					retval = "void"
+					# if another route is set
+					if "route" in proto["features"]:
+						rust += f"	return (void*){proto['features']['route'](args)}\n"
+					elif "proxy" in convClass._features:
+						rust += "	auto " + convClass._features["proxy"].wrap(f"new {convClass._features['proxy'].wrapped_conv.bound_name}({','.join(args)})", "v")
+						rust += "	return v;\n"
+					else:
+						rust += f"	return (void*)(new {convClass.ctype}({','.join(args)}));\n"
+				else:
+					# if there is return value
+					if retval != "void":
+						rust += "	auto ret = "
+
+					# special comparison
+					if overload_op is not None:
+							rust += f"(*({convClass.ctype}*)this_)"
+							rust += overload_op
+							rust += f"({args[0]});\n"
+					# classic call to function
+					else:
+						# transform & to *
+						if hasattr(proto["rval"]["storage_ctype"], "ref") and any(s in proto["rval"]["storage_ctype"].ref for s in ["&"]):
+							rust += "&"
+
+						# if another route is set
+						if "route" in proto["features"]:
+							rust += proto["features"]["route"](args) + "\n"
+						else:
+							# not global, member class, include the "this" pointer first
+							if not is_global:
+								rust += f"(*({convClass.ctype}*)this_)"
+								if convClass.ctype.is_pointer():
+									rust += "->"
+								else:
+									rust += "."
+
+							# cpp function name
+							rust += cpp_function_name
+
+							# add function's arguments
+							rust += f"({','.join(args)});\n"
+
+						# return arg out
+						if "arg_out" in proto["features"] or "arg_in_out" in proto["features"]:
+							for arg in proto['args']:
+								if ('arg_out' in proto['features'] and str(arg['carg'].name) in proto['features']['arg_out']) or \
+									('arg_in_out' in proto['features'] and str(arg['carg'].name) in proto['features']['arg_in_out']):
+									# FOR NOW ONLY FOR THE STD::STRING
+									if "RustStringConverter" in str(arg["conv"]) and \
+										"carg" in arg and hasattr(arg["carg"].ctype, "ref") and any(s in arg["carg"].ctype.ref for s in ["&"]):
+										# it's a pointer (or there is a bug)
+										retval_cpp = f"(&({str(arg['carg'].name)}_cpp))"
+										src, retval_cpp = self.__arg_from_cpp_to_c(arg, retval_cpp, static)
+										rust += src
+										rust += f"	{str(arg['carg'].name)} = {retval_cpp};\n"
+
+				if retval != "void":
+					src, retval_c = self.__arg_from_cpp_to_c(proto["rval"], "ret", static)
+					rust += src
+					rust += f"return {retval_c};\n"
+				rust += "}\n"
+
+		return rust
 
 	# VERY SPECIAL
 	# check in every methods, 
@@ -451,13 +677,14 @@ struct {type_info_name} {{
 				'extern "C" {\n'\
 				'#endif\n'
 
-		rust_h += '#include <stdint.h>\n' \
-			'#include <stdbool.h>\n' \
-			'#include <stddef.h>\n' \
-			'#include <memory.h>\n' \
-			'#include <string.h>\n' \
-			'#include <stdlib.h>\n' \
-			'#include "fabgen.h"\n\n'
+		# rust_h += '#include <stdint.h>\n' \
+		# 	'#include <stdbool.h>\n' \
+		# 	'#include <stddef.h>\n' \
+		# 	'#include <memory.h>\n' \
+		# 	'#include <string.h>\n' \
+		# 	'#include <stdlib.h>\n' \
+		# 	'#include "fabgen.h"\n\n'
+		rust_h += '#include "fabgen.h"\n\n'
 			
 		# enum
 		for bound_name, enum in self._enums.items():
@@ -478,7 +705,7 @@ struct {type_info_name} {{
 			if self.__get_is_type_class_or_pointer_with_class(conv) :
 				rust_h += f"typedef void* {clean_name_with_title(self._name)}{cleanBoundName};\n"
 
-			if "GoStdFunctionConverter" in str(conv):
+			if "RustStdFunctionConverter" in str(conv):
 				func_name = conv.base_type.replace("std::function<", "").replace("&", "*")[:-1] # [:-1] to remove the > of std::function
 				first_parenthesis = func_name.find("(")
 				# get all args boundname in c
