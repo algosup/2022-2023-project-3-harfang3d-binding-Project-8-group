@@ -551,6 +551,7 @@ fn main() {{
         .enable_cxx_namespaces()
         .raw_line("pub use self::root::*;")
         .clang_args(&[
+			"-c",
             "-x",
             "c++",
             "-Wall",
