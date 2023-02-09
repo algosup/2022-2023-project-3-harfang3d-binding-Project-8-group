@@ -21,11 +21,11 @@ def clean_name_with_title(name: str) -> str:
 
 
 class RustTypeConverterCommon(gen.TypeConverter):
-	# def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False) -> None:
-	# 	super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
-	# 	self.base_type = type
-	# 	self.rust_to_c_type = None
-	# 	self.rust_type = None
+	def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False) -> None:
+		super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
+		self.base_type = type
+		self.rust_to_c_type = None
+		self.rust_type = None
 
 	def get_type_api(self, module_name: str) -> str:
 		out = f"// type API for {self.ctype}\n"
