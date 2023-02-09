@@ -1,6 +1,8 @@
-# Context
+# Product Requirement
 
-## Problem
+## Context
+
+### Problem
 
 Harfang3D is written in C++. To use Harfang3D you also need to write the
 code in C++.  
@@ -11,14 +13,14 @@ It also takes longer to develop a program in C++.
 to Harfang3D. Specifically, the client wants a Rust binding in
 particular
 
-## Target, User and Stakeholder
+### Target, User and Stakeholder
 
 Our Target is Harfang3D. The users are Harfang3D, Harfang’s client and
 the users. The Stakeholders are Harfang3D and ALGOSUP.
 
-# Scope
+## Scope
 
-## Success
+### Success
 
 -   Use the clients software and update it to add a Rust binding.
 
@@ -26,7 +28,7 @@ the users. The Stakeholders are Harfang3D and ALGOSUP.
 
 -   Make sure the binding functions properly.
 
-## Out of Scope
+### Out of Scope
 
 -   No polymorphism at runtime.
 
@@ -34,16 +36,16 @@ the users. The Stakeholders are Harfang3D and ALGOSUP.
 
 -   Unit tests must be verified.
 
-# Key decision / Constraints
+## Key decision / Constraints
 
-## Sizing
+### Sizing
 
 We are not projecting any budget need as of today January 6, 2023. The
 project needs to be delivered on the February 17, 2023. The Deliverable
 project will also include a presentation in front of the stakeholders,
 functional specifications and technical specifi- cations.
 
-## Solution proposition
+### Solution proposition
 
 The solution selected is to use the client’s existing C++ binding
 generator. This binding generator already supports GOlang, Python and
