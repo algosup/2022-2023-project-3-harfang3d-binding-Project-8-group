@@ -1,6 +1,8 @@
-# Context
+# Functional Specifications
 
-## Problem
+## Context
+
+### Problem
 
 This project was proposed by <span acronym-label="Harfang"
 acronym-form="singular+short">Harfang</span> a French company that makes
@@ -34,11 +36,11 @@ acronym-form="singular+short">Rust</span> in
 acronym-form="singular+short">FABGen</span>.  
  
 
-## Target and Stakeholders
+### Target and Stakeholders
 
 Our Target is FABGen. The Stakeholders are ALGOSUP and Harfang.
 
-## Concurrency
+### Concurrency
 
 SWIG is an other existing, widely used, binding system for C and C++.
 SWIG was not suited to the client needs as it was too old, The
@@ -49,16 +51,16 @@ stepping stone for the implementation of Rust into FABGen. Bindgen use a
 different file format than FABGen to describe library so it is
 unsuitable for the client use.
 
-# Project scope
+## Project scope
 
-## In scope
+### In scope
 
 FABGen is an open source software development tool that connects
 programs written in C++ with a variety of high-level programming
 languages. Currently FABGen supports LUA, Python and Go.  
 Our objective is to add Rust support to FABGen.
 
-## Out of scope
+### Out of scope
 
 These are the features that were not necessary for a minimum viable
 product. It does not mean that these features won’t be added.  
@@ -87,7 +89,7 @@ after everything else is implemented.
 | No <span acronym-label="polymorphism" acronym-form="singular+short">polymorphism</span> at runtime |    Not enough time    | 03/01/2023 |
 |                                       Extra language binder                                        |    Not enough time    | 03/01/2023 |
 
-# Personas
+## Personas
 
 These are personas that represent potential users.
 
@@ -97,7 +99,7 @@ These are personas that represent potential users.
 
 ![image](img/Persona3.png)
 
-# Use case
+## Use case
 
 -   The user has a C++ library they want to bind to Rust (or another
     language)
@@ -109,7 +111,7 @@ These are personas that represent potential users.
 
 -   The user can now import his library into his language of choice
 
-# Requirements
+## Requirements
 
 |                                              Feature                                               | Importance |
 |:--------------------------------------------------------------------------------------------------:|:----------:|
@@ -119,7 +121,7 @@ These are personas that represent potential users.
 | No <span acronym-label="polymorphism" acronym-form="singular+short">polymorphism</span> at runtime |  Optional  |
 |                                        Working Rust example                                        |  Optional  |
 
-## Binding with Rust
+### Binding with Rust
 
 Binding a library to <span acronym-label="Rust"
 acronym-form="singular+short">Rust</span> means creating a way to call
@@ -129,14 +131,14 @@ Binding allows communication between very low level programming
 languages and higher level programming languages like C to Python which
 have a simpler syntax and is easier to work with.
 
-## Validate unit tests
+### Validate unit tests
 
 <span acronym-label="FABGen" acronym-form="singular+short">FABGen</span>
 comes with a set of unit tests to validate that most features of a
 language are properly implemented. We need to write a new set of tests
 for Rust.
 
-## High reliability
+### High reliability
 
 A major feature of <span acronym-label="Rust"
 acronym-form="singular+short">Rust</span> is memory safety and
@@ -147,7 +149,7 @@ acronym-form="singular+short">binding</span>.
 acronym-form="singular+short">Rust</span> implementation must conform to
 the standard syntax of the language and undergo extensive unit testing..
 
-## No polymorphism at runtime
+### No polymorphism at runtime
 
 "Runtime <span acronym-label="polymorphism"
 acronym-form="singular+short">polymorphism</span>" refers to a program’s
@@ -156,7 +158,7 @@ polymorphic interface. Depending on the programming language, this can
 be relatively simple to implement. However, it can also lead to
 decreased performance and reduced memory safety.
 
-## Working Rust-Harfang example
+### Working Rust-Harfang example
 
 To ensure that our <span acronym-label="binding"
 acronym-form="singular+short">binding</span> is functional, we will need
@@ -167,7 +169,7 @@ To save time on development, this project will be a
 <span acronym-label="Rust" acronym-form="singular+short">Rust</span>
 version of a pre-existing, completed project.
 
-# Timeline & Milestones
+## Timeline & Milestones
 
 |        Deliverable        |    Date    |
 |:-------------------------:|:----------:|
@@ -189,9 +191,9 @@ Their are also a number of smaller steps to reach our end goal.
 
 -   Create a demonstration project using the binding
 
-# Risks and Assumptions
+## Risks and Assumptions
 
-## Risks
+### Risks
 
 |                                                       Risk                                                       | Danger Level |      Mitigation      |
 |:----------------------------------------------------------------------------------------------------------------:|:------------:|:--------------------:|
@@ -199,7 +201,7 @@ Their are also a number of smaller steps to reach our end goal.
 |  Team needs more time to familiarise with <span acronym-label="Rust" acronym-form="singular+short">Rust</span>   |     High     |    Work overtime     |
 |           FABGen can’t run on OSX <span acronym-label="Rust" acronym-form="singular+short">Rust</span>           |     High     |       Use a VM       |
 
-## Assumptions
+### Assumptions
 
 -   We can base ourselves on the Golang-<span acronym-label="FABGen"
     acronym-form="singular+short">FABGen</span> implementation
