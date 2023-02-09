@@ -126,7 +126,7 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let mut d = my_test_a::new();
+		let mut d = my_test_constructor_A();
 		d = my_test_modify_in_out_struct(d);
 		assert_eq!(d.v, 3);
 

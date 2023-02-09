@@ -48,12 +48,12 @@ package mytest
 
 test_rust = '''\
 include!("bindings.rs");
-use std::panicking;
+use std::panic;
 
 #[test]
 fn test_get_int() {
-	usafe {
-		let exception_raised = std::panicking::catch_unwind(|| my_test_get_int()).is_err();
+	unsafe {
+		let exception_raised = std::panic::catch_unwind(|| my_test_get_int()).is_err();
 		assert!(exception_raised);
 	}
 }
