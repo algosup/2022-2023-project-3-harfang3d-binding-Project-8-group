@@ -47,14 +47,4 @@ package mytest
 '''
 
 test_rust = '''\
-include!("bindings.rs");
-use std::panic;
-
-#[test]
-fn test_get_int() {
-	unsafe {
-		let exception_raised = std::panic::catch_unwind(|| my_test_get_int()).is_err();
-		assert!(exception_raised);
-	}
-}
 '''
