@@ -176,7 +176,7 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	usafe {
+	unsafe {
 		// TODO: Check for scoping rules (RAII)
 		let a = my_test_simple_struct::new(4);
 		let b = my_test_simple_struct::new(8);

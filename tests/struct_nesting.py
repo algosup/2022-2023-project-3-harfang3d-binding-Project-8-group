@@ -104,7 +104,7 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	usafe {
+	unsafe {
 		let mut n = nested_struct::new();
 		assert_eq!(n.v, 8);
 		n.v -= 4;

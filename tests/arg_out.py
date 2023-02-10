@@ -99,10 +99,10 @@ func Test(t *testing.T) {
 	defer a.Free()
 	ModifyInOutStruct(a)
 	assert.Equal(t, a.GetV(), int32(3), "should be the same.")
-
-	c, b := OutValuesFunctionCall(2, 3)
-	assert.Equal(t, *c, int32(16), "should be the same.")
+hould be the same.")
 	assert.Equal(t, *b, int32(42), "should be the same.")
+	c, b := OutValuesFunctionCall(2, 3)
+	assert.Equal(t, *c, int32(16), "s
 
 	r, c, b := OutValuesFunctionCallRval(2)
 	assert.Equal(t, r, int32(2), "should be the same.")
@@ -126,7 +126,7 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let mut d = my_test_constructor_A();
+		let mut d = my_test_constructor_a();
 		d = my_test_modify_in_out_struct(d);
 		assert_eq!(d.v, 3);
 

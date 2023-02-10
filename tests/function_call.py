@@ -136,13 +136,13 @@ fn test() {
 
 		// overload
 		assert_eq!(my_test_get(), 0);
-		assert_eq!(my_test_getWithV(2), 1);
-		assert_eq!(my_test_getWithVK(4, 3), 12);
-		assert_eq!(my_test_getWithVKB(4, 3, 2), 14);
+		assert_eq!(my_test_get_with_v(2), 1);
+		assert_eq!(my_test_get_with_vk(4, 3), 12);
+		assert_eq!(my_test_get_with_vkb(4, 3, 2), 14);
 
 		// optional argument
 		assert_eq!(my_test_get_global_int_multiplied(), 15);
-		assert_eq!(my_test_get_global_int_multipliedWithK(2), 6);
+		assert_eq!(my_test_get_global_int_multiplied_with_k(2), 6);
 	}
 }
 '''
