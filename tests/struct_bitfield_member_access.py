@@ -94,20 +94,19 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let s = my_test_simple_struct();
+		let s = my_test_constructor_simple_struct();
 
-		assert_eq!(s.get_a(), 3);
-		assert_eq!(s.get_b(), 11);
-		assert_eq!(s.get_c(), 1);
+		assert_eq!(my_test_simple_struct_get_a(s), 3);
+		assert_eq!(my_test_simple_struct_get_b(s), 11);
+		assert_eq!(my_test_simple_struct_get_c(s), 1);
 
-		s.set_a(1);
-		s.set_b(7);
-		s.set_c(2);
+		my_test_simple_struct_set_a(s, 1);
+		my_test_simple_struct_set_b(s, 7);
+		my_test_simple_struct_set_c(s, 2);
 
-		assert_eq!(s.get_a(), 1);
-		assert_eq!(s.get_b(), 7);
-		assert_eq!(s.get_c(), 2);
+		assert_eq!(my_test_simple_struct_get_a(s), 1);
+		assert_eq!(my_test_simple_struct_get_b(s), 7);
+		assert_eq!(my_test_simple_struct_get_c(s), 2);
 	}
 }
-
 '''

@@ -79,7 +79,7 @@ fn test() {
 	unsafe {
 		let a = my_test_get_base_class();
 		let b = my_test_cast_base_class_to_derived_class(a);
-		assert_eq!(b.u, 7);
+		assert_eq!(my_test_derived_class_get_u(b), 7);
 	}
 }
 
