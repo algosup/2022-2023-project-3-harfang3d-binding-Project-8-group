@@ -461,6 +461,8 @@ struct {type_info_name} {{
 		c_name = str(member["name"])
 
 		cleanClassname = to_snake_case(classname)
+		if cleanClassname:
+			cleanClassname = '_' + cleanClassname
 
 		# special Slice
 		if False: # TODO: isinstance(conv, lib.rust.stl.RustSliceToStdVectorConverter):
@@ -476,9 +478,9 @@ struct {type_info_name} {{
 		if is_in_header:
 			rust += "extern "
 
-		rust += f"{c_arg_bound_name} {to_snake_case(self._name)}_{cleanClassname}_get_{name.replace(':', '')}("
+		rust += f"{c_arg_bound_name} {to_snake_case(self._name)}{cleanClassname}_get_{name.replace(':', '')}("
 		if not static and not is_global:
-			rust += f"{to_snake_case(self._name)}_{cleanClassname} h"
+			rust += f"{to_snake_case(self._name)}{cleanClassname} h"
 		rust += ")"
 
 		if is_in_header:
@@ -513,9 +515,9 @@ struct {type_info_name} {{
 			if is_in_header:
 				rust += "extern "
 
-			rust += f"void {to_snake_case(self._name)}_{cleanClassname}_set_{name.replace(':', '')}("
+			rust += f"void {to_snake_case(self._name)}{cleanClassname}_set_{name.replace(':', '')}("
 			if not static and not is_global:
-				rust += f"{to_snake_case(self._name)}_{cleanClassname} h, "
+				rust += f"{to_snake_case(self._name)}{cleanClassname} h, "
 			rust += f"{c_arg_bound_name} v)"
 
 			if is_in_header:
@@ -574,7 +576,7 @@ struct {type_info_name} {{
 
 			# not global, add the Name of the class to be sure to avoid double name function name
 			if not is_global or (not is_constructor and is_global and convClass is not None):
-				rust += f"{to_snake_case(convClass.bound_name)}"
+				rust += f"_{to_snake_case(convClass.bound_name)}"
 
 			# add bounding_name to the overload function
 			if "bound_name" in proto["features"]:
