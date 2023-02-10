@@ -95,7 +95,7 @@ func Test(t *testing.T) {
 '''
 test_rust = '''\
 include!("bindings.rs");
-use std::ptr;
+use std::ptr::eq;
 
 #[test]
 fn test() {
@@ -103,15 +103,16 @@ fn test() {
         let a = my_test_get_obj0();
         let b = my_test_get_obj0();
 
-        assert!(ptr::eq(&*a, &*b));
+        assert!(eq(&*a, &*b));
 
         let c = my_test_get_obj1();
 
-        assert!(!ptr::eq(&*a, &*c));
-        assert!(!ptr::eq(&*b, &*c));
+        assert!(!eq(&*a, &*c));
+        assert!(!eq(&*b, &*c));
         let d = my_test_get_obj2();
 
-        assert!(ptr::eq(&*a, &*d));
+        assert!(eq(&*a, &*d));
     }
 }
+
 '''

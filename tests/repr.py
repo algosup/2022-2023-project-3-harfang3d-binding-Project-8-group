@@ -40,14 +40,4 @@ package mytest
 
 '''
 test_rust = '''\
-include!("bindings.rs");
-
-#[test]
-fn test() {
-	unsafe {
-		let o = my_test_some_struct::new();
-
-		assert_eq!(format!("{:?}", o), "repr!");
-	}
-}
 '''

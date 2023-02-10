@@ -59,8 +59,8 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let o = my_test_object::new();
-		assert_eq!(o.get(4), 15);`
+		let o = my_test_constructor_Object();
+		assert_eq!(my_test_GetObject(o, 4), 15);`
 	}
 }
 """
