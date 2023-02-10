@@ -76,7 +76,7 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let s = my_test_EnclosingTemplateInt::new();
+		let s = my_test_enclosing_template_int::new();
 		let n = my_test_get_nested_struct_int(&s);
 		assert_eq!(n.v, 9);
 	}

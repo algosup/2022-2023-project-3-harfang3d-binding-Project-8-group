@@ -105,12 +105,12 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	usafe {
-		let mut n = NestedStruct::new();
+		let mut n = nested_struct::new();
 		assert_eq!(n.v, 8);
 		n.v -= 4;
 		assert_eq!(n.v, 4);
 
-		let mut e = EnclosingStruct::new();
+		let mut e = enclosing_struct::new();
 		assert_eq!(e.n.v, 8);
 		e.n.v = 12;
 		assert_eq!(e.n.v, 12);

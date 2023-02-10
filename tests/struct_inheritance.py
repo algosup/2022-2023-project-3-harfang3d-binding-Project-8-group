@@ -175,11 +175,11 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let base = my_test_BaseClass::new();
+		let base = my_test_base_class::new();
 		assert_eq!(base.base_method(), 4);
 		assert_eq!(base.base_method_override(), 4);
 
-		let derived = my_test_DerivedClass::new();
+		let derived = my_test_derived_class::new();
 		assert_eq!(derived.base_method(), 4); // can still access base class
 		assert_eq!(derived.derived_method(), 8);  // can access its own methods
 		assert_eq!(derived.base_method_override(), 8); // properly overshadows redeclared base methods
