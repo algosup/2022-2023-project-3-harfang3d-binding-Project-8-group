@@ -90,7 +90,7 @@ fn test() {
 
 		assert_eq!(a, b);
 
-		let c = get_obj1();
+		let c = my_test_get_obj1();
 
 		assert_ne!(a, c);
 		assert_ne!(b, c);
