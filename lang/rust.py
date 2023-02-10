@@ -12,14 +12,6 @@ import lib
 def route_lambda(name: str) -> str:
 	return "" # TODO
 
-
-def clean_name(name: str) -> str:
-    return ""  # TODO
-
-
-def clean_name_with_title(name: str) -> str:
-	return name # TODO
-
 # https://stackoverflow.com/a/1176023
 def to_snake_case(name: str) -> str:
     name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
@@ -276,7 +268,7 @@ struct {type_info_name} {{
 						src += f"	auto retPointer = {retval_name};\n"
 					else:
 						src += f"	auto retPointer = new {val['conv'].ctype}({retval_name});\n"
-				retval_name = f"({clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})(retPointer)"
+				retval_name = f"({to_snake_case(self._name)}_{to_snake_case(val['conv'].bound_name)})(retPointer)"
 		else:
 			# special std::string (convert to const char*)
 			if val["conv"] is not None and "std::string" in str(val["conv"].ctype):
@@ -382,7 +374,7 @@ struct {type_info_name} {{
 		# if class or pointer with class
 		if self.__get_is_type_class_or_pointer_with_class(val["conv"]) or \
 			"RustStdFunctionConverter" in str(val["conv"]):
-			arg_bound_name += f"{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)} "
+			arg_bound_name += f"{to_snake_case(self._name)}_{to_snake_case(val['conv'].bound_name)} "
 		else:
 			# check the convert from the base (in case of ptr)
 			if  ('carg' in val and (val['carg'].ctype.is_pointer() or (hasattr(val['carg'].ctype, 'ref') and any(s in val['carg'].ctype.ref for s in ["&", "*"])))) or \
@@ -455,7 +447,96 @@ struct {type_info_name} {{
 		return "" # TODO
 
 	def __extract_get_set_member(self, classname: str, convClass: gen.TypeConverter | None, member: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False) -> str:
-		return "" # TODO
+		rust = ""
+		conv = self.select_ctype_conv(member["ctype"])
+
+		if "bound_name" in member:
+			bound_name = str(member["bound_name"])
+		elif bound_name is None:
+			bound_name = str(member["name"])
+		if name is None:
+			name = bound_name
+		name = to_snake_case(name)
+
+		c_name = str(member["name"])
+
+		cleanClassname = to_snake_case(classname)
+
+		# special Slice
+		if False: # TODO: isinstance(conv, lib.rust.stl.RustSliceToStdVectorConverter):
+			arg_bound_name = self.__get_arg_bound_name_to_c({"conv": conv.T_conv})
+		else:
+			arg_bound_name = self.__get_arg_bound_name_to_c({"conv": conv})
+		
+		# special std::string (convert to const char*)
+		c_arg_bound_name = arg_bound_name.replace("std::string", "const char*")
+		c_arg_bound_name = c_arg_bound_name.replace("const const", "const")
+
+		# GET
+		if is_in_header:
+			rust += "extern "
+
+		rust += f"{c_arg_bound_name} {to_snake_case(self._name)}_{cleanClassname}_get_{name.replace(':', '')}("
+		if not static and not is_global:
+			rust += f"{to_snake_case(self._name)}_{cleanClassname} h"
+		rust += ")"
+
+		if is_in_header:
+			rust += ";\n"
+		else:
+			rust += "{"
+			# check if the value is a ref
+			prefix = ""
+			if (hasattr(conv.ctype, "ref") and conv.ctype.ref in ["&", "*&"]) or \
+				conv.is_type_class():
+				prefix = "&"
+
+			if static or is_global:
+				if convClass is not None:
+					rust += f"	auto ret = {prefix}{convClass.ctype}::{c_name};\n"
+				else:
+					rust += f"	auto ret = {prefix}{classname}::{c_name};\n"
+			else:
+				if convClass is not None and "proxy" in convClass._features:
+					rust += f"\n	auto v = _type_tag_cast(h, {convClass.type_tag}, {convClass._features['proxy'].wrapped_conv.type_tag});\n"
+					rust += f"	auto ret = {prefix}(({convClass._features['proxy'].wrapped_conv.ctype}*)v)->{c_name};\n"
+				else:
+					rust += f"	auto ret = {prefix}(({convClass.ctype}*)h)->{c_name};\n"
+
+			src, retval_c = self.__arg_from_cpp_to_c({"conv": conv}, "ret", True)
+			rust += src
+			rust += f"return {retval_c};\n}}\n"
+
+		# SET
+		# add set only if the member is not const
+		if not(member["ctype"].const or conv._non_copyable):
+			if is_in_header:
+				rust += "extern "
+
+			rust += f"void {to_snake_case(self._name)}_{cleanClassname}_set_{name.replace(':', '')}("
+			if not static and not is_global:
+				rust += f"{to_snake_case(self._name)}_{cleanClassname} h, "
+			rust += f"{c_arg_bound_name} v)"
+
+			if is_in_header:
+				rust += ";\n"
+			else:
+
+				src, inval = self.__arg_from_c_to_cpp({"conv": conv}, "v")
+				rust += src
+
+				if static or is_global:
+					if convClass is not None:
+						rust += f"{{ {convClass.ctype}::{c_name} = {inval};\n}}\n"
+					else:
+						rust += f"{{ {classname}::{c_name} = {inval};\n}}\n"
+				else:
+					if convClass is not None and "proxy" in convClass._features:
+						rust += f"{{\n	auto w = _type_tag_cast(h, {convClass.type_tag}, {convClass._features['proxy'].wrapped_conv.type_tag});\n"
+						rust += f"	(({convClass._features['proxy'].wrapped_conv.bound_name}*)w)->{c_name} = {inval};\n}}\n"
+					else:
+						rust += f"{{ (({convClass.ctype}*)h)->{c_name} = {inval};}}\n"
+		return rust
 
 	def __extract_method_rust(self, classname: str, convClass: gen.TypeConverter, method: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_constructor: bool=False) -> str:
 		# TODO: Check necessity with client
@@ -489,11 +570,11 @@ struct {type_info_name} {{
 
 			if is_in_header:
 				rust += "extern "
-			rust += f"{retval} {clean_name_with_title(self._name)}_{clean_name_with_title(wrap_name)}"
+			rust += f"{retval} {to_snake_case(self._name)}_{to_snake_case(wrap_name)}"
 
 			# not global, add the Name of the class to be sure to avoid double name function name
 			if not is_global or (not is_constructor and is_global and convClass is not None):
-				rust += f"{clean_name_with_title(convClass.bound_name)}"
+				rust += f"{to_snake_case(convClass.bound_name)}"
 
 			# add bounding_name to the overload function
 			if "bound_name" in proto["features"]:
@@ -508,7 +589,7 @@ struct {type_info_name} {{
 			# not global, member class, include the "this" pointer first
 			if not is_global or (not is_constructor and is_global and convClass is not None):
 				has_previous_arg = True
-				rust += f"{clean_name_with_title(self._name)}{clean_name_with_title(convClass.bound_name)} this_"
+				rust += f"{to_snake_case(self._name)}_{to_snake_case(convClass.bound_name)} this_"
 
 			if len(proto["args"]):
 				for argin in proto["args"]:
@@ -712,9 +793,9 @@ struct {type_info_name} {{
 			if conv.nobind:
 				continue
 
-			cleanBoundName = clean_name_with_title(conv.bound_name)
+			cleanBoundName = to_snake_case(conv.bound_name)
 			if self.__get_is_type_class_or_pointer_with_class(conv) :
-				rust_h += f"typedef void* {clean_name_with_title(self._name)}{cleanBoundName};\n"
+				rust_h += f"typedef void* {to_snake_case(self._name)}_{cleanBoundName};\n"
 
 			if "RustStdFunctionConverter" in str(conv):
 				func_name = conv.base_type.replace("std::function<", "").replace("&", "*")[:-1] # [:-1] to remove the > of std::function
@@ -728,14 +809,16 @@ struct {type_info_name} {{
 						conv = self.select_ctype_conv(ctype)
 						args_boundname.append(self.__get_arg_bound_name_to_c({"conv": conv, "carg": type('carg', (object,), {'ctype':ctype})()}))
 
-				rust_h += f"typedef {func_name[:first_parenthesis]} (*{clean_name_with_title(self._name)}{cleanBoundName})({','.join(args_boundname)});\n"
+				rust_h += f"typedef {func_name[:first_parenthesis]} (*{to_snake_case(self._name)}_{cleanBoundName})({','.join(args_boundname)});\n"
 
 		# write the rest of the classes
 		for conv in self._bound_types:
 			if conv.nobind:
 				continue
 
-			cleanBoundName = clean_name_with_title(conv.bound_name)
+			cleanBoundName = to_snake_case(conv.bound_name)
+			if cleanBoundName == "simple_struct":
+				pass
 
 			if "sequence" in conv._features:
 				rust_h += self.__extract_sequence(conv, is_in_header=True)
@@ -756,7 +839,7 @@ struct {type_info_name} {{
 
 			# destructor for all type class
 			if self.__get_is_type_class_or_pointer_with_class(conv) :
-				rust_h += f"extern void {clean_name_with_title(self._name)}{cleanBoundName}Free({clean_name_with_title(self._name)}{cleanBoundName});\n"
+				rust_h += f"extern void {to_snake_case(self._name)}_{cleanBoundName}_free({to_snake_case(self._name)}_{cleanBoundName});\n"
 
 			# arithmetic operators
 			rust_h += extract_conv_and_bases(conv.arithmetic_ops, \
@@ -815,17 +898,17 @@ struct {type_info_name} {{
 			enum_vars = []
 			for name, value in enum.items():
 				enum_vars.append(f"({arg_bound_name}){value}")
-			rust_cpp += f"static const {arg_bound_name} {clean_name_with_title(self._name)}{bound_name} [] = {{ {', '.join(enum_vars)} }};\n"
-			rust_cpp += f"{arg_bound_name} Get{bound_name}(const int id) {{ return {clean_name_with_title(self._name)}{bound_name}[id];}}\n"
+			rust_cpp += f"static const {arg_bound_name} {to_snake_case(self._name)}_{bound_name} [] = {{ {', '.join(enum_vars)} }};\n"
+			rust_cpp += f"{arg_bound_name} Get{bound_name}(const int id) {{ return {to_snake_case(self._name)}_{bound_name}[id];}}\n"
 
 		#  classes
 		for conv in self._bound_types:
 			if conv.nobind:
 				continue
 
-			cleanBoundName = clean_name_with_title(conv.bound_name)
+			cleanBoundName = to_snake_case(conv.bound_name)
 			if conv.is_type_class():
-				rust_cpp += f"// bind {clean_name_with_title(self._name)}{cleanBoundName} methods\n"
+				rust_cpp += f"// bind {to_snake_case(self._name)}_{cleanBoundName} methods\n"
 
 			if "sequence" in conv._features:
 				rust_cpp += self.__extract_sequence(conv)
@@ -847,7 +930,7 @@ struct {type_info_name} {{
 			# destructor for all type class
 			if self.__get_is_type_class_or_pointer_with_class(conv) :
 				# delete
-				rust_cpp += f"void {clean_name_with_title(self._name)}{cleanBoundName}Free({clean_name_with_title(self._name)}{cleanBoundName} h){{" \
+				rust_cpp += f"void {to_snake_case(self._name)}_{cleanBoundName}_free({to_snake_case(self._name)}_{cleanBoundName} h){{" \
 						f"delete ({conv.ctype}*)h;" \
 						f"}}\n" 
 
