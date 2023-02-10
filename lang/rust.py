@@ -574,7 +574,7 @@ struct {type_info_name} {{
 
 			# not global, add the Name of the class to be sure to avoid double name function name
 			if not is_global or (not is_constructor and is_global and convClass is not None):
-				rust += f"{to_snake_case(convClass.bound_name)}"
+				rust += f"_{to_snake_case(convClass.bound_name)}"
 
 			# add bounding_name to the overload function
 			if "bound_name" in proto["features"]:
