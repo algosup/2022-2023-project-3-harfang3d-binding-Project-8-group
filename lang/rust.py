@@ -581,7 +581,7 @@ struct {type_info_name} {{
 				rust += proto["features"]["bound_name"]
 			# if automatic suffix generated
 			elif "suggested_suffix" in proto:
-				rust += proto["suggested_suffix"]
+				rust += '_' + to_snake_case(proto["suggested_suffix"])
 
 			rust += "("
 
