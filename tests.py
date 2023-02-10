@@ -40,9 +40,9 @@ if args.python_base_path:
 # -- CMake generator
 if not args.linux:
 	if args.x64:
-		cmake_generator = 'Visual Studio 16 2019'
+		cmake_generator = 'Visual Studio 17 2022'
 	else:
-		cmake_generator = 'Visual Studio 16 2019'
+		cmake_generator = 'Visual Studio 17 2022'
 
 	print("Using CMake generator: %s" % cmake_generator)
 
@@ -585,8 +585,8 @@ fn main() {{
 			return False
 
 		# after build, delete the wrapper.cpp to test the lib which has been build
-		if os.path.exists(os.path.join(work_path, 'wrapper.cpp')):
-			os.remove(os.path.join(work_path, 'wrapper.cpp'))
+		# if os.path.exists(os.path.join(work_path, 'wrapper.cpp')):
+		# 	os.remove(os.path.join(work_path, 'wrapper.cpp'))
 
 		print("Executing Rust test...")
 		os.chdir(work_path)

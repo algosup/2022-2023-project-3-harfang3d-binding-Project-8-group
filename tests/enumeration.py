@@ -102,21 +102,21 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		assert_eq!(my_test_GE_a, 0);
-		assert_eq!(my_test_GE_b, 1);
-		assert_eq!(my_test_GE_c, 8);
+		assert_eq!(my_test_ge_a, 0);
+		assert_eq!(my_test_ge_b, 1);
+		assert_eq!(my_test_ge_c, 8);
 
-		assert_eq!(my_test_SE_a, 0);
-		assert_eq!(my_test_SE_b, 128);
-		assert_eq!(my_test_SE_c, 512);
+		assert_eq!(my_test_se_a, 0);
+		assert_eq!(my_test_se_b, 128);
+		assert_eq!(my_test_se_c, 512);
 
-		assert_eq!(my_test_TE_a, 0);
-		assert_eq!(my_test_TE_b, 1);
-		assert_eq!(my_test_TE_c, 16384);
+		assert_eq!(my_test_te_a, 0);
+		assert_eq!(my_test_te_b, 1);
+		assert_eq!(my_test_te_c, 16384);
 
-		assert_eq!(my_test_NE_a, 0);
-		assert_eq!(my_test_NE_b, 1);
-		assert_eq!(my_test_NE_c, 4096);
+		assert_eq!(my_test_ne_a, 0);
+		assert_eq!(my_test_ne_b, 1);
+		assert_eq!(my_test_ne_c, 4096);
 	}
 }
 '''

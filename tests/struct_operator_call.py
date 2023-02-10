@@ -176,10 +176,10 @@ include!("bindings.rs");
 
 #[test]
 fn test() {
-	usafe {
+	unsafe {
 		// TODO: Check for scoping rules (RAII)
-		let a = my_test_SimpleStruct::new(4);
-		let b = my_test_SimpleStruct::new(8);
+		let a = my_test_simple_struct::new(4);
+		let b = my_test_simple_struct::new(8);
 
 		let mut s = a.add_simple_struct(b);
 		assert_eq!(s.v, 12);

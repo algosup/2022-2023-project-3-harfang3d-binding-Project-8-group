@@ -126,28 +126,29 @@ func Test(t *testing.T) {
 '''
 
 test_rust = '''\
-include!("bindings.rs");
+	include!("bindings.rs");
 
-fn simple_void_function() {
-	println!("void function called!");
+
+extern fn simple_void_function(){}
+extern fn compute_function(v: i32, m: *mut i32, c: *mut i32) -> i32{
+	let m = unsafe {*m};
+	let c = unsafe {*c}; 
+	return v* m + c
 }
+
 
 #[test]
 fn test_std_function() {
 	unsafe {
-		my_test_set_simple_void_function(simple_void_function);
+		my_test_set_simple_void_function(Some(simple_void_function));
 		my_test_invoke_simple_void_function();
 	}
-}
-
-fn compute_function(v: i32, m: &i32, c: &i32) -> i32 {
-	return v * *m + *c;
 }
 
 #[test]
 fn test_std_function2() {
 	unsafe {
-		my_test_set_compute_function(compute_function);
+		my_test_set_compute_function(Some(compute_function));
 		let r = my_test_invoke_compute_function(5, 3, 4);
 		assert_eq!(r, 19);
 	}

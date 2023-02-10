@@ -74,11 +74,11 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let v = my_test_SimpleStruct::new();
+		let v = my_test_simplestruct::new();
 		assert_eq!(v.v, 3);
 
-		assert_eq!(my_test_SimpleStruct::i, 5);
-		assert_eq!(my_test_SimpleStruct::s, "some string");
+		assert_eq!(my_test_simplestruct::i, 5);
+		assert_eq!(my_test_simplestruct::s, "some string");
 	}
 }
 '''
