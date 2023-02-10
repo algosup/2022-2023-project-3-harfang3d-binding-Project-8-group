@@ -72,12 +72,11 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let s = my_test_simple_struct::new();
-		let t = my_test_simple_struct::new_with_v(4);
+		let s = my_test_constructor_simple_struct();
+		let t = my_test_constructor_simple_struct_with_v(4);
 
-		assert_eq!(s.v_, -8);
-		assert_eq!(t.v_, 4);
+		assert_eq!(my_test_simple_struct_get_v_(s), -8);
+		assert_eq!(my_test_simple_struct_get_v_(t), 4);
 	}
 }
-
 '''

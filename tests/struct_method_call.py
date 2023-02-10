@@ -146,17 +146,17 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let mut s = my_test_simple_struct::new();
+		let mut s = my_test_constructor_simple_structSimplestConstructor();
 
-		assert_eq!(s.get_a(), 1);
-		assert!(s.set_a_with_v0_v1(8, 2));
+		assert_eq!(my_test_get_asimple_struct(s), 1);
+		assert!(my_test_set_asimple_struct_with_v0_v1(s, 8, 2));
 
-		assert_eq!(s.get_a(), 10);
+		assert_eq!(my_test_get_asimple_struct(s), 10);
 
-		assert_eq!(s.set_a_with_v(9), 9);
-		assert_eq!(s.get_a(), 9);
+		assert_eq!(my_test_set_asimple_struct(s, 9), 9);
+		assert_eq!(my_test_get_asimple_struct(s), 9);
 
-		assert_eq!(my_test_simple_struct::get_static_int(), 4);
+		assert_eq!(my_test_get_static_intsimple_struct(s), 4);
 
 		// TODO: Add tests for `get_modify_arg_out` ?
 	}
