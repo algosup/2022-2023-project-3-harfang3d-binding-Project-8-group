@@ -105,19 +105,19 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let mut n = nested_struct::new();
-		assert_eq!(n.v, 8);
-		n.v -= 4;
-		assert_eq!(n.v, 4);
+		let mut n = my_test_constructor_nested_struct();
+		assert_eq!(my_test_nested_struct_get_v(n), 8);
+		my_test_nested_struct_set_v(n, 4);
+		assert_eq!(my_test_nested_struct_get_v(n), 4);
 
-		let mut e = enclosing_struct::new();
-		assert_eq!(e.n.v, 8);
-		e.n.v = 12;
-		assert_eq!(e.n.v, 12);
-		e.n.v *= 4;
-		assert_eq!(e.n.v, 48);
-		e.n.v /= 2;
-		assert_eq!(e.n.v, 24);
+		let mut e = my_test_constructor_enclosing_struct();
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 8);
+		my_test_nested_struct_set_v(my_test_enclosing_struct_get_n(e), 12);
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 12);
+		my_test_nested_struct_set_v(my_test_enclosing_struct_get_n(e), my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e))* 4);
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 48);
+		my_test_nested_struct_set_v(my_test_enclosing_struct_get_n(e), my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)) / 2);
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 24);
 	}
 }
 '''

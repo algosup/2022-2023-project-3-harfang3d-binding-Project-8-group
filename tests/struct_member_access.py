@@ -144,32 +144,27 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let mut s = my_test_return_simple_struct_by_pointer();
+		let s = my_test_return_simple_struct_by_pointer();
 
-		assert_eq!(s.a, 7);
-		assert_eq!(s.b, 17.5);
-		assert!(s.c);
-		assert_eq!(s.d, 9);
-		assert_eq!(s.text_field, "some content");
+		assert_eq!(my_test_simple_struct_get_a(s), 7);
+		assert_eq!(my_test_simple_struct_get_b(s), 17.5);
+		assert!(my_test_simple_struct_get_c(s));
+		assert_eq!(my_test_simple_struct_get_d(s), 9);
+		assert_eq!(std::ffi::CStr::from_ptr(my_test_simple_struct_get_text_field(s)).to_str().unwrap(), "some content");
 
-		s.a = -2;
-		s.b = -4.5;
-		s.c = false;
+		my_test_simple_struct_set_a(s, -2);
+		my_test_simple_struct_set_b(s, -4.5);
+		my_test_simple_struct_set_c(s,false);
 
-		assert_eq!(s.a, -2);
-		assert_eq!(s.b, -4.5);
-		assert!(!s.c);
+		assert_eq!(my_test_simple_struct_get_a(s), -2);
+		assert_eq!(my_test_simple_struct_get_b(s), -4.5);
+		assert!(!my_test_simple_struct_get_c(s));
 
-		s.a += 4;
-		assert_eq!(s.a, 2);
+		my_test_simple_struct_set_a(s, my_test_simple_struct_get_a(s) + 4);
+		assert_eq!(my_test_simple_struct_get_a(s), 2);
 
-		// write to const member
-		// FIXME: Cannot would not compile
-		/*
-		let old_value = std::mem::replace(&mut s.d, 12);
-		assert_eq!(write_to_const_failed, true);
-		assert_eq!(s.d, 9);
-		*/
+		// write to const member d is impossible since bindgen erase the possibility. 
+		
 	}
 }
 '''

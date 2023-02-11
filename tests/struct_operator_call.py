@@ -178,36 +178,37 @@ include!("bindings.rs");
 fn test() {
 	unsafe {
 		// TODO: Check for scoping rules (RAII)
-		let a = my_test_simple_struct::new(4);
-		let b = my_test_simple_struct::new(8);
+		let a = my_test_constructor_simple_struct(4);
+		let b = my_test_constructor_simple_struct(8);
 
-		let mut s = a.add_simple_struct(b);
-		assert_eq!(s.v, 12);
-		s.add_int(b);
-		assert_eq!(s.v, 20);
-		s.inplace_add_int(4);
-		assert_eq!(s.v, 24);
+		let mut s = my_test_add_simple_structSimpleStruct(a, b);
+		assert_eq!(my_test_simple_struct_get_v(s), 12);
+		s = my_test_add_simple_structSimpleStruct(s, b);
+		assert_eq!(my_test_simple_struct_get_v(s), 20);
+		my_test_inplace_add_simple_structInt(s, 4);
+		assert_eq!(my_test_simple_struct_get_v(s), 24);
 
-		s = s.divide_int(4);
-		assert_eq!(s.v, 6);
-		s.inplace_divide_int(3);
-		assert_eq!(s.v, 2);
-		s.inplace_add_simple_struct(a);
-		assert_eq!(s.v, 6);
+		s = my_test_div_simple_structInt(s, 4);
+		assert_eq!(my_test_simple_struct_get_v(s), 6);
+		my_test_inplace_div_simple_structInt(s, 3);
+		assert_eq!(my_test_simple_struct_get_v(s), 2);
+		my_test_inplace_add_simple_structSimpleStruct(s, a);
+		assert_eq!(my_test_simple_struct_get_v(s), 6);
 
-		s = s.multiply_simple_struct(a);
-		assert_eq!(s.v, 24);
-		s.inplace_miltiply_int(2);
-		assert_eq!(s.v, 48);
+		s = my_test_mul_simple_structSimpleStruct(s, a);
+		assert_eq!(my_test_simple_struct_get_v(s), 24);
+		my_test_inplace_mul_simple_structInt(s, 2);
+		assert_eq!(my_test_simple_struct_get_v(s), 48);
 
-		s = s.subtract_simple_struct(b);
-		assert_eq!(s.v, 40);
-		s.subtract_int(32);
-		assert_eq!(s.v, 8);
+		s = my_test_sub_simple_structSimpleStruct(s, b);
+		assert_eq!(my_test_simple_struct_get_v(s), 40);
+		my_test_inplace_sub_simple_structInt(s, 32);
+		assert_eq!(my_test_simple_struct_get_v(s), 8);
 
-		let c = a.multiply_int(2);
-		assert_eq!(c, b);
-		assert_ne!(a, b);
+		let c = my_test_mul_simple_structInt(a, 2);
+		assert!(my_test_eq_simple_struct(c, b));
+		assert!(my_test_ne_simple_struct(a, b));
+		
 	}
 }
 '''
