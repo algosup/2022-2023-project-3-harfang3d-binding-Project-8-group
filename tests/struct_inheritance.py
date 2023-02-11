@@ -176,13 +176,13 @@ include!("bindings.rs");
 fn test() {
 	unsafe {
 		let base = my_test_constructor_base_class();
-		assert_eq!(my_test_base_methodbase_class(base), 4);
-		assert_eq!(my_test_base_method_overridebase_class(base), 4);
+		assert_eq!(my_test_base_method_base_class(base), 4);
+		assert_eq!(my_test_base_method_override_base_class(base), 4);
 
 		let derived = my_test_constructor_derived_class();
-		assert_eq!(my_test_base_methodderived_class(derived), 4); // can still access base class
-		assert_eq!(my_test_base_method_overridederived_class(derived), 8);  // can access its own methods
-		assert_eq!(my_test_derived_methodderived_class(derived), 8); // properly overshadows redeclared base methods
+		assert_eq!(my_test_base_method_derived_class(derived), 4); // can still access base class
+		assert_eq!(my_test_base_method_override_derived_class(derived), 8);  // can access its own methods
+		assert_eq!(my_test_derived_method_derived_class(derived), 8); // properly overshadows redeclared base methods
 
 		// argument casting through inheritance tree
 		assert_eq!(my_test_read_virtual_method_through_base_class(base), 6);
