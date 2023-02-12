@@ -102,14 +102,13 @@ fn test() {
 		my_test_set_v(5i32);
 		assert_eq!(my_test_get_v(), 5i32);
 
-		assert_eq!(my_test_get_s().v, 4i32);
-		my_test_get_s().v = 9i32;
-		assert_eq!(my_test_get_s().v, 9i32);
+		assert_eq!(my_test_simple_struct_get_v(my_test_get_s()), 4i32);
+		my_test_simple_struct_set_v(my_test_get_s(), 9i32);
+		assert_eq!(my_test_simple_struct_get_v(my_test_get_s()), 9i32);
 		
 		assert_eq!(my_test_get_w(), 14i32);
 
 		assert_eq!(my_test_get_u(), 7f32);
 	}
 }
-
 '''

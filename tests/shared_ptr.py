@@ -113,13 +113,13 @@ fn test () {
 	unsafe {
 		let sp = my_test_get_shared_ptr_to_simple_struct();
 
-		assert_eq!(sp.my_test_get_u(), 4.0);
-		assert_eq!(sp.my_test_get_v(), 7);
+		assert_eq!(my_test_ssimple_struct_get_u(sp), 4.0);
+		assert_eq!(my_test_ssimple_struct_get_v(sp), 7);
 
-		let sp2 = my_test_new_s_simple_struct(9.0);
+		let sp2 = my_test_constructor_ssimple_struct(9.0);
 
-		assert_eq!(sp2.my_test_get_u(), 9.0);
-		assert_eq!(sp2.my_test_get_v(), 90);
+		assert_eq!(my_test_ssimple_struct_get_u(sp2), 9.0);
+		assert_eq!(my_test_ssimple_struct_get_v(sp2), 90);
 
 		let spn = my_test_get_empty_shared_ptr();
 
