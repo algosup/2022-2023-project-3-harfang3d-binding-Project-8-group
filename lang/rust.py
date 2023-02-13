@@ -40,7 +40,8 @@ class RustTypeConverterCommon(gen.TypeConverter):
 		return out
 
 	def to_c_call(self, in_var: str, out_var_p: str, is_pointer: bool) -> str:
-		pass # Unused
+		raise NotImplementedError("RustTypeConverterCommon.to_c_call")
+		pass # TODO: Remove or implement (unused)
 
 	def from_c_call(self, out_var: str, expr: str, ownership: str) -> str:
 		return self.from_c_func + "((void *)" + expr + ", " + ownership + ");\n"
@@ -48,67 +49,76 @@ class RustTypeConverterCommon(gen.TypeConverter):
 
 #
 class RustClassTypeDefaultConverter(RustTypeConverterCommon):
-	# def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False) -> None:
-	# 	super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
+	def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False) -> None:
+		super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
 
 	def is_type_class(self) -> bool:
 		return True
 
 	def get_type_api(self, module_name: str) -> str:
-		return "" # TODO
+		return ""
 
 	def to_c_call(self, in_var: str, out_var_p: str, is_pointer: bool) -> str:
-		return "" # TODO
+		raise NotImplementedError("RustClassTypeDefaultConverter.to_c_call")
+		return "" # TODO: Remove or implement (unused)
 
 	def from_c_call(self, out_var: str, expr: str, ownership: str) -> str:
-		return "" # TODO
+		raise NotImplementedError("RustClassTypeDefaultConverter.from_c_call")
+		return "" # TODO: Remove or implement (unused)
 
 	def check_call(self, in_var: str) -> str:
-		return "" # TODO
+		raise NotImplementedError("RustClassTypeDefaultConverter.check_call")
+		return "" # TODO: Remove or implement (unused)
 
 	def get_type_glue(self, gen: gen.FABGen, module_name: str) -> str:
-		return "" # TODO
+		# Override default as glue type not used in Rust
+		return ""
 
 
 class RustPtrTypeConverter(gen.TypeConverter):
-	# def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False) -> None:
-	# 	super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
+	def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False) -> None:
+		super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
 
 	def get_type_api(self, module_name: str) -> str:
 		return "" # TODO
 
 	def to_c_call(self, in_var: str, out_var_p: str, is_pointer: bool) -> str:
-		return "" # TODO
+		return "" # TODO: Remove or implement (unused)
 
 	def from_c_call(self, out_var: str, expr: str, ownership: str) -> str:
-		return "" # TODO
+		return "" # TODO: Remove or implement (unused)
 
 	def check_call(self, in_var: str) -> str:
-		return "" # TODO
+		return "" # TODO: Remove or implement (unused)
 
 	def get_type_glue(self, gen: gen.FABGen, module_name: str) -> str:
-		return "" # TODO
+		# Override default as glue type not used in Rust
+		return ""
 
 
 class RustExternTypeConverter(RustTypeConverterCommon):
-	# def __init__(self, type, to_c_storage_type, bound_name, module):
-	# 	super().__init__(type, to_c_storage_type, bound_name)
-	# 	self.module = module
+	def __init__(self, type, to_c_storage_type, bound_name, module):
+		super().__init__(type, to_c_storage_type, bound_name)
+		self.module = module
 
 	def get_type_api(self, module_name: str) -> str:
-		return "" # TODO
+		return ""
 
 	def to_c_call(self, in_var: str, out_var_p: str) -> str:
+		raise NotImplementedError("RustExternTypeConverter.to_c_call")
 		return "" # TODO
 
 	def from_c_call(self, out_var: str, expr: str, ownership: str) -> str:
+		raise NotImplementedError("RustExternTypeConverter.from_c_call")
 		return "" # TODO
 
 	def check_call(self, in_var: str) -> str:
+		raise NotImplementedError("RustExternTypeConverter.check_call")
 		return "" # TODO
 
 	def get_type_glue(self, gen: gen.FABGen, module_name: str) -> str:
-		return "" # TODO
+		# Override default as glue type not used in Rust
+		return ""
 
 
 
@@ -135,45 +145,9 @@ class RustGenerator(gen.FABGen):
 	def set_compilation_directives(self, directives: Any) -> None: # TODO
 		self.crust_directives = directives
 
-	# kill a bunch of functions we don't care about
-	def set_error(self, type: str, reason: str) -> str:
-		return "" # TODO: Check usefulness
-
-	def get_self(self, ctx: str) -> str:
-		return "" # TODO: Check usefulness
-
-	def get_var(self, i: int, ctx: str) -> str:
-		return "" # TODO: Check usefulness
-
-	def open_proxy(self, name: str, max_arg_count: int, ctx: str) -> str:
-		return "" # TODO: Check usefulness
-
-	def _proto_call(self, self_conv, proto, expr_eval, ctx, fixed_arg_count=None): # TODO
-		return "" # TODO: Check usefulness
-
-	def _bind_proxy(self, name, self_conv, protos, desc, expr_eval, ctx, fixed_arg_count=None): # TODO
-		return "" # TODO: Check usefulness
-
-	def close_proxy(self, ctx: str) -> str:
-		return "" # TODO: Check usefulness
-
-	def proxy_call_error(self, msg: str, ctx: str) -> str:
-		return "" # TODO: Check usefulness
-
-	def return_void_from_c(self):
-		return "" # TODO: Check usefulness
-
-	def rval_from_nullptr(self, out_var):
-		return "" # TODO: Check usefulness
-
-	def rval_from_c_ptr(self, conv, out_var, expr, ownership):
-		return "" # TODO: Check usefulness
-
-	def commit_from_c_vars(self, rvals, ctx="default"):
-		return "" # TODO: Check usefulness
-
-	def rbind_function(self, name, rval, args, internal=False):
-		return "" # TODO: Check usefulness
+	def _bind_proxy(self, name, self_conv, protos, desc, expr_eval, ctx, fixed_arg_count=None):
+		# TODO: Typehinting
+		return "" # Unused ?
 
 	#
 	def get_binding_api_declaration(self) -> str:
@@ -207,9 +181,7 @@ struct {type_info_name} {{
 		return out
 
 	def output_binding_api(self) -> None:
-		type_info_name = gen.apply_api_prefix("type_info")
-		
-		return "" # TODO
+		return ""
 
 	#
 	def get_output(self) -> dict[str, str]:
@@ -354,15 +326,6 @@ struct {type_info_name} {{
 
 		return src, retval
 
-	def __arg_from_c_to_rust(self, val: dict[str, Any], retval_name: str, non_owning: bool=False) -> tuple[str, str]:
-		return "", "" # TODO
-
-	def __arg_from_rust_to_c(self, val: dict[str, Any], arg_name: str) -> str:
-		return "" # TODO
-
-	def __get_arg_bound_name_to_rust(self, val: dict[str, Any]) -> str:
-		return "" # TODO
-
 	def __get_arg_bound_name_to_c(self, val: dict[str, Any]) -> str:
 		arg_bound_name = ""
 
@@ -437,13 +400,7 @@ struct {type_info_name} {{
 						arg_bound_name += f"{val['conv'].bound_name} "
 		return arg_bound_name
 
-	def __extract_sequence_rust(self, conv: gen.TypeConverter) -> str:
-		return "" # TODO
-
 	def __extract_sequence(self, conv: gen.TypeConverter, is_in_header: bool=False) -> str:
-		return "" # TODO
-
-	def __extract_get_set_member_rust(self, classname: str, member: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, implicit_cast: str | None=None) -> str:
 		return "" # TODO
 
 	def __extract_get_set_member(self, classname: str, convClass: gen.TypeConverter | None, member: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False) -> str:
@@ -539,10 +496,6 @@ struct {type_info_name} {{
 					else:
 						rust += f"{{ (({convClass.ctype}*)h)->{c_name} = {inval};}}\n"
 		return rust
-
-	def __extract_method_rust(self, classname: str, convClass: gen.TypeConverter, method: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_constructor: bool=False) -> str:
-		# TODO: Check necessity with client
-		return "" # TODO
 
 	def __extract_method(self, classname: str, convClass: gen.TypeConverter, method: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False, is_constructor: bool=False, overload_op: str | None=None) -> str:
 		rust = ""
@@ -702,40 +655,6 @@ struct {type_info_name} {{
 
 		return rust
 
-	# VERY SPECIAL
-	# check in every methods, 
-	# if one arg is only out and if it's a class, if there is a constructor with no arg
-	def _check_arg_out_add_constructor_if_needed(self, method: dict[str, Any]) -> None:
-		pass # TODO
-		# def check_if_val_have_constructor(val):
-		# 	# if it's a arg out and a class
-		# 	if self.__get_is_type_class_or_pointer_with_class(val["conv"]):
-		# 		# find the constructor without arg
-		# 		type_conv = None
-		# 		for arg_conv in self._bound_types:
-		# 			if str(arg_conv.ctype) == str(val["conv"].ctype):
-		# 				type_conv = arg_conv
-		# 				if hasattr(arg_conv, "constructor") and arg_conv.constructor is not None:
-		# 					proto_args = self._build_protos(arg_conv.constructor["protos"])
-		# 					break
-		# 		else:
-		# 			proto_args = None
-				
-		# 		# if no proto constructor with no args, add one
-		# 		if proto_args is None and type_conv is not None:
-		# 			self.bind_constructor(type_conv, [])
-
-		# # check all protos
-		# protos = self._build_protos(method["protos"])
-		# for proto in protos:
-		# 	# convert arg in to c
-		# 	if len(proto["args"]):
-		# 		for arg in proto["args"]:
-		# 			# if arg out only, declare this value
-		# 			if "arg_out" in proto["features"] and str(arg["carg"].name) in proto["features"]["arg_out"]:
-		# 				if arg["carg"].ctype.is_pointer() or (hasattr(arg["carg"].ctype, "ref") and arg["carg"].ctype.ref == "&"):
-		# 					check_if_val_have_constructor(arg)
-
 	def finalize(self) -> None:
 		super().finalize()
 
@@ -771,13 +690,6 @@ struct {type_info_name} {{
 				'extern "C" {\n'\
 				'#endif\n'
 
-		# rust_h += '#include <stdint.h>\n' \
-		# 	'#include <stdbool.h>\n' \
-		# 	'#include <stddef.h>\n' \
-		# 	'#include <memory.h>\n' \
-		# 	'#include <string.h>\n' \
-		# 	'#include <stdlib.h>\n' \
-		# 	'#include "fabgen.h"\n\n'
 		rust_h += '#include "fabgen.h"\n\n'
 			
 		# enum
