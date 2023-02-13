@@ -39,10 +39,9 @@ if args.python_base_path:
 
 # -- CMake generator
 if not args.linux:
-	if args.x64:
-		cmake_generator = 'Visual Studio 17 2022'
-	else:
-		cmake_generator = 'Visual Studio 17 2022'
+	cmake_generator_list = subprocess.check_output(["cmake", "--help"]).decode()
+	cmake_generator_list = cmake_generator_list[cmake_generator_list.find("Visual Studio"):]
+	cmake_generator = cmake_generator_list[:cmake_generator_list.find("=")].strip()
 
 	print("Using CMake generator: %s" % cmake_generator)
 
