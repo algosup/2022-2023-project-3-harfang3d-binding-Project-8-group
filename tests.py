@@ -113,7 +113,7 @@ def run_tests(gen, names, testbed):
 		final, final2 = run_test(gen, name, testbed)
 		os.chdir(cwd)
 		print('')
-		final = str(i+1), "  ", str(final), "  ", name, "  ", final2, "\n"
+		final = str(i+1), "  ", str(round(final,2)), "  ", name, "  ", final2, "\n"
 		with open ("windows_perf.txt", "a") as f:
 			f.write(''.join(final))
 
