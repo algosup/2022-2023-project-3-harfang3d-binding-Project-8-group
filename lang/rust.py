@@ -205,47 +205,49 @@ struct {type_info_name} {{
 		return None
 
 	def __get_is_type_class_or_pointer_with_class(self, conv: gen.TypeConverter) -> bool:
-		if conv.is_type_class() or \
-			(isinstance(conv, RustPtrTypeConverter) and self._get_conv(str(conv.ctype.scoped_typename)) is None):
-			return True
-		return False
+		return conv.is_type_class() or \
+			(isinstance(conv, RustPtrTypeConverter) and self._get_conv(str(conv.ctype.scoped_typename)) is None)
 
 	def __get_stars(self, val: dict[str, Any], start_stars: int=0, add_start_for_ref: bool=True) -> str:
-		stars = "*" * start_stars
+		def get(name: str) -> int:
+			ref = val[name].ctype.ref
+			if add_start_for_ref:
+				return len(ref)
+			return ref.count("*")
+
+		additional_stars = 0
 		if "carg" in val and hasattr(val["carg"].ctype, "ref"):
-			stars += "*" * (len(val["carg"].ctype.ref) if add_start_for_ref else val["carg"].ctype.ref.count('*'))
+			additional_stars = get("carg")
 		elif "storage_ctype" in val and hasattr(val["storage_ctype"], "ref"):
-			stars += "*" * (len(val["storage_ctype"].ref) if add_start_for_ref else val["storage_ctype"].ref.count('*'))
+			additional_stars = get("storage_ctype")
 		elif hasattr(val["conv"].ctype, "ref"):
-			stars += "*" * (len(val["conv"].ctype.ref) if add_start_for_ref else val["conv"].ctype.ref.count('*'))
-		return stars
+			additional_stars = get("conv")
+		return (start_stars + additional_stars) * "*"
 
 	def __arg_from_cpp_to_c(self, val: dict[str, Any], retval_name: str, just_copy: bool) -> tuple[str, str]:
 		src = ""
 		# type class, not a pointer
-		if val['conv'] is not None and val['conv'].is_type_class() and \
-			not val['conv'].ctype.is_pointer() and ('storage_ctype' not in val or not hasattr(val['storage_ctype'], 'ref') or not any(s in val['storage_ctype'].ref for s in ["&", "*"])):
-				# special shared ptr
-				if 'proxy' in val['conv']._features:
-					src += f"	if(!{retval_name})\n" \
-						"		return nullptr;\n"
+		if val['conv'] is not None and val['conv'].is_type_class() and not val['conv'].ctype.is_pointer() and ('storage_ctype' not in val or not hasattr(val['storage_ctype'], 'ref') or not any(s in val['storage_ctype'].ref for s in ["&", "*"])):
 
-					src += "	auto " + val['conv']._features['proxy'].wrap("ret", "retPointer")
-				# special std::future 
-				elif val["conv"] is not None and "std::future" in str(val["conv"].ctype):
-					src += f"	auto retPointer = new std::future<int>(std::move({retval_name}));\n"
-				else:
-					# class, not pointer, but static
-					if just_copy:
-						src += f"	auto retPointer = {retval_name};\n"
-					else:
-						src += f"	auto retPointer = new {val['conv'].ctype}({retval_name});\n"
-				retval_name = f"({to_snake_case(self._name)}_{to_snake_case(val['conv'].bound_name)})(retPointer)"
+			# special shared ptr
+			if 'proxy' in val['conv']._features:
+				src += f"\tif(!{retval_name})\n\t\treturn nullptr;\n"
+				src += f"\tauto " + val['conv']._features['proxy'].wrap("ret", "retPointer")
+			# special std::future 
+			elif val["conv"] is not None and "std::future" in str(val["conv"].ctype):
+				src += f"\tauto retPointer = new std::future<int>(std::move({retval_name}));\n"
+			# class, not pointer, but static
+			else:
+				expression = retval_name if just_copy else f"new {val['conv'].ctype}({retval_name})"
+				src += f"	auto retPointer = {expression};\n"
+
+			retval_name = f"({to_snake_case(self._name)}_{to_snake_case(val['conv'].bound_name)})(retPointer)"
+
 		else:
 			# special std::string (convert to const char*)
 			if val["conv"] is not None and "std::string" in str(val["conv"].ctype):
 				stars = self.__get_stars(val)
-				if len(stars) > 0:# rarely use but just in case
+				if stars:# rarely use but just in case
 					retval_name = f"new const char*(&(*{retval_name}->begin()))"
 				else:
 					retval_name = f"{retval_name}.c_str()"
@@ -254,7 +256,7 @@ struct {type_info_name} {{
 
 		# cast it
 		# if it's an enum
-		if val["conv"].bound_name in self._enums.keys():
+		if val["conv"].bound_name in self._enums:
 			enum_conv = self._get_conv_from_bound_name(val['conv'].bound_name)
 			if enum_conv is not None and hasattr(enum_conv, "base_type") and enum_conv.base_type is not None:
 				arg_bound_name = str(enum_conv.base_type)
@@ -262,8 +264,7 @@ struct {type_info_name} {{
 				arg_bound_name = "int"
 			retval_name = f"({arg_bound_name}){retval_name}"
 		# cast it, if it's a const
-		elif 'storage_ctype' in val and val["storage_ctype"].const or \
-			'carg' in val and val["carg"].ctype.const:
+		elif 'storage_ctype' in val and val["storage_ctype"].const or 'carg' in val and val["carg"].ctype.const:
 			arg_bound_name = self.__get_arg_bound_name_to_c(val)
 			retval_name = f"({arg_bound_name}){retval_name}"
 
@@ -287,44 +288,44 @@ struct {type_info_name} {{
 			else:
 				src += f"std::vector<{val['conv'].T_conv.ctype}> {retval_name}(({val['conv'].T_conv.ctype}*){retval_name}ToCBuf, ({val['conv'].T_conv.ctype}*){retval_name}ToCBuf + {retval_name}ToCSize);\n"
 
-		retval = ""
 		# very special case, std::string &
 		if "RustStringConverter" in str(val["conv"]) and \
 			"carg" in val and hasattr(val["carg"].ctype, "ref") and any(s in val["carg"].ctype.ref for s in ["&"]) and \
 			not val["carg"].ctype.const:
 			src += f"std::string {retval_name}_cpp(*{retval_name});\n"
-			retval += f"{retval_name}_cpp"
+			retval = f"{retval_name}_cpp"
+			return src, retval
 		# std::function
-		elif "RustStdFunctionConverter" in str(val["conv"]):
+		if "RustStdFunctionConverter" in str(val["conv"]):
 			func_name = val["conv"].base_type.replace("std::function<", "")[:-1]
 			first_parenthesis = func_name.find("(")
-			retval += f"({func_name[:first_parenthesis]}(*){func_name[first_parenthesis:]}){retval_name}"
+			retval = f"({func_name[:first_parenthesis]}(*){func_name[first_parenthesis:]}){retval_name}"
+			return src, retval
 		# classe or pointer on class
-		else:
-			if self.__get_is_type_class_or_pointer_with_class(val["conv"]):
-				stars = self.__get_stars(val, add_start_for_ref=False)
-				# for type pointer, there is a * in the ctype, so remove one
-				if isinstance(val['conv'], RustPtrTypeConverter):
-					stars = stars[1:]
-				
-				# if it's not a pointer, add a star anyway because we use pointer to use in rust
-				if (not val["conv"].ctype.is_pointer() and ("carg" not in val or ("carg" in val and not val["carg"].ctype.is_pointer()))):
-					stars += "*"
-					if add_star:
-						retval += "*"
+		if self.__get_is_type_class_or_pointer_with_class(val["conv"]):
+			retval = ""
+			stars = self.__get_stars(val, add_start_for_ref=False)
+			# for type pointer, there is a * in the ctype, so remove one
+			if isinstance(val['conv'], RustPtrTypeConverter):
+				stars = stars[1:]
+			
+			# if it's not a pointer, add a star anyway because we use pointer to use in rust
+			if not (val["conv"].ctype.is_pointer() or ("carg" in val and val["carg"].ctype.is_pointer())):
+				stars += "*"
+				if add_star:
+					retval += "*"
 
-				retval += f"({val['conv'].ctype}{stars}){retval_name}"
+			retval += f"({val['conv'].ctype}{stars}){retval_name}"
+			return src, retval
 
-			elif "carg" in val and hasattr(val["carg"].ctype, "ref") and any(s in val["carg"].ctype.ref for s in ["&"]) and not val["carg"].ctype.const:
-				# add cast and *
-				retval = f"({val['carg'].ctype})(*{retval_name})"
-			# cast, if it's an enum
-			elif val["conv"].bound_name in self._enums.keys():
-				retval = f"({val['conv'].ctype}){retval_name}"
-			else:
-				retval = retval_name
-
-		return src, retval
+		if "carg" in val and hasattr(val["carg"].ctype, "ref") and any(s in val["carg"].ctype.ref for s in ["&"]) and not val["carg"].ctype.const:
+			# add cast and *
+			return src, f"({val['carg'].ctype})(*{retval_name})"
+		# cast, if it's an enum
+		if val["conv"].bound_name in self._enums:
+			return src, f"({val['conv'].ctype}){retval_name}"
+		
+		return src, retval_name
 
 	def __get_arg_bound_name_to_c(self, val: dict[str, Any]) -> str:
 		arg_bound_name = ""
