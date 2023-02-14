@@ -50,7 +50,7 @@ use std::ptr::null_mut;
 #[test]
 fn test() {
 	unsafe {
-		let v = my_test_return_null_ptr();
+		let v = my_test_return_nullptr();
 		assert!(v.is_null());
 	}
 }
