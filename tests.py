@@ -6,6 +6,7 @@ import tempfile
 import subprocess
 import argparse
 import shutil
+from time import perf_counter
 import lib
 import sys
 import os
@@ -54,6 +55,7 @@ failed_test_list = []
 
 
 def run_test(gen, name, testbed):
+	t1_start = perf_counter()
 	work_path = tempfile.mkdtemp()
 	print('Working directory is ' + work_path)
 
@@ -75,23 +77,30 @@ def run_test(gen, name, testbed):
 
 	run_test_list.append(name)
 	result = testbed.build_and_test_extension(work_path, test_module, sources)
-
+	res = ""
 	if result:
 		print("[OK]")
+		res = "[OK]"
 	else:
 		print("[FAILED]")
+		res = "[FAILED]"
 		failed_test_list.append('%s (%s)' % (name, gen.get_language()))
-
+	t1_stop = perf_counter()
+ 
 	if args.debug_test:
 		if args.linux:
 			subprocess.Popen('xdg-open "%s"' % work_path, shell=True)
+			return t1_stop-t1_start, res
 		else:
 			subprocess.Popen('explorer "%s"' % work_path)
+			return t1_stop-t1_start, res
 	else:
 		shutil.rmtree(work_path, ignore_errors=True)
+		return t1_stop-t1_start, res
 
 
 def run_tests(gen, names, testbed):
+	
 	print("Starting tests with generator %s" % gen.get_language())
 
 	test_count = len(names)
@@ -100,9 +109,12 @@ def run_tests(gen, names, testbed):
 	for i, name in enumerate(names):
 		print('[%d/%d] Running test "%s" (%s)' % (i+1, test_count, name, gen.get_language()))
 		cwd = os.getcwd()
-		run_test(gen, name, testbed)
+		final, final2 = run_test(gen, name, testbed)
 		os.chdir(cwd)
 		print('')
+		final = str(i+1), "  ", str(round(final,2)), "  ", name, "  ", final2, "\n"
+		with open ("windows_perf.txt", "a") as f:
+			f.write(''.join(final))
 
 	run_test_count = len(run_test_list)
 	failed_test_count = len(failed_test_list)
@@ -171,6 +183,7 @@ class CPythonTestBed:
 		test_path = os.path.join(work_path, 'test.py')
 		with open(test_path, 'w') as file:
 			file.write(module.test_python)
+
 
 		print("Building extension...")
 
