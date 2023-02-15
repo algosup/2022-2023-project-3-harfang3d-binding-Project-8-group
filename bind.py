@@ -2,6 +2,7 @@
 #	Copyright (C) 2018 Emmanuel Julien
 
 import os
+import subprocess
 import sys
 import importlib
 import time
@@ -131,6 +132,70 @@ if args.go:
 		os.system("clang-format -i wrapper.cpp wrapper.h")
 	except:
 		print("clang-format was not found, ideally use to have beautiful .h file")
+
+if args.rust:
+	rust_gen = lang.rust.RustGenerator()
+	output_binding(setup_generator(rust_gen))
+	work_path = args.out
+	# initializing cargo package
+	os.chdir(work_path)
+	subprocess.check_output(["cargo", "init", "--lib","--name", "my_test", "--vcs", "none"])
+	toml_path = os.path.join(work_path, 'Cargo.toml')
+	with open(toml_path, 'a') as file:
+		file.write("""
+[lib]
+name = "my_test"
+crate-type = ["staticlib"]
+
+[build-dependencies]
+bindgen = "*"
+cc = "*"
+""")
+
+	# create builder file
+	use_bindgen_tests = False
+	builder_path = os.path.join(work_path, 'build.rs')
+	with open(builder_path, 'w') as file:
+		file.write(f"""
+fn main() {{
+    if std::path::Path::new("wrapper.cpp").exists() {{
+        cc::Build::new()
+            .file("wrapper.cpp")
+            .include("src")
+            .compile("test");
+    }}
+
+    let bindings = bindgen::Builder::default()
+		.layout_tests({str(use_bindgen_tests).lower()})
+        .generate_inline_functions(true)
+        .enable_cxx_namespaces()
+        .raw_line("pub use self::root::*;")
+        .clang_args(&[
+			"-c",
+            "-x",
+            "c++",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+        ])
+        .header("wrapper.h")
+        .generate()
+        .unwrap();
+
+    let mut target = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    target.push("src/bindings.rs");
+    
+    bindings.write_to_file(&target).unwrap();
+}}
+""")
+
+		# copy test file
+		test_path = os.path.join(work_path, 'src/lib.rs')
+		
+		build_path = os.path.join(work_path, 'build')
+		os.mkdir(build_path)
+		os.chdir(build_path)
+
 
 if args.xml:
 	output_binding(setup_generator(lang.xml.XMLGenerator()))
