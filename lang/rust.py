@@ -2,7 +2,7 @@
 #	Copyright (C) 2023 Léo Chartier
 
 import re
-from typing import Any
+from typing import Any, Dict
 from pypeg2 import parse
 
 import gen
@@ -184,7 +184,7 @@ struct {type_info_name} {{
 		return ""
 
 	#
-	def get_output(self) -> dict[str, str]:
+	def get_output(self) -> Dict[str, str]:
 		return {"wrapper.cpp": self.rust_cpp, "wrapper.h": self.rust_h}
 
 	def _get_type(self, name: str) -> gen.TypeConverter | None:
@@ -208,7 +208,7 @@ struct {type_info_name} {{
 		return conv.is_type_class() or \
 			(isinstance(conv, RustPtrTypeConverter) and self._get_conv(str(conv.ctype.scoped_typename)) is None)
 
-	def __get_stars(self, val: dict[str, Any], start_stars: int=0, add_start_for_ref: bool=True) -> str:
+	def __get_stars(self, val: Dict[str, Any], start_stars: int=0, add_start_for_ref: bool=True) -> str:
 		def get(name: str) -> int:
 			ref = val[name].ctype.ref
 			if add_start_for_ref:
@@ -224,7 +224,7 @@ struct {type_info_name} {{
 			additional_stars = get("conv")
 		return (start_stars + additional_stars) * "*"
 
-	def __arg_from_cpp_to_c(self, val: dict[str, Any], retval_name: str, just_copy: bool) -> tuple[str, str]:
+	def __arg_from_cpp_to_c(self, val: Dict[str, Any], retval_name: str, just_copy: bool) -> tuple[str, str]:
 		src = ""
 		# type class, not a pointer
 		if val['conv'] is not None and val['conv'].is_type_class() and not val['conv'].ctype.is_pointer() and ('storage_ctype' not in val or not hasattr(val['storage_ctype'], 'ref') or not any(s in val['storage_ctype'].ref for s in ["&", "*"])):
@@ -270,7 +270,7 @@ struct {type_info_name} {{
 
 		return src, retval_name
 
-	def __arg_from_c_to_cpp(self, val: dict[str, Any], retval_name: str, add_star: bool=True) -> tuple[str, str]:
+	def __arg_from_c_to_cpp(self, val: Dict[str, Any], retval_name: str, add_star: bool=True) -> tuple[str, str]:
 		src = ""
 		# check if there is special slice to convert
 		if False: #isinstance(val["conv"], lib.rust.stl.RustSliceToStdVectorConverter): # TODO
@@ -327,7 +327,7 @@ struct {type_info_name} {{
 		
 		return src, retval_name
 
-	def __get_arg_bound_name_to_c(self, val: dict[str, Any]) -> str:
+	def __get_arg_bound_name_to_c(self, val: Dict[str, Any]) -> str:
 		arg_bound_name = ""
 
 		# check to add const
@@ -402,7 +402,7 @@ struct {type_info_name} {{
 	def __extract_sequence(self, conv: gen.TypeConverter, is_in_header: bool=False) -> str:
 		return "" # TODO
 
-	def __extract_get_set_member(self, classname: str, convClass: gen.TypeConverter | None, member: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False) -> str:
+	def __extract_get_set_member(self, classname: str, convClass: gen.TypeConverter | None, member: Dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False) -> str:
 		rust = ""
 		conv = self.select_ctype_conv(member["ctype"])
 
@@ -496,7 +496,7 @@ struct {type_info_name} {{
 				rust += f"{{ (({convClass.ctype}*)h)->{c_name} = {inval};}}\n"
 		return rust
 
-	def __extract_method(self, classname: str, convClass: gen.TypeConverter, method: dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False, is_constructor: bool=False, overload_op: str | None=None) -> str:
+	def __extract_method(self, classname: str, convClass: gen.TypeConverter, method: Dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False, is_constructor: bool=False, overload_op: str | None=None) -> str:
 		rust = ""
 
 		if bound_name is None:
