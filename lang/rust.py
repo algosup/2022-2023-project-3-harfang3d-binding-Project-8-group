@@ -2,7 +2,7 @@
 #	Copyright (C) 2023 Léo Chartier
 
 import re
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from pypeg2 import parse
 
 import gen
@@ -187,13 +187,13 @@ struct {type_info_name} {{
 	def get_output(self) -> Dict[str, str]:
 		return {"wrapper.cpp": self.rust_cpp, "wrapper.h": self.rust_h}
 
-	def _get_type(self, name: str) -> gen.TypeConverter | None:
+	def _get_type(self, name: str) -> Optional[gen.TypeConverter]:
 		for type in self._bound_types:
 			if type:
 				return type
 		return None
 
-	def _get_conv(self, conv_name: str) -> gen.TypeConverter | None:
+	def _get_conv(self, conv_name: str) -> Optional[gen.TypeConverter]:
 		if conv_name in self._FABGen__type_convs:
 			return self.get_conv(conv_name)
 		return None
@@ -402,7 +402,7 @@ struct {type_info_name} {{
 	def __extract_sequence(self, conv: gen.TypeConverter, is_in_header: bool=False) -> str:
 		return "" # TODO
 
-	def __extract_get_set_member(self, classname: str, convClass: gen.TypeConverter | None, member: Dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False) -> str:
+	def __extract_get_set_member(self, classname: str, convClass: Optional[gen.TypeConverter], member: Dict[str, Any], static: bool=False, name: Optional[str]=None, bound_name: Optional[str]=None, is_global: bool=False, is_in_header: bool=False) -> str:
 		rust = ""
 		conv = self.select_ctype_conv(member["ctype"])
 
@@ -496,7 +496,7 @@ struct {type_info_name} {{
 				rust += f"{{ (({convClass.ctype}*)h)->{c_name} = {inval};}}\n"
 		return rust
 
-	def __extract_method(self, classname: str, convClass: gen.TypeConverter, method: Dict[str, Any], static: bool=False, name: str | None=None, bound_name: str | None=None, is_global: bool=False, is_in_header: bool=False, is_constructor: bool=False, overload_op: str | None=None) -> str:
+	def __extract_method(self, classname: str, convClass: gen.TypeConverter, method: Dict[str, Any], static: bool=False, name: Optional[str]=None, bound_name: Optional[str]=None, is_global: bool=False, is_in_header: bool=False, is_constructor: bool=False, overload_op: Optional[str]=None) -> str:
 		rust = ""
 
 		if bound_name is None:

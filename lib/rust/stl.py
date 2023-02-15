@@ -1,7 +1,7 @@
 # FABGen - The FABulous binding Generator for CPython, Lua, Go and Rust
 #	Copyright (C) 2023 Léo Chartier
 
-from typing import Any
+from typing import Any, Optional
 
 from gen import FABGen, TypeConverter
 import lang.rust
@@ -32,7 +32,7 @@ def bind_stl(gen):
 	gen.bind_type(RustStringConverter("std::string"))
 
 
-def bind_function_T(gen, type: str, bound_name: str | None=None):
+def bind_function_T(gen, type: str, bound_name: Optional[str]=None):
 	class RustStdFunctionConverter(lang.rust.RustTypeConverterCommon):
 		def get_type_glue(self, gen: FABGen, module_name: str) -> str:
 			return ""
