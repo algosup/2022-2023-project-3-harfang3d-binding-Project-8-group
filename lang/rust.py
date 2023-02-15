@@ -2,7 +2,7 @@
 #	Copyright (C) 2023 Léo Chartier
 
 import re
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 from pypeg2 import parse
 
 import gen
@@ -224,7 +224,7 @@ struct {type_info_name} {{
 			additional_stars = get("conv")
 		return (start_stars + additional_stars) * "*"
 
-	def __arg_from_cpp_to_c(self, val: Dict[str, Any], retval_name: str, just_copy: bool) -> tuple[str, str]:
+	def __arg_from_cpp_to_c(self, val: Dict[str, Any], retval_name: str, just_copy: bool) -> Tuple[str, str]:
 		src = ""
 		# type class, not a pointer
 		if val['conv'] is not None and val['conv'].is_type_class() and not val['conv'].ctype.is_pointer() and ('storage_ctype' not in val or not hasattr(val['storage_ctype'], 'ref') or not any(s in val['storage_ctype'].ref for s in ["&", "*"])):
@@ -270,7 +270,7 @@ struct {type_info_name} {{
 
 		return src, retval_name
 
-	def __arg_from_c_to_cpp(self, val: Dict[str, Any], retval_name: str, add_star: bool=True) -> tuple[str, str]:
+	def __arg_from_c_to_cpp(self, val: Dict[str, Any], retval_name: str, add_star: bool=True) -> Tuple[str, str]:
 		src = ""
 		# check if there is special slice to convert
 		if False: #isinstance(val["conv"], lib.rust.stl.RustSliceToStdVectorConverter): # TODO
