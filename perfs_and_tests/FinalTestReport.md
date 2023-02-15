@@ -205,3 +205,23 @@ The global average time of a valid run is **6.94** seconds.
 | shared_ptr | [FAILED] |
 | basic_type_exchange | [OK] |
 | struct_instantiation | [FAILED] |
+
+## Ease of installation
+
+### Windows
+
+Really easy, the usual installs that our target audience is used to like python.
+To get all clang dependencies you need to install the visual studio community edition.
+The most technical part is llvm which is to be installed through their website but you need to navigate 3 links before finding it.
+
+### MacOS
+
+Less easy, the usual installs that our target audience is used to like python.
+To get all clang dependencies you need to install the Xcode command line tools.
+You can get errors if you do the mistake of using multiple installation sources or versions so you need to be extra careful.
+LLVM is installed through brew.
+
+### Linux
+
+easy, the usual installs that our target audience is used to like python.
+Clang and llvm are installed through the package manager apt.
