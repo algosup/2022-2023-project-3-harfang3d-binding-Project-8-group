@@ -276,7 +276,7 @@ struct {type_info_name} {{
 	def __arg_from_c_to_cpp(self, val: Dict[str, Any], retval_name: str, add_star: bool=True) -> Tuple[str, str]:
 		src = ""
 		# check if there is special slice to convert
-		if False: #isinstance(val["conv"], lib.rust.stl.RustSliceToStdVectorConverter): # TODO
+		if isinstance(val["conv"], lib.rust.stl.RustSliceToStdVectorConverter): # TODO
 			# special if string or const char*
 			if "RustStringConverter" in str(val["conv"].T_conv): # or \
 				# "RustConstCharPtrConverter" in str(val["conv"].T_conv):
@@ -424,7 +424,7 @@ struct {type_info_name} {{
 			cleanClassname = '_' + cleanClassname
 
 		# special Slice
-		if False: # TODO: isinstance(conv, lib.rust.stl.RustSliceToStdVectorConverter):
+		if isinstance(conv, lib.rust.stl.RustSliceToStdVectorConverter):
 			arg_bound_name = self.__get_arg_bound_name_to_c({"conv": conv.T_conv})
 		else:
 			arg_bound_name = self.__get_arg_bound_name_to_c({"conv": conv})

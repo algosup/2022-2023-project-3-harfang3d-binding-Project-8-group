@@ -40,7 +40,7 @@ def bind_function_T(gen, type: str, bound_name: Optional[str]=None):
 	return gen.bind_type(RustStdFunctionConverter(type))
 
 
-class GoSliceToStdVectorConverter(lang.rust.RustTypeConverterCommon):
+class RustSliceToStdVectorConverter(lang.rust.RustTypeConverterCommon):
 	def __init__(self, type: str, T_conv: TypeConverter) -> None:
 		native_type = f"std::vector<{T_conv.ctype}>"
 		super().__init__(type, native_type, None, native_type)
