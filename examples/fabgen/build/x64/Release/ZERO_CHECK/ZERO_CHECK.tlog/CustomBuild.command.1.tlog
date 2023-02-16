@@ -1,0 +1,10 @@
+^C:\USERS\LOUIS\DOCUMENTS\MATPLOT\FABGEN\BUILD\CMAKEFILES\FA0A75783752A36B2F7B74CFE58740C0\GENERATE.STAMP.RULE
+setlocal
+C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\bin\cmake.exe -SC:/Users/louis/Documents/matplot/fabgen -BC:/Users/louis/Documents/matplot/fabgen/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/louis/Documents/matplot/fabgen/build/mayplot.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

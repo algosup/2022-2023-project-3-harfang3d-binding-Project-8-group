@@ -1,0 +1,24 @@
+EXPORTS 
+	??_R0?AVbad_alloc@std@@@8 	 DATA
+	??_R0?AVbad_array_new_length@std@@@8 	 DATA
+	??_R0?AVexception@std@@@8 	 DATA
+	??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPEAX_K@Z
+	??$_Copy_memmove@PEANPEAN@std@@YAPEANPEAN00@Z
+	??$plot@V?$vector@NV?$allocator@N@std@@@std@@AEAV12@@matplot@@YA?A_PV?$vector@NV?$allocator@N@std@@@std@@AEAV12@@Z
+	??0bad_alloc@std@@QEAA@AEBV01@@Z
+	??0bad_array_new_length@std@@QEAA@AEBV01@@Z
+	??0bad_array_new_length@std@@QEAA@XZ
+	??0exception@std@@QEAA@AEBV01@@Z
+	??1?$shared_ptr@Vaxes_type@matplot@@@std@@QEAA@XZ
+	??1?$vector@NV?$allocator@N@std@@@std@@QEAA@XZ
+	??1bad_array_new_length@std@@UEAA@XZ
+	??1exception@std@@UEAA@XZ
+	?_Buy_raw@?$vector@NV?$allocator@N@std@@@std@@AEAAX_K@Z
+	?_Throw_bad_array_new_length@std@@YAXXZ
+	?gen_link_binding@@YA_KP6APEAUgen_type_info@@PEBD@Z@Z
+	?what@exception@std@@UEBAPEBDXZ
+	matplot_figure_handle_free
+	matplot_line_handle_free
+	matplot_plot
+	matplot_show
+	matplot_vector_1d_free

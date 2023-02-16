@@ -170,7 +170,8 @@ def build_and_deploy_cpython_extension(work_path, build_path, python_interpreter
 	try:
 		subprocess.check_output('cmake --build . --config Release')
 	except subprocess.CalledProcessError as e:
-		print(e.output.decode('utf-8'))
+		x = str(e.output).encode()
+		print(x.decode('utf-8'))
 		return False
 
 	return True
@@ -511,7 +512,7 @@ def build_and_deploy_rust_extension(work_path, build_path):
 		else:
 			subprocess.check_output(['cmake', '--build', '.', '--config', 'Release'])
 	except subprocess.CalledProcessError as e:
-		print(e.output.decode('utf-8'))
+		print(e.output)
 		return False
 
 	print("install extension...")

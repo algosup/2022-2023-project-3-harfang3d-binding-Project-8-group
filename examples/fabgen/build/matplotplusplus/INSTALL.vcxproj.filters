@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\louis\Documents\matplot\fabgen\build\CMakeFiles\bd8aae81b43805d8f188fc1386923937\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0B13A51B-5DAC-38F6-835C-ECE8493BDA03}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

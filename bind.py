@@ -187,8 +187,8 @@ fn main() {{
     bindings.write_to_file(&target).unwrap();
 }}
 """)
-	output_binding(rust_gen)
 	os.chdir(cwd)
+	output_binding(rust_gen)
 
 
 if args.xml:

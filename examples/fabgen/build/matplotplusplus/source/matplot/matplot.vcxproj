@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5A2FB060-E63E-3A0B-BDE5-F53161375404}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>matplot</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">matplot.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">matplot</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">matplot.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">matplot</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">matplot.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">matplot</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">matplot.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">matplot</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/cimg" /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/nodesoup/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NOMINMAX;cimg_display=2;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;NOMINMAX;cimg_display=2;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/cimg" /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/nodesoup/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;NOMINMAX;cimg_display=2;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;NOMINMAX;cimg_display=2;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/cimg" /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/nodesoup/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;NOMINMAX;cimg_display=2;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;NOMINMAX;cimg_display=2;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/cimg" /external:I "C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/3rd_party/nodesoup/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;NOMINMAX;cimg_display=2;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;NOMINMAX;cimg_display=2;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\cimg;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\3rd_party\nodesoup\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/matplot/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\bin\cmake.exe -SC:/Users/louis/Documents/matplot/fabgen -BC:/Users/louis/Documents/matplot/fabgen/build --check-stamp-file C:/Users/louis/Documents/matplot/fabgen/build/matplotplusplus/source/matplot/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CMakePushCheckState.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckCXXSourceRuns.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckSymbolExists.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\Internal\CheckSourceRuns.cmake;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\cmake\FindFilesystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/matplot/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\bin\cmake.exe -SC:/Users/louis/Documents/matplot/fabgen -BC:/Users/louis/Documents/matplot/fabgen/build --check-stamp-file C:/Users/louis/Documents/matplot/fabgen/build/matplotplusplus/source/matplot/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CMakePushCheckState.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckCXXSourceRuns.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckSymbolExists.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\Internal\CheckSourceRuns.cmake;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\cmake\FindFilesystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/matplot/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\bin\cmake.exe -SC:/Users/louis/Documents/matplot/fabgen -BC:/Users/louis/Documents/matplot/fabgen/build --check-stamp-file C:/Users/louis/Documents/matplot/fabgen/build/matplotplusplus/source/matplot/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CMakePushCheckState.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckCXXSourceRuns.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckSymbolExists.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\Internal\CheckSourceRuns.cmake;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\cmake\FindFilesystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/louis/Documents/matplot/fabgen/matplotplusplus/source/matplot/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\bin\cmake.exe -SC:/Users/louis/Documents/matplot/fabgen -BC:/Users/louis/Documents/matplot/fabgen/build --check-stamp-file C:/Users/louis/Documents/matplot/fabgen/build/matplotplusplus/source/matplot/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CMakePushCheckState.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckCXXSourceRuns.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\CheckSymbolExists.cmake;C:\Users\louis\AppData\Local\Programs\Python\Python310\Lib\site-packages\cmake\data\share\cmake-3.25\Modules\Internal\CheckSourceRuns.cmake;C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\cmake\FindFilesystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\matplot\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\matplot.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\backend\backend_interface.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\backend\backend_interface.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\backend\gnuplot.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\backend\gnuplot.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\backend\backend_registry.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\backend\backend_registry.cpp" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\axes_type.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\axes_type.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\axes_object.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\axes_object.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\axis_type.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\axis_type.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\figure_type.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\figure_type.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\figure_registry.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\figure_registry.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\legend.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\legend.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\line_spec.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\core\line_spec.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\colors.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\colors.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\common.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\common.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\concepts.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\contourc.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\contourc.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\geodata.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\handle_types.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\keywords.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\popen.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\type_traits.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\world_cities.cpp" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\world_map_10m.cpp" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\world_map_50m.cpp" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\util\world_map_110m.cpp" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\bars.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\bars.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\box_chart.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\box_chart.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\circles.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\circles.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\contours.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\contours.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\error_bar.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\error_bar.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\filled_area.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\filled_area.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\function_line.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\function_line.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\histogram.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\histogram.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\labels.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\labels.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\line.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\line.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\matrix.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\matrix.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\network.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\network.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\parallel_lines.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\parallel_lines.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\stair.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\stair.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\string_function.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\string_function.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\surface.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\surface.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\vectors.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\axes_objects\vectors.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\freestanding\axes_functions.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\freestanding\axes_functions.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\freestanding\axes_lim.h" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\freestanding\histcounts.h" />
+    <ClCompile Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\freestanding\histcounts.cpp" />
+    <ClInclude Include="C:\Users\louis\Documents\matplot\fabgen\matplotplusplus\source\matplot\freestanding\plot.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\louis\Documents\matplot\fabgen\build\ZERO_CHECK.vcxproj">
+      <Project>{04517013-069E-30AC-ABA1-3D46D060ADD3}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\louis\Documents\matplot\fabgen\build\matplotplusplus\source\3rd_party\nodesoup.vcxproj">
+      <Project>{E13D8D69-0525-3597-BA97-59F1D7B1B26D}</Project>
+      <Name>nodesoup</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
