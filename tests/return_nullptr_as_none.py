@@ -43,3 +43,15 @@ func Test(t *testing.T) {
 	assert.Nil(t, v, "should be nil.")
 }
 '''
+test_rust = '''\
+include!("bindings.rs");
+use std::ptr::null_mut;
+
+#[test]
+fn test() {
+	unsafe {
+		let v = my_test_return_nullptr();
+		assert!(v.is_null());
+	}
+}
+'''

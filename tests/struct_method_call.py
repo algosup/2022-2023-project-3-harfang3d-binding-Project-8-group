@@ -139,3 +139,26 @@ func Test(t *testing.T) {
 	assert.Equal(t, sOut2.GetA(), int32(28), "should be the same.")
 }
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		let mut s = my_test_constructor_simple_structSimplestConstructor();
+
+		assert_eq!(my_test_get_a_simple_struct(s), 1);
+		assert!(my_test_set_a_simple_struct_with_v0_v1(s, 8, 2));
+
+		assert_eq!(my_test_get_a_simple_struct(s), 10);
+
+		assert_eq!(my_test_set_a_simple_struct(s, 9), 9);
+		assert_eq!(my_test_get_a_simple_struct(s), 9);
+
+		assert_eq!(my_test_get_static_int_simple_struct(s), 4);
+
+		// TODO: Add tests for `get_modify_arg_out` ?
+	}
+}
+'''

@@ -3,31 +3,31 @@ FROM ubuntu:latest
 
 RUN apt-get update
 
-# install golang
-RUN apt-get install -y golang golang-golang-x-tools clang-format
-
-# install python
-RUN apt-get install -y python3 python3-pip
-
-# install lua
-RUN apt-get install -y lua5.2
-
 # install utilities
-RUN apt-get install -y git nano
-
-# add to nanorc line numbers
+RUN apt-get install -y git nano sudo curl cmake
 RUN echo "set linenumbers" >> /etc/nanorc
 
-# add Rust
-RUN apt install rustc -y
+# install Golang
+RUN apt-get install -y golang golang-golang-x-tools clang clang-format
 
-RUN apt install cmake
+# install Python
+RUN apt-get install -y python3 python3-pip
 
-RUN mkdir app
+# install Lua
+RUN apt-get install -y lua5.2
+
+# install Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+# update crates.io index
+RUN mkdir /tmp/crates_update && cd /tmp/crates_update && /root/.cargo/bin/cargo init && /root/.cargo/bin/cargo add bindgen && rm -rf /tmp/crates_update
+
+RUN mkdir /app
 WORKDIR /app
 
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
+
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 CMD ["/bin/bash"]

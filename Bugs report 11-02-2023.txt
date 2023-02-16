@@ -1,0 +1,22 @@
+List of encountered errors in tests
+
+
+ID    N°    ERROR                          FIXED        SECONDARY FIXES
+1    1    ??                               F
+2    3    ? (crash)                        F
+3    4    ?                                F
+4    5    ?                                F
+5    10    snake case to fix (SE)          F
+6    11    to look into                    F
+7    12    error &*a, &*d -> last assert   F
+8    14    ???                             F
+9    15    ?                               F
+10    19    snake case to add (QA)         V
+11    22    add get and set in lib.rs ?    F
+12    23    snake case to add (QA)         V        SnakeCase struct simple constructor(SE) && second part of test to add (QA)
+13    24    function to add in lib.rs ?    F
+14    25    function to add in lib.rs ?    F
+15    26    function to add in lib.rs ?    F
+16    27    add get and set in lib.rs ?    F
+17    28    add get and set in lib.rs ?    F
+18    29    add get and set in lib.rs ?    F

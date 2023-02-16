@@ -27,3 +27,9 @@ my_test = require "my_test"
 test_go = '''\
 package mytest
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+extern crate my_test;
+'''

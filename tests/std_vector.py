@@ -246,3 +246,57 @@ func Test(t *testing.T) {
 	assert.Equal(t, vPtr.Len(), int32(2), "should be the same.")
 }
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		let v = my_test_vector_of_int();
+
+		assert_eq!(v.size(), 0);
+		assert_eq!(v.length(), 0);
+
+		v.push_back(5);
+		v.push_back(1);
+		v.push_back(9);
+
+		assert_eq!(v.size(), 3);
+		assert_eq!(v.length(), 3);
+
+		assert_eq!(*v.at(1), 1);
+		assert_eq!(*v.at(2), 9);
+		assert_eq!(*v.at(0), 5);
+
+		assert_eq!(v.get(1), 1);
+		assert_eq!(v.get(2), 9);
+		assert_eq!(v.get(0), 5);
+		
+		v.set(1, 16);
+
+		assert_eq!(v.get(2), 9);
+		assert_eq!(v.get(0), 5);
+		assert_eq!(v.get(1), 16);
+
+		v.set(0, v.get(0)*4);
+
+		assert_eq!(v.get(0), 20);
+
+		assert_eq!(my_test_consume_pointer_to_int(v.Data()), 16);
+
+		let w = my_test_vector_of_int_ptr([]int32{5, 2, 8});
+
+		assert_eq!(w.get(0), 5);
+		assert_eq!(w.get(1), 2);
+		assert_eq!(w.get(2), 8);
+
+		let v_ptr = my_test_vector_of_int_ptr();
+		v_ptr.push_back(nil);
+		v_ptr.push_back(v.data());
+
+		assert_eq!(v_ptr.size(), 2);
+		assert_eq!(v.length(), 2);
+	}
+}
+'''

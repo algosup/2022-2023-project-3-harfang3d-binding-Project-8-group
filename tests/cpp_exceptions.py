@@ -45,3 +45,6 @@ end
 test_go = '''\
 package mytest
 '''
+
+test_rust = '''\
+'''

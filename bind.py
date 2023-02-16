@@ -2,6 +2,7 @@
 #	Copyright (C) 2018 Emmanuel Julien
 
 import os
+import shutil
 import sys
 import importlib
 import time
@@ -11,6 +12,7 @@ import argparse
 import gen
 import lang.lua
 import lang.go
+import lang.rust
 import lang.cpython
 import lang.xml
 
@@ -29,6 +31,7 @@ parser.add_argument('script', nargs=1)
 parser.add_argument('--lua', help='Bind to Lua 5.2+', action='store_true')
 parser.add_argument('--cpython', help='Bind to CPython', action='store_true')
 parser.add_argument('--go', help='Bind to Go', action='store_true')
+parser.add_argument('--rust', help='Bind to Rust', action='store_true')
 parser.add_argument('--xml', help='Bind to CPython', action='store_true')
 parser.add_argument('--out', help='Path to output generated files', required=True)
 parser.add_argument('--out_prefix', help='Prefix to append to output generated files name', default='')
@@ -130,6 +133,64 @@ if args.go:
 	except:
 		print("clang-format was not found, ideally use to have beautiful .h file")
 
+if args.rust:
+	rust_gen = lang.rust.RustGenerator()
+	cwd = os.getcwd()
+	if os.path.exists(args.out):
+		shutil.rmtree(args.out)
+	os.makedirs(args.out)
+	# initializing cargo package
+	os.chdir(args.out)
+	os.system(f"cargo init --lib --name {mod} --vcs none")
+	with open("Cargo.toml", 'a') as file:
+		file.write(f"""
+[lib]
+name = "{mod}"
+crate-type = ["staticlib"]
+
+[build-dependencies]
+bindgen = "*"
+cc = "*"
+""")
+
+	# create builder file
+	with open("build.rs", 'w') as file:
+		file.write(f"""
+fn main() {{
+    if std::path::Path::new("wrapper.cpp").exists() {{
+        cc::Build::new()
+            .file("wrapper.cpp")
+            .include("src")
+            .compile("{mod}");
+    }}
+
+    let bindings = bindgen::Builder::default()
+		.layout_tests(false)
+        .generate_inline_functions(true)
+        .enable_cxx_namespaces()
+        .raw_line("pub use self::root::*;")
+        .clang_args(&[
+			"-c",
+            "-x",
+            "c++",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+        ])
+        .header("wrapper.h")
+        .generate()
+        .unwrap();
+
+    let mut target = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    target.push("src/bindings.rs");
+    
+    bindings.write_to_file(&target).unwrap();
+}}
+""")
+	output_binding(rust_gen)
+	os.chdir(cwd)
+
+
 if args.xml:
 	output_binding(setup_generator(lang.xml.XMLGenerator()))
 
@@ -142,3 +203,9 @@ if not args.no_fabgen_api:
 	print('FABgen API written to %s' % path)
 else:
 	print('FABgen API not written')
+
+if args.rust:
+	cwd = os.getcwd()
+	os.chdir(args.out)
+	os.system("cargo build")
+	os.chdir(cwd)

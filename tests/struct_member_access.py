@@ -98,7 +98,7 @@ assert(s.a == 2)
 --expect_eq(s.d, 9)
 '''
 
-test_go = """\
+test_go = '''\
 package mytest
 
 import (
@@ -136,4 +136,35 @@ func Test(t *testing.T) {
 
 	assert.Equal(t, s.GetD(), int32(9), "should be the same.")
 }
-"""
+'''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		let s = my_test_return_simple_struct_by_pointer();
+
+		assert_eq!(my_test_simple_struct_get_a(s), 7);
+		assert_eq!(my_test_simple_struct_get_b(s), 17.5);
+		assert!(my_test_simple_struct_get_c(s));
+		assert_eq!(my_test_simple_struct_get_d(s), 9);
+		assert_eq!(std::ffi::CStr::from_ptr(my_test_simple_struct_get_text_field(s)).to_str().unwrap(), "some content");
+
+		my_test_simple_struct_set_a(s, -2);
+		my_test_simple_struct_set_b(s, -4.5);
+		my_test_simple_struct_set_c(s,false);
+
+		assert_eq!(my_test_simple_struct_get_a(s), -2);
+		assert_eq!(my_test_simple_struct_get_b(s), -4.5);
+		assert!(!my_test_simple_struct_get_c(s));
+
+		my_test_simple_struct_set_a(s, my_test_simple_struct_get_a(s) + 4);
+		assert_eq!(my_test_simple_struct_get_a(s), 2);
+
+		// write to const member d is impossible since bindgen erase the possibility. 
+		
+	}
+}
+'''

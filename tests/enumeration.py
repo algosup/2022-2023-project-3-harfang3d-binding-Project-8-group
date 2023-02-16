@@ -95,3 +95,28 @@ func Test(t *testing.T) {
 	assert.Equal(t, NEc, NamedEnum(4096), "should be the same.")
 }
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		assert_eq!(my_test_ge_a, 0);
+		assert_eq!(my_test_ge_b, 1);
+		assert_eq!(my_test_ge_c, 8);
+
+		assert_eq!(my_test_se_a, 0);
+		assert_eq!(my_test_se_b, 128);
+		assert_eq!(my_test_se_c, 512);
+
+		assert_eq!(my_test_te_a, 0);
+		assert_eq!(my_test_te_b, 1);
+		assert_eq!(my_test_te_c, 16384);
+
+		assert_eq!(my_test_ne_a, 0);
+		assert_eq!(my_test_ne_b, 1);
+		assert_eq!(my_test_ne_c, 4096);
+	}
+}
+'''

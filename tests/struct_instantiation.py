@@ -47,7 +47,7 @@ assert(s.v_ == -8)
 assert(t.v_ == 4)
 '''
 
-test_go = """\
+test_go = '''\
 package mytest
 
 import (
@@ -64,4 +64,19 @@ func Test(t *testing.T) {
 	assert.Equal(t, s.GetV(), int32(-8), "should be the same.")
 	assert.Equal(t, u.GetV(), int32(4), "should be the same.")
 }
-"""
+'''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		let s = my_test_constructor_simple_struct();
+		let t = my_test_constructor_simple_struct_with_v(4);
+
+		assert_eq!(my_test_simple_struct_get_v_(s), -8);
+		assert_eq!(my_test_simple_struct_get_v_(t), 4);
+	}
+}
+'''

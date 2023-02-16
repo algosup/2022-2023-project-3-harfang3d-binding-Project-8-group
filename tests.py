@@ -6,6 +6,7 @@ import tempfile
 import subprocess
 import argparse
 import shutil
+from time import perf_counter
 import lib
 import sys
 import os
@@ -13,6 +14,7 @@ import os
 import lang.cpython
 import lang.lua
 import lang.go
+import lang.rust
 
 
 start_path = os.path.dirname(__file__)
@@ -21,9 +23,11 @@ parser = argparse.ArgumentParser(description='Run generator unit tests.')
 parser.add_argument('--pybase', dest='python_base_path', help='Path to the Python interpreter')
 parser.add_argument('--luabase', dest='lua_base_path', help='Path to the Lua interpreter')
 parser.add_argument('--go', dest='go_build', help='Build GO', action="store_true")
+parser.add_argument('--rust', dest='rust_build', help='Build Rust', action="store_true")
 parser.add_argument('--debug', dest='debug_test', help='Generate a working solution to debug a test')
 parser.add_argument('--x64', dest='x64', help='Build for 64 bit architecture', action='store_true', default=False)
 parser.add_argument('--linux', dest='linux', help='Build on Linux', action='store_true', default=False)
+parser.add_argument('--generator', dest='generator', help='CMake generator', default=None)
 
 args = parser.parse_args()
 
@@ -36,14 +40,9 @@ if args.python_base_path:
 
 
 # -- CMake generator
+if args.generator:
+	print("Using CMake generator: %s" % args.generator)
 if not args.linux:
-	if args.x64:
-		cmake_generator = 'Visual Studio 16 2019'
-	else:
-		cmake_generator = 'Visual Studio 16 2019'
-
-	print("Using CMake generator: %s" % cmake_generator)
-
 	msvc_arch = 'x64' if args.x64 else 'Win32'
 
 
@@ -53,6 +52,7 @@ failed_test_list = []
 
 
 def run_test(gen, name, testbed):
+	t1_start = perf_counter()
 	work_path = tempfile.mkdtemp()
 	print('Working directory is ' + work_path)
 
@@ -74,23 +74,30 @@ def run_test(gen, name, testbed):
 
 	run_test_list.append(name)
 	result = testbed.build_and_test_extension(work_path, test_module, sources)
-
+	res = ""
 	if result:
 		print("[OK]")
+		res = "[OK]"
 	else:
 		print("[FAILED]")
+		res = "[FAILED]"
 		failed_test_list.append('%s (%s)' % (name, gen.get_language()))
-
+	t1_stop = perf_counter()
+ 
 	if args.debug_test:
 		if args.linux:
 			subprocess.Popen('xdg-open "%s"' % work_path, shell=True)
+			return t1_stop-t1_start, res
 		else:
 			subprocess.Popen('explorer "%s"' % work_path)
+			return t1_stop-t1_start, res
 	else:
 		shutil.rmtree(work_path, ignore_errors=True)
+		return t1_stop-t1_start, res
 
 
 def run_tests(gen, names, testbed):
+	
 	print("Starting tests with generator %s" % gen.get_language())
 
 	test_count = len(names)
@@ -99,9 +106,12 @@ def run_tests(gen, names, testbed):
 	for i, name in enumerate(names):
 		print('[%d/%d] Running test "%s" (%s)' % (i+1, test_count, name, gen.get_language()))
 		cwd = os.getcwd()
-		run_test(gen, name, testbed)
+		final, final2 = run_test(gen, name, testbed)
 		os.chdir(cwd)
 		print('')
+		final = str(i+1), "  ", str(round(final,2)), "  ", name, "  ", final2, "\n"
+		with open ("windows_perf.txt", "a") as f:
+			f.write(''.join(final))
 
 	run_test_count = len(run_test_list)
 	failed_test_count = len(failed_test_list)
@@ -135,7 +145,10 @@ def build_and_deploy_cpython_extension(work_path, build_path, python_interpreter
 	print("Generating build system...")
 
 	try:
-		subprocess.check_output('cmake .. -G "%s"' % cmake_generator)
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
+		else:
+			subprocess.check_output('cmake ..')
 	except subprocess.CalledProcessError as e:
 		print(e.output.decode('utf-8'))
 		return False
@@ -170,6 +183,7 @@ class CPythonTestBed:
 		test_path = os.path.join(work_path, 'test.py')
 		with open(test_path, 'w') as file:
 			file.write(module.test_python)
+
 
 		print("Building extension...")
 
@@ -254,7 +268,10 @@ target_link_libraries(my_test lua)
 def build_and_deploy_lua_extension(work_path, build_path):
 	print("Generating build system...")
 	try:
-		subprocess.check_output('cmake .. -G "%s"' % cmake_generator)
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
+		else:
+			subprocess.check_output('cmake ..')
 	except subprocess.CalledProcessError as e:
 		print(e.output.decode('utf-8'))
 		return False
@@ -371,10 +388,10 @@ install(TARGETS my_test DESTINATION "${{CMAKE_SOURCE_DIR}}/" COMPONENT my_test)
 def build_and_deploy_go_extension(work_path, build_path):
 	print("Generating build system...")
 	try:
-		if args.linux:
-			subprocess.check_output(['cmake', '..'])
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
 		else:
-			subprocess.check_output('cmake .. -G "%s"' % cmake_generator)
+			subprocess.check_output('cmake ..')
 	except subprocess.CalledProcessError as e:
 		print(e.output.decode('utf-8'))
 		return False
@@ -449,6 +466,157 @@ class GoTestBed:
 
 		return success
 
+# Rust test bed
+def create_rust_cmake_file(module, work_path, sources):
+	cmake_path = os.path.join(work_path, 'CMakeLists.txt')
+
+	with open(cmake_path, 'w') as file:
+		quoted_sources = ['"%s"' % source for source in sources if ".rs" not in source]
+
+		work_place_ = work_path.replace('\\', '/')
+
+		file.write(f"""
+cmake_minimum_required(VERSION 3.1)
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+set(CMAKE_MODULE_PATH ${{CMAKE_MODULE_PATH}} "${{CMAKE_SOURCE_DIR}}/")
+
+project({module})
+enable_language(C CXX)
+set(CMAKE_CXX_STANDARD 14)
+
+add_library(my_test SHARED {' '.join(quoted_sources)})
+set_target_properties(my_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "{work_place_}")
+
+install(TARGETS my_test DESTINATION "${{CMAKE_SOURCE_DIR}}/" COMPONENT my_test)
+""")
+
+
+def build_and_deploy_rust_extension(work_path, build_path):
+	print("Generating build system...")
+	try:
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
+		else:
+			subprocess.check_output('cmake ..')
+	except subprocess.CalledProcessError as e:
+		print(e.output.decode('utf-8'))
+		return False
+
+	print("Building extension...")
+	try:
+		if args.linux:
+			subprocess.check_output(['make'])
+		else:
+			subprocess.check_output(['cmake', '--build', '.', '--config', 'Release'])
+	except subprocess.CalledProcessError as e:
+		print(e.output.decode('utf-8'))
+		return False
+
+	print("install extension...")
+	try:
+		if args.linux:
+			subprocess.check_output(['make', 'install'])
+		else:
+			subprocess.check_output(['cmake', '--install', '.', '--config', 'Release'])
+	except subprocess.CalledProcessError as e:
+		print(e.output.decode('utf-8'))
+		return False
+
+	return True
+
+class RustTestBed:
+	def build_and_test_extension(self, work_path, module, sources):
+		if not hasattr(module, "test_rust"):
+			print("Can't find test_rust")
+			return False
+
+		# initializing cargo package
+		os.chdir(work_path)
+		subprocess.check_output(["cargo", "init", "--lib", "--name", "my_test", "--vcs", "none"])
+		toml_path = os.path.join(work_path, 'Cargo.toml')
+		with open(toml_path, 'a') as file:
+			file.write("""
+[lib]
+name = "my_test"
+crate-type = ["staticlib"]
+
+[build-dependencies]
+bindgen = "*"
+cc = "*"
+""")
+
+		# create builder file
+		use_bindgen_tests = False
+		builder_path = os.path.join(work_path, 'build.rs')
+		with open(builder_path, 'w') as file:
+			file.write(f"""
+fn main() {{
+    if std::path::Path::new("wrapper.cpp").exists() {{
+        cc::Build::new()
+            .file("wrapper.cpp")
+            .include("src")
+            .compile("test");
+    }}
+
+    let bindings = bindgen::Builder::default()
+		.layout_tests({str(use_bindgen_tests).lower()})
+        .generate_inline_functions(true)
+        .enable_cxx_namespaces()
+        .raw_line("pub use self::root::*;")
+        .clang_args(&[
+			"-c",
+            "-x",
+            "c++",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+        ])
+        .header("wrapper.h")
+        .generate()
+        .unwrap();
+
+    let mut target = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    target.push("src/bindings.rs");
+    
+    bindings.write_to_file(&target).unwrap();
+}}
+""")
+
+		# copy test file
+		test_path = os.path.join(work_path, 'src/lib.rs')
+		with open(test_path, 'w') as file:
+			file.write(module.test_rust)
+
+		build_path = os.path.join(work_path, 'build')
+		os.mkdir(build_path)
+		os.chdir(build_path)
+
+		create_rust_cmake_file("test", work_path, sources)
+		create_clang_format_file(work_path)
+
+		if not build_and_deploy_rust_extension(work_path, build_path):
+			return False
+
+		# after build, delete the wrapper.cpp to test the lib which has been build
+		# if os.path.exists(os.path.join(work_path, 'wrapper.cpp')):
+		# 	os.remove(os.path.join(work_path, 'wrapper.cpp'))
+
+		print("Executing Rust test...")
+		os.chdir(work_path)
+
+		success = True
+		try:
+			subprocess.check_output('cargo test', shell=True, stderr=subprocess.STDOUT)
+		except subprocess.CalledProcessError as e:
+			print(e.output.decode('utf-8'))
+			success = False
+
+		print("Cleanup...")
+
+		return success
+
 
 # Clang format
 def create_clang_format_file(work_path):
@@ -488,6 +656,10 @@ if args.go_build:
 	gen.verbose = False
 	run_tests(gen, test_names, GoTestBed())
 
+if args.rust_build:
+	gen = lang.rust.RustGenerator()
+	gen.verbose = False
+	run_tests(gen, test_names, RustTestBed())
 
 #
 print("[Final summary]")

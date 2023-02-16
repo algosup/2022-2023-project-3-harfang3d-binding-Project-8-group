@@ -137,6 +137,22 @@
 			]
 		},
 		{
+			"name": "Rust: Tests --debug",
+			"type": "python",
+			"request": "launch",
+			"stopOnEntry": false,
+			"python": "${command:python.interpreterPath}",
+			"program": "${workspaceRoot}/tests.py",
+			"cwd": "${workspaceRoot}",
+			"args": ["--rust", "--debug", "basic_type_exchange"],
+			"envFile": "${workspaceRoot}/.env",
+			"debugOptions": [
+				"WaitOnAbnormalExit",
+				"WaitOnNormalExit",
+				"RedirectOutput"
+			]
+		},
+		{
 			"name": "Lua53: Tests",
 			"type": "python",
 			"request": "launch",

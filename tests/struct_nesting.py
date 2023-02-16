@@ -98,3 +98,26 @@ func Test(t *testing.T) {
 	assert.Equal(t, e.GetN().GetV(), int32(24), "should be the same.")
 }
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		let mut n = my_test_constructor_nested_struct();
+		assert_eq!(my_test_nested_struct_get_v(n), 8);
+		my_test_nested_struct_set_v(n, 4);
+		assert_eq!(my_test_nested_struct_get_v(n), 4);
+
+		let mut e = my_test_constructor_enclosing_struct();
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 8);
+		my_test_nested_struct_set_v(my_test_enclosing_struct_get_n(e), 12);
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 12);
+		my_test_nested_struct_set_v(my_test_enclosing_struct_get_n(e), my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e))* 4);
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 48);
+		my_test_nested_struct_set_v(my_test_enclosing_struct_get_n(e), my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)) / 2);
+		assert_eq!(my_test_nested_struct_get_v(my_test_enclosing_struct_get_n(e)), 24);
+	}
+}
+'''

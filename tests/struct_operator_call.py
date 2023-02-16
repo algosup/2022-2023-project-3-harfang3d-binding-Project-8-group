@@ -129,7 +129,7 @@ assert(c == b)
 assert(a ~= b)
 '''
 
-test_go = """\
+test_go = '''\
 package mytest
 
 import (
@@ -169,4 +169,46 @@ func Test(t *testing.T) {
 	assert.True(t, c.Eq(b), "should be the same.")
 	assert.True(t, a.Ne(b), "should be the same.")
 }
-"""
+'''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		// TODO: Check for scoping rules (RAII)
+		let a = my_test_constructor_simple_struct(4);
+		let b = my_test_constructor_simple_struct(8);
+
+		let mut s = my_test_add_simple_structSimpleStruct(a, b);
+		assert_eq!(my_test_simple_struct_get_v(s), 12);
+		s = my_test_add_simple_structSimpleStruct(s, b);
+		assert_eq!(my_test_simple_struct_get_v(s), 20);
+		my_test_inplace_add_simple_structInt(s, 4);
+		assert_eq!(my_test_simple_struct_get_v(s), 24);
+
+		s = my_test_div_simple_structInt(s, 4);
+		assert_eq!(my_test_simple_struct_get_v(s), 6);
+		my_test_inplace_div_simple_structInt(s, 3);
+		assert_eq!(my_test_simple_struct_get_v(s), 2);
+		my_test_inplace_add_simple_structSimpleStruct(s, a);
+		assert_eq!(my_test_simple_struct_get_v(s), 6);
+
+		s = my_test_mul_simple_structSimpleStruct(s, a);
+		assert_eq!(my_test_simple_struct_get_v(s), 24);
+		my_test_inplace_mul_simple_structInt(s, 2);
+		assert_eq!(my_test_simple_struct_get_v(s), 48);
+
+		s = my_test_sub_simple_structSimpleStruct(s, b);
+		assert_eq!(my_test_simple_struct_get_v(s), 40);
+		my_test_inplace_sub_simple_structInt(s, 32);
+		assert_eq!(my_test_simple_struct_get_v(s), 8);
+
+		let c = my_test_mul_simple_structInt(a, 2);
+		assert!(my_test_eq_simple_struct(c, b));
+		assert!(my_test_ne_simple_struct(a, b));
+		
+	}
+}
+'''

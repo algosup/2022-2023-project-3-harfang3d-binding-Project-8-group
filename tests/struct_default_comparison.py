@@ -78,3 +78,23 @@ func Test(t *testing.T) {
 	assert.NotEqual(t, b, c, "should not be the same.")
 }
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		let a = my_test_get_obj0();
+		let b = my_test_get_obj0();
+
+		assert_eq!(a, b);
+
+		let c = my_test_get_obj1();
+
+		assert_ne!(a, c);
+		assert_ne!(b, c);
+	}
+}
+
+'''

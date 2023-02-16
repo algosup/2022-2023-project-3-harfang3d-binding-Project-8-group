@@ -67,3 +67,18 @@ func Test(t *testing.T) {
 	assert.Equal(t, SimpleStructGetS(), "some string", "should be the same.")
 }
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		let v = my_test_constructor_simple_struct();
+		assert_eq!(my_test_simple_struct_get_v(v), 3);
+
+		assert_eq!(my_test_simple_struct_get_i(), 5);
+		assert_eq!(std::ffi::CStr::from_ptr(my_test_simple_struct_get_s()).to_str().unwrap(), "some string");
+	}
+}
+'''

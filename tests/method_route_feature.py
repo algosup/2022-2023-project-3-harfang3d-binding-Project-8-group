@@ -53,4 +53,14 @@ func Test(t *testing.T) {
 	assert.Equal(t, o.Get(4), int32(15), "should be the same.")
 }
 """
+test_rust = """\
+include!("bindings.rs");
 
+#[test]
+fn test() {
+	unsafe {
+		let o = my_test_constructor_object();
+		assert_eq!(my_test_get_object(o, 4), 15);
+	}
+}
+"""

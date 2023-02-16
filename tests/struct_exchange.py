@@ -107,3 +107,26 @@ func Test(t *testing.T) {
 	assert.True(t, TestSimpleStruct(), "should be true.")
 }
 '''
+
+test_rust = '''\
+include!("bindings.rs");
+
+#[test]
+fn test() {
+	unsafe {
+		// take by value
+		let s = my_test_return_simple_struct_by_value();
+		my_test_take_simple_struct_by_value(s);
+		assert!(my_test_test_simple_struct());
+
+		let sp = my_test_return_simple_struct_by_pointer();
+		my_test_take_simple_struct_by_value(sp);
+		assert!(my_test_test_simple_struct());
+		
+		let sr = my_test_return_simple_struct_by_ref();
+		my_test_take_simple_struct_by_value(sr);
+		assert!(my_test_test_simple_struct());
+	}
+}
+
+'''
