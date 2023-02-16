@@ -1,0 +1,1 @@
+C:\Users\louis\Documents\matplot\fabgen\target\debug\matplot.exe: C:\Users\louis\Documents\matplot\fabgen\build.rs C:\Users\louis\Documents\matplot\fabgen\src\bindings.rs C:\Users\louis\Documents\matplot\fabgen\src\main.rs

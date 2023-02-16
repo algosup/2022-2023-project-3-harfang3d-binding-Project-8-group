@@ -1,0 +1,2 @@
+cargo:rustc-link-search=native=./matplot_l
+cargo:rustc-link-lib=static=matplot_l
