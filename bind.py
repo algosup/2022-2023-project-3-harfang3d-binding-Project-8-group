@@ -141,7 +141,7 @@ if args.rust:
 	os.makedirs(args.out)
 	# initializing cargo package
 	os.chdir(args.out)
-	os.system("cargo init --lib --name my_test --vcs none")
+	os.system(f"cargo init --lib --name {mod} --vcs none")
 	with open("Cargo.toml", 'a') as file:
 		file.write(f"""
 [lib]
