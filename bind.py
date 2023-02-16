@@ -135,7 +135,7 @@ if args.go:
 
 if args.rust:
 	rust_gen = lang.rust.RustGenerator()
-	cd = os.getcwd()
+	cwd = os.getcwd()
 	if os.path.exists(args.out):
 		shutil.rmtree(args.out)
 	os.makedirs(args.out)
@@ -187,7 +187,8 @@ fn main() {{
     bindings.write_to_file(&target).unwrap();
 }}
 """)
-	os.chdir(cd)
+	output_binding(rust_gen)
+	os.chdir(cwd)
 
 
 if args.xml:
@@ -202,3 +203,9 @@ if not args.no_fabgen_api:
 	print('FABgen API written to %s' % path)
 else:
 	print('FABgen API not written')
+
+if args.rust:
+	cwd = os.getcwd()
+	os.chdir(args.out)
+	os.system("cargo build")
+	os.chdir(cwd)

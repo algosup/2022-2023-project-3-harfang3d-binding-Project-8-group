@@ -210,7 +210,10 @@ struct {type_info_name} {{
 
 	def __get_stars(self, val: dict[str, Any], start_stars: int=0, add_start_for_ref: bool=True) -> str:
 		def get(name: str) -> int:
-			ref = val[name].ctype.ref
+			if name != "storage_ctype":
+				ref = val[name].ctype.ref
+			else:
+				ref = val[name].ref
 			if add_start_for_ref:
 				return len(ref)
 			return ref.count("*")
