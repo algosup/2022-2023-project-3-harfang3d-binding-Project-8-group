@@ -64,12 +64,6 @@ It will be using the following file structure contingent upon following the curr
 - README.md (updated)
 ```
 
-Else using Rust and bindgen (Rust lib), the architecture would follow the architecture below :
-
-```md
-- WIP
-```
-
 ## **Test Strategy**
 
 ### Long term
