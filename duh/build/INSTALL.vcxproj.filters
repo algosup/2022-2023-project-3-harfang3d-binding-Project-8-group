@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\louis\Documents\GitHub\2022-2023-project-3-harfang3d-binding-Project-8-group\duh\build\CMakeFiles\9934d07ec97ba6236c529b3f93d938f4\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{13A3B297-720B-3E55-8694-6F8246745EB0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

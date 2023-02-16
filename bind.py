@@ -133,18 +133,94 @@ if args.go:
 	except:
 		print("clang-format was not found, ideally use to have beautiful .h file")
 
+
+def build_and_deploy_rust_extension(work_path, build_path):
+	os.chdir(build_path)
+	print("Generating build system...")
+	from sys import platform
+	try:
+		if platform == "linux" or platform == "linux2":
+			subprocess.check_output(['cmake', '..'])
+		else:
+			subprocess.check_output('cmake .. -G "Visual Studio 16 2019"')
+	except subprocess.CalledProcessError as e:
+		print(e.output.decode('utf-8'))
+		return False
+
+	print("Building extension...")
+	try:
+		if platform == "linux" or platform == "linux2":
+			subprocess.check_output(['make'])
+		else:
+			subprocess.check_output(['cmake', '--build', '.', '--config', 'Release'])
+	except subprocess.CalledProcessError as e:
+		print(e.output.decode('utf-8'))
+		return False
+
+	print("install extension...")
+	try:
+		if platform == "linux" or platform == "linux2":
+			subprocess.check_output(['make', 'install'])
+		else:
+			subprocess.check_output(['cmake', '--install', '.', '--config', 'Release'])
+	except subprocess.CalledProcessError as e:
+		print(e.output.decode('utf-8'))
+		return False
+	
+	os.chdir(build_path)
+	return True
+
+
+# Clang format
+def create_clang_format_file(work_path):
+	with open('./_clang-format', 'w+') as file:
+		file.write('''ColumnLimit: 0
+UseTab: Always
+TabWidth: 4
+IndentWidth: 4
+IndentCaseLabels: true
+AccessModifierOffset: -4
+AlignAfterOpenBracket: DontAlign
+AlwaysBreakTemplateDeclarations: false
+AlignTrailingComments: false''')
+
+def create_rust_cmake_file(module, work_path, sources):
+	cmake_path = './CMakeLists.txt'
+	with open(cmake_path, 'w') as file:
+		quoted_sources = ['"%s"' % source for source in sources if ".rs" not in source]
+
+		work_place_ = work_path.replace('\\', '/')
+
+		file.write(f"""
+cmake_minimum_required(VERSION 3.1)
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+set(CMAKE_MODULE_PATH ${{CMAKE_MODULE_PATH}} "${{CMAKE_SOURCE_DIR}}/")
+
+project({module})
+enable_language(C CXX)
+set(CMAKE_CXX_STANDARD 14)
+
+add_library({mod} SHARED {' '.join(quoted_sources)})
+set_target_properties({mod} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "{work_place_}")
+
+install(TARGETS {mod} DESTINATION "${{CMAKE_SOURCE_DIR}}/" COMPONENT {mod})
+""")
+
 if args.rust:
 	rust_gen = lang.rust.RustGenerator()
 	output_binding(setup_generator(rust_gen))
+	cd = os.getcwd()
 	work_path = args.out
-	# initializing cargo package
+		
 	os.chdir(work_path)
-	subprocess.check_output(["cargo", "init", "--lib","--name", "my_test", "--vcs", "none"])
-	toml_path = os.path.join(work_path, 'Cargo.toml')
-	with open(toml_path, 'a') as file:
-		file.write("""
+	# initializing cargo package
+	subprocess.check_output(["cargo", "init", "--lib", "--name", mod, "--vcs", "none"])
+	with open("./Cargo.toml", 'a') as file:
+		file.write(f"""
 [lib]
-name = "my_test"
+name = "{mod}"
 crate-type = ["staticlib"]
 
 [build-dependencies]
@@ -154,15 +230,14 @@ cc = "*"
 
 	# create builder file
 	use_bindgen_tests = False
-	builder_path = os.path.join(work_path, 'build.rs')
-	with open(builder_path, 'w') as file:
+	with open('./build.rs', 'w') as file:
 		file.write(f"""
 fn main() {{
     if std::path::Path::new("wrapper.cpp").exists() {{
         cc::Build::new()
             .file("wrapper.cpp")
             .include("src")
-            .compile("test");
+            .compile("{mod}");
     }}
 
     let bindings = bindgen::Builder::default()
@@ -190,11 +265,17 @@ fn main() {{
 """)
 
 		# copy test file
-		test_path = os.path.join(work_path, 'src/lib.rs')
+		test_path = './src/lib.rs'
 		
-		build_path = os.path.join(work_path, 'build')
-		os.mkdir(build_path)
-		os.chdir(build_path)
+		build_path = './build'
+		try:
+			os.mkdir(build_path)
+		except:
+			print("exist")
+		create_rust_cmake_file(mod, work_path, ["wrapper.cpp"])
+		create_clang_format_file(work_path)
+		os.chdir(cd)
+		
 
 
 if args.xml:
@@ -209,3 +290,8 @@ if not args.no_fabgen_api:
 	print('FABgen API written to %s' % path)
 else:
 	print('FABgen API not written')
+
+if args.rust:
+	os.chdir(work_path)
+	build_and_deploy_rust_extension(work_path, build_path)
+	os.chdir(cd)

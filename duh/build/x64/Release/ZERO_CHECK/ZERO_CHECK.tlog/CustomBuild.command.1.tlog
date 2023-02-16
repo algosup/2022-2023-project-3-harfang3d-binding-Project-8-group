@@ -1,0 +1,10 @@
+^C:\USERS\LOUIS\DOCUMENTS\GITHUB\2022-2023-PROJECT-3-HARFANG3D-BINDING-PROJECT-8-GROUP\DUH\BUILD\CMAKEFILES\9934D07EC97BA6236C529B3F93D938F4\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/louis/Documents/GitHub/2022-2023-project-3-harfang3d-binding-Project-8-group/duh -BC:/Users/louis/Documents/GitHub/2022-2023-project-3-harfang3d-binding-Project-8-group/duh/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/louis/Documents/GitHub/2022-2023-project-3-harfang3d-binding-Project-8-group/duh/build/hg.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
