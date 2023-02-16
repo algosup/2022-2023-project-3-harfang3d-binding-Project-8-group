@@ -2,6 +2,7 @@
 #	Copyright (C) 2018 Emmanuel Julien
 
 import os
+import shutil
 import sys
 import importlib
 import time
@@ -131,6 +132,63 @@ if args.go:
 		os.system("clang-format -i wrapper.cpp wrapper.h")
 	except:
 		print("clang-format was not found, ideally use to have beautiful .h file")
+
+if args.rust:
+	rust_gen = lang.rust.RustGenerator()
+	cd = os.getcwd()
+	if os.path.exists(args.out):
+		shutil.rmtree(args.out)
+	os.makedirs(args.out)
+	# initializing cargo package
+	os.chdir(args.out)
+	os.system("cargo init --lib --name my_test --vcs none")
+	with open("Cargo.toml", 'a') as file:
+		file.write(f"""
+[lib]
+name = "{mod}"
+crate-type = ["staticlib"]
+
+[build-dependencies]
+bindgen = "*"
+cc = "*"
+""")
+
+	# create builder file
+	with open("build.rs", 'w') as file:
+		file.write(f"""
+fn main() {{
+    if std::path::Path::new("wrapper.cpp").exists() {{
+        cc::Build::new()
+            .file("wrapper.cpp")
+            .include("src")
+            .compile("{mod}");
+    }}
+
+    let bindings = bindgen::Builder::default()
+		.layout_tests(false)
+        .generate_inline_functions(true)
+        .enable_cxx_namespaces()
+        .raw_line("pub use self::root::*;")
+        .clang_args(&[
+			"-c",
+            "-x",
+            "c++",
+            "-Wall",
+            "-Wextra",
+            "-Werror"
+        ])
+        .header("wrapper.h")
+        .generate()
+        .unwrap();
+
+    let mut target = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    target.push("src/bindings.rs");
+    
+    bindings.write_to_file(&target).unwrap();
+}}
+""")
+	os.chdir(cd)
+
 
 if args.xml:
 	output_binding(setup_generator(lang.xml.XMLGenerator()))
