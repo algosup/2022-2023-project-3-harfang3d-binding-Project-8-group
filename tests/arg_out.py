@@ -126,27 +126,30 @@ include!("bindings.rs");
 #[test]
 fn test() {
 	unsafe {
-		let mut d = my_test_constructor_a();
-		d = my_test_modify_in_out_struct(d);
-		assert_eq!(d.v, 3);
+		let  d = my_test_constructor_a();
+		my_test_modify_in_out_struct(d);
+		assert_eq!(my_test_a_get_v(d), 3);
+		let (a,b) = (&mut 0,&mut 0);
 
-		let (d, b) = my_test_out_values_function_call(2, 3);
-		assert_eq!(d, 16);
-		assert_eq!(b, 42);
+        my_test_out_values_function_call(a, 2, b, 3.0);
+        assert_eq!(*a, 16);
+        assert_eq!(*b, 42);
 
-		let (r, d, b) = my_test_out_values_function_call_rval(2);
-		assert_eq!(r, 2);
-		assert_eq!(d, 16);
-		assert_eq!(b, 28);
+        let r = my_test_out_values_function_call_rval(a,2,b);
+        assert_eq!(r, 2);
+        assert_eq!(*a, 16);
+        assert_eq!(*b, 28);
 
-		let (r, d, b) = my_test_out_values_function_call_rval(2, 2);
-		assert_eq!(r, 4);
-		assert_eq!(d, 16);
-		assert_eq!(b, 28);
+        let r= my_test_out_values_function_call_rval_with_k(a,2, b, 2.0);
+        assert_eq!(r, 4);
+        assert_eq!(*a, 16);
+        assert_eq!(*b, 28);
 
-		let (r, v) = my_test_in_out_value(5);
-		assert_eq!(r, true);
-		assert_eq!(v, 20);
+        let mut w = 5;
+        let rb = my_test_in_out_value(&mut w);
+        assert!(rb);
+        assert_eq!(w, 20);
+		
 	}
 }
 '''
