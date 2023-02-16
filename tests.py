@@ -27,6 +27,7 @@ parser.add_argument('--rust', dest='rust_build', help='Build Rust', action="stor
 parser.add_argument('--debug', dest='debug_test', help='Generate a working solution to debug a test')
 parser.add_argument('--x64', dest='x64', help='Build for 64 bit architecture', action='store_true', default=False)
 parser.add_argument('--linux', dest='linux', help='Build on Linux', action='store_true', default=False)
+parser.add_argument('--generator', dest='generator', help='CMake generator', default=None)
 
 args = parser.parse_args()
 
@@ -39,13 +40,9 @@ if args.python_base_path:
 
 
 # -- CMake generator
+if args.generator:
+	print("Using CMake generator: %s" % args.generator)
 if not args.linux:
-	cmake_generator_list = subprocess.check_output(["cmake", "--help"]).decode()
-	cmake_generator_list = cmake_generator_list[cmake_generator_list.find("Visual Studio"):]
-	cmake_generator = cmake_generator_list[:cmake_generator_list.find("=")].strip()
-
-	print("Using CMake generator: %s" % cmake_generator)
-
 	msvc_arch = 'x64' if args.x64 else 'Win32'
 
 
@@ -148,7 +145,10 @@ def build_and_deploy_cpython_extension(work_path, build_path, python_interpreter
 	print("Generating build system...")
 
 	try:
-		subprocess.check_output('cmake .. -G "%s"' % cmake_generator)
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
+		else:
+			subprocess.check_output('cmake ..')
 	except subprocess.CalledProcessError as e:
 		print(e.output.decode('utf-8'))
 		return False
@@ -268,7 +268,10 @@ target_link_libraries(my_test lua)
 def build_and_deploy_lua_extension(work_path, build_path):
 	print("Generating build system...")
 	try:
-		subprocess.check_output('cmake .. -G "%s"' % cmake_generator)
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
+		else:
+			subprocess.check_output('cmake ..')
 	except subprocess.CalledProcessError as e:
 		print(e.output.decode('utf-8'))
 		return False
@@ -385,10 +388,10 @@ install(TARGETS my_test DESTINATION "${{CMAKE_SOURCE_DIR}}/" COMPONENT my_test)
 def build_and_deploy_go_extension(work_path, build_path):
 	print("Generating build system...")
 	try:
-		if args.linux:
-			subprocess.check_output(['cmake', '..'])
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
 		else:
-			subprocess.check_output('cmake .. -G "%s"' % cmake_generator)
+			subprocess.check_output('cmake ..')
 	except subprocess.CalledProcessError as e:
 		print(e.output.decode('utf-8'))
 		return False
@@ -493,10 +496,10 @@ install(TARGETS my_test DESTINATION "${{CMAKE_SOURCE_DIR}}/" COMPONENT my_test)
 def build_and_deploy_rust_extension(work_path, build_path):
 	print("Generating build system...")
 	try:
-		if args.linux:
-			subprocess.check_output(['cmake', '..'])
+		if args.generator:
+			subprocess.check_output('cmake .. -G "%s"' % args.generator)
 		else:
-			subprocess.check_output('cmake .. -G "%s"' % cmake_generator)
+			subprocess.check_output('cmake ..')
 	except subprocess.CalledProcessError as e:
 		print(e.output.decode('utf-8'))
 		return False
